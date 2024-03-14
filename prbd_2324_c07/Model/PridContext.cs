@@ -65,11 +65,15 @@ public class PridContext : DbContextBase
             .WithOne(tri => tri.Creator)
             .HasForeignKey(tri => tri.CreatorId);
 
+        //
         modelBuilder.Entity<User>()
             .HasMany(user => user.Subscriptions)
             .WithOne(sub=>sub.User)
             .HasForeignKey(sub => sub.UserId)
             .OnDelete(DeleteBehavior.NoAction);
+
+
+        //test commit feat_Lucien
 
     }
 
