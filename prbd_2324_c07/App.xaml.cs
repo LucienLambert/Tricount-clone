@@ -2,10 +2,11 @@
 using prbd_2324_c07.ViewModel;
 using System.Windows;
 using System.Globalization;
+using PRBD_Framework;
 
 namespace prbd_2324_c07;
 
-public partial class App {
+public partial class App : ApplicationBase<User,PridContext>{
     public App() {
         var ci = new CultureInfo("fr-BE") {
             DateTimeFormat = {
@@ -35,6 +36,7 @@ public partial class App {
         Console.Write("Cold starting database... ");
         Context.Users.Find(1);
         Console.WriteLine("done");
+        Context.SaveChanges();
     }
 
     protected override void OnRefreshData() {
