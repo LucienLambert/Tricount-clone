@@ -38,7 +38,8 @@ public class User : EntityBase<PridContext> {
      public override string ToString() {
         return $"<User : fullname ={FullName}, " +
             $"#tricount={Tricounts.Count}, " +
-            $"#subscription={Subscriptions.Count}";
+            $"#subscription={Subscriptions.Count}" +
+            $"#operation={Operations.Count}";
     }
 
     //public virtual ICollection<Operation> Operations { get; set; }

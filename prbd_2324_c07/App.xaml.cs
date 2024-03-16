@@ -38,34 +38,37 @@ public partial class App : ApplicationBase<User,PridContext>{
 
         
 
-        var TricTest = new Tricount("Tricount test", "test test", userTest);
+        var tricTest = new Tricount("Tricount test", "test test", userTest);
 
-        var subTest = new Subscription(userTest, TricTest);
+        var subTest = new Subscription(userTest, tricTest);
+
+        var opeTest = new Operation("operation faite pare UserTest 100 euro", 100, tricTest, userTest);
 
         Context.Users.AddRange(userTest, userAdmin);
-        Context.Tricounts.Add(TricTest);
+        Context.Tricounts.Add(tricTest);
         Context.Subscriptions.Add(subTest);
+        // Context.Operations.Add(opeTest);
 
         Context.SaveChanges();
 
         foreach (var user in Context.Users) {
-            Console.WriteLine("Before del");
-            Console.WriteLine(user);
+            Console.WriteLine("*****************Befor del***************");
+            Console.WriteLine("USER : " + user);
         }
 
         foreach (var tric in Context.Tricounts) {
-            Console.WriteLine(tric);
+            Console.WriteLine("TRICOUNT : " + tric);
         }
 
         Context.Users.Remove(userTest);
         Context.SaveChanges();
 
         foreach (var user in Context.Users) {
-            Console.WriteLine("After del");
-            Console.WriteLine(user);
+            Console.WriteLine("*****************After del***************");
+            Console.WriteLine("USER : " + user);
         }
         foreach (var tric in Context.Tricounts) {
-            Console.WriteLine(tric);
+            Console.WriteLine("TRICOUNT : " + tric);
         }
 
         // Cold start
