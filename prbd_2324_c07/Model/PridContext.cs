@@ -37,10 +37,32 @@ public class PridContext : DbContextBase
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
+
+        //function Link
         Link_Subscriptions_Users_Tricounts(modelBuilder);
+        Link_User_Tricount(modelBuilder);
+        Link_Operations_Users_Tricounts(modelBuilder);
+
+        //function Setup_Attributes
         SetupAttributesUsers(modelBuilder);
         SetupAttributesTricounts(modelBuilder);
-        Link_Operations_Users_Tricounts(modelBuilder);
+        
+    }
+
+
+    private void Link_User_Tricount(ModelBuilder modelBuilder) {
+
+        //Liaison Users => Tricounts
+        modelBuilder.Entity<User>()
+            .HasMany(user => user.Tricounts)
+            .WithOne(tri => tri.Creator)
+            .HasForeignKey(tri => tri.CreatorId);
+
+        modelBuilder.Entity<User>()
+            .HasMany(user => user.Subscriptions)
+            .WithOne(sub => sub.User)
+            .HasForeignKey(sub => sub.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 
     // mise en relation des tables + modification en relation.
@@ -50,31 +72,17 @@ public class PridContext : DbContextBase
             .HasKey(sub => new { sub.UserId, sub.TricountId });
 
         //Liaison Subscriptions => Users
-        modelBuilder.Entity<Subscription>()
-            .HasOne(sub => sub.User)
-            .WithMany(user => user.Subscriptions)
-            .HasForeignKey(sub => sub.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+        //modelBuilder.Entity<Subscription>()
+        //   .HasOne(sub => sub.User)
+        //   .WithMany(user => user.Subscriptions)
+        //   .HasForeignKey(sub => sub.UserId)
+        //   .OnDelete(DeleteBehavior.Cascade);
 
         //Liaison Subscriptions => Tricounts
         modelBuilder.Entity<Subscription>()
             .HasOne(sub => sub.Tricount)
             .WithMany(tri => tri.Subscriptions)
             .HasForeignKey(sub => sub.TricountId);
-
-        //Liaison Users => Tricounts
-        modelBuilder.Entity<User>()
-            .HasMany(user => user.Tricounts)
-            .WithOne(tri => tri.Creator)
-            .HasForeignKey(tri => tri.CreatorId);
-
-        //
-        modelBuilder.Entity<User>()
-            .HasMany(user => user.Subscriptions)
-            .WithOne(sub => sub.User)
-            .HasForeignKey(sub => sub.UserId)
-            .OnDelete(DeleteBehavior.NoAction);
-
 
         //test commit feat_Lucien
 
