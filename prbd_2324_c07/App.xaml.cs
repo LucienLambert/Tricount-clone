@@ -3,6 +3,7 @@ using prbd_2324_c07.ViewModel;
 using System.Windows;
 using System.Globalization;
 using PRBD_Framework;
+using Microsoft.EntityFrameworkCore;
 
 namespace prbd_2324_c07;
 
@@ -31,6 +32,41 @@ public partial class App : ApplicationBase<User,PridContext>{
         // Clear database and seed data
         Context.Database.EnsureDeleted();
         Context.Database.EnsureCreated();
+
+        var userTest = new User("lucien@gmail.com", "password", "Lucien Lambert");
+        var userAdmin = new Administrator("admin", "passwordAdmin", "admin administrator");
+
+        
+
+        var TricTest = new Tricount("Tricount test", "test test", userTest);
+
+        var subTest = new Subscription(userTest, TricTest);
+
+        Context.Users.AddRange(userTest, userAdmin);
+        Context.Tricounts.Add(TricTest);
+        Context.Subscriptions.Add(subTest);
+
+        Context.SaveChanges();
+
+        //foreach (var user in Context.Users) {
+        //    Console.WriteLine("Before del");
+        //    Console.WriteLine(user);
+        //}
+
+        //foreach(var tric in Context.Tricounts) {
+        //    Console.WriteLine(tric);
+        //}
+
+        //Context.Tricounts.Remove(TricTest);
+        //Context.SaveChanges();
+
+        //foreach (var user in Context.Users) {
+        //    Console.WriteLine("After del");
+        //    Console.WriteLine(user);
+        //}
+        //foreach (var tric in Context.Tricounts) {
+        //    Console.WriteLine(tric);
+        //}
 
         // Cold start
         Console.Write("Cold starting database... ");

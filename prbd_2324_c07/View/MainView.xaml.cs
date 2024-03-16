@@ -1,9 +1,9 @@
-﻿using PRBD_Framework;
+﻿using prbd_2324_c07.Model;
+using PRBD_Framework;
 
 namespace prbd_2324_c07.View;
 
-public partial class MainView : WindowBase
-{
+public partial class MainView : WindowBase{
     public MainView() {
         InitializeComponent();
     }

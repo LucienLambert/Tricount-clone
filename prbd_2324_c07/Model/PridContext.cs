@@ -37,7 +37,6 @@ public class PridContext : DbContextBase
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
         Link_Subscriptions_Users_Tricounts(modelBuilder);
-
     }
 
 
@@ -59,7 +58,7 @@ public class PridContext : DbContextBase
             .WithMany(tri => tri.Subscriptions)
             .HasForeignKey(sub => sub.TricountId);
 
-        //Liaison Users => Tricountsr
+        //Liaison Users => Tricounts
         modelBuilder.Entity<User>()
             .HasMany(user => user.Tricounts)
             .WithOne(tri => tri.Creator)
@@ -79,7 +78,7 @@ public class PridContext : DbContextBase
 
     private static void ConfigureOptions(DbContextOptionsBuilder optionsBuilder) {
         optionsBuilder.UseLazyLoadingProxies()
-            .LogTo(Console.WriteLine, LogLevel.Information) // permet de visualiser les requêtes SQL générées par LINQ
+            //.LogTo(Console.WriteLine, LogLevel.Information) // permet de visualiser les requêtes SQL générées par LINQ
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors() // attention : ralentit les requêtes
             ;
