@@ -7,8 +7,7 @@ public enum Role
     User = 0,
     Administrator = 1
 }
-public class User : EntityBase<PridContext>
-{
+public class User : EntityBase<PridContext> {
 
     [Key]
     [Required]
@@ -24,6 +23,23 @@ public class User : EntityBase<PridContext>
 
     public virtual ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
     public virtual ICollection<Tricount> Tricounts { get; set; } = new HashSet<Tricount>();
+
+    public User() {
+
+    }
+
+    public User(string mail, string password, string fullname, Role role = 0) {
+        Mail = mail;
+        Password = password;
+        FullName = fullname;
+    }
+
+    public override string ToString() {
+        return $"<User : fullname ={FullName}, " +
+            $"#tricount={Tricounts.Count}, " +
+            $"#subscription={Subscriptions.Count}";
+    }
+
     //public virtual ICollection<Operation> Operations { get; set; }
     //public virtual ICollection<Repartition> Repartitions { get; set; }
     //public virtual ICollection<TemplateItem> TemplateItems { get; set; }

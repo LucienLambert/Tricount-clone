@@ -10,21 +10,37 @@ namespace prbd_2324_c07.Model
 
         [Key, Required]
         public int TricountId { get; set; }
+
         [Required]
         public string Title { get; set; }
+
         public string Description { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
+
         [Required, ForeignKey(nameof(Creator))]
         public int CreatorId { get; set; }
+
         [Required]
         public virtual User Creator { get; set; }
         public virtual ICollection<Subscription> Subscriptions { get; set; }
-        //public virtual ICollection<Operation> Operations { get; set; }
-        //public virtual ICollection<Template> Templates { get; set; }
 
-        //public Dictionary<int, float> Balance = new();
+        public Tricount() {
 
+        }
 
+        public Tricount(string title, string description, User creator) {
+            Title = title;
+            Description = description;
+            Creator = creator;
+            CreatedAt = DateTime.Now;
+        }
+
+        public override string ToString() {
+            return $"<tricount : title  = {Title}, " +
+                $"#creator = {CreatorId}, " +
+                $"#subscription = {Subscriptions.Count}";
+        }
     }
 }
