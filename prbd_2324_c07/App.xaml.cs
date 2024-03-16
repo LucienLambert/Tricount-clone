@@ -48,25 +48,25 @@ public partial class App : ApplicationBase<User,PridContext>{
 
         Context.SaveChanges();
 
-        //foreach (var user in Context.Users) {
-        //    Console.WriteLine("Before del");
-        //    Console.WriteLine(user);
-        //}
+        foreach (var user in Context.Users) {
+            Console.WriteLine("Before del");
+            Console.WriteLine(user);
+        }
 
-        //foreach(var tric in Context.Tricounts) {
-        //    Console.WriteLine(tric);
-        //}
+        foreach (var tric in Context.Tricounts) {
+            Console.WriteLine(tric);
+        }
 
-        //Context.Tricounts.Remove(TricTest);
-        //Context.SaveChanges();
+        Context.Users.Remove(userTest);
+        Context.SaveChanges();
 
-        //foreach (var user in Context.Users) {
-        //    Console.WriteLine("After del");
-        //    Console.WriteLine(user);
-        //}
-        //foreach (var tric in Context.Tricounts) {
-        //    Console.WriteLine(tric);
-        //}
+        foreach (var user in Context.Users) {
+            Console.WriteLine("After del");
+            Console.WriteLine(user);
+        }
+        foreach (var tric in Context.Tricounts) {
+            Console.WriteLine(tric);
+        }
 
         // Cold start
         Console.Write("Cold starting database... ");

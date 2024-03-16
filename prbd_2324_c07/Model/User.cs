@@ -16,13 +16,14 @@ public class User : EntityBase<PridContext> {
     public string Mail { get; set; }
     [Required]
     public string Password { get; set; }
-    [Required]
+    [Required, MinLength(3)]
     public string FullName { get; set; }
     [Required]
     public Role Role { get; protected set; } = Role.User;
 
     public virtual ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
     public virtual ICollection<Tricount> Tricounts { get; set; } = new HashSet<Tricount>();
+    public virtual ICollection<Operation> Operations { get; set; } = new HashSet<Operation>();
 
     public User() {
 
@@ -34,7 +35,7 @@ public class User : EntityBase<PridContext> {
         FullName = fullname;
     }
 
-    public override string ToString() {
+     public override string ToString() {
         return $"<User : fullname ={FullName}, " +
             $"#tricount={Tricounts.Count}, " +
             $"#subscription={Subscriptions.Count}";

@@ -13,6 +13,7 @@ public class PridContext : DbContextBase
     public DbSet<User> Users => Set<User>();
     public DbSet<Subscription> Subscriptions => Set<Subscription>();
     public DbSet<Tricount> Tricounts => Set<Tricount>();
+    public DbSet<Operation> Operations => Set<Operation>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         base.OnConfiguring(optionsBuilder);
@@ -37,9 +38,12 @@ public class PridContext : DbContextBase
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
         Link_Subscriptions_Users_Tricounts(modelBuilder);
+        SetupAttributesUsers(modelBuilder);
+        SetupAttributesTricounts(modelBuilder);
+        Link_Operations_Users_Tricounts(modelBuilder);
     }
 
-
+    // mise en relation des tables + modification en relation.
     private void Link_Subscriptions_Users_Tricounts(ModelBuilder modelBuilder) {
         //Liaison Subscriptions => Users / Subscriptions => Tricount 
         modelBuilder.Entity<Subscription>()
@@ -67,13 +71,41 @@ public class PridContext : DbContextBase
         //
         modelBuilder.Entity<User>()
             .HasMany(user => user.Subscriptions)
-            .WithOne(sub=>sub.User)
+            .WithOne(sub => sub.User)
             .HasForeignKey(sub => sub.UserId)
             .OnDelete(DeleteBehavior.NoAction);
 
 
         //test commit feat_Lucien
 
+    }
+
+    private void Link_Operations_Users_Tricounts(ModelBuilder modelBuilder) {
+        //Link Operations => Tricounts
+        modelBuilder.Entity<Operation>().HasOne(ope => ope.Tricount)
+            .WithMany(tri => tri.Operations)
+            .HasForeignKey(ope => ope.TricountId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        //Link Operations => Users
+        modelBuilder.Entity<Operation>().HasOne(ope => ope.Initiator)
+            .WithMany(user => user.Operations)
+            .HasForeignKey(ope => ope.InitiatorId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        //Link Operations => repatitions
+    }
+
+        private void SetupAttributesUsers(ModelBuilder modelBuilder) {
+        modelBuilder.Entity<User>().HasIndex(user => user.Mail).IsUnique();
+        modelBuilder.Entity<User>().Property(user => user.Mail).HasMaxLength(256);
+        modelBuilder.Entity<User>().Property(user => user.FullName).HasMaxLength(256);
+    }
+     
+    private void SetupAttributesTricounts(ModelBuilder modelBuilder) { 
+        modelBuilder.Entity<Tricount>().Property(tricount =>  tricount.Title).HasMaxLength(256);
+        modelBuilder.Entity<Tricount>().Property(tricount => tricount.Description).HasMaxLength(1024);
+        modelBuilder.Entity<Tricount>().Property(tricount => tricount.CreatedAt).HasColumnType("datetime");
     }
 
     private static void ConfigureOptions(DbContextOptionsBuilder optionsBuilder) {
