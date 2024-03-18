@@ -8,7 +8,7 @@ namespace prbd_2324_c07.Model
     public class Tricount : EntityBase<PridContext>
     {
 
-        [Key, Required]
+        [Key]
         public int TricountId { get; set; }
 
         [Required, MinLength(3)]
@@ -18,16 +18,18 @@ namespace prbd_2324_c07.Model
         public string Description { get; set; }
 
         [Required]
-        public DateTime CreatedAt { get; }
+        public DateTime CreatedAt { get; set; }
 
         [Required, ForeignKey(nameof(Creator))]
         public int CreatorId { get; set; }
-
         [Required]
         public virtual User Creator { get; set; }
-        
-        public virtual ICollection<Subscription> Subscriptions { get; set; }
-        public virtual ICollection<Operation> Operations { get; set; }
+
+        //public virtual ICollection<Subscription> Subscriptions { get; set; }
+        //public virtual ICollection<Operation> Operations { get; set; }
+        public virtual ICollection<Template> Templates { get; set; } = new HashSet<Template>();
+        public virtual ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
+        public virtual ICollection<Operation> Operations { get; set; } = new HashSet<Operation>();
 
         public Tricount() {
 

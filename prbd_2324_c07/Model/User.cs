@@ -2,15 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace prbd_2324_c07.Model;
-public enum Role
-{
+public enum Role {
     User = 0,
-    Administrator = 1
+    Administrator = 1,
 }
 public class User : EntityBase<PridContext> {
 
     [Key]
-    [Required]
     public int UserId { get; set; }
     [Required, EmailAddress]
     public string Mail { get; set; }
@@ -24,6 +22,8 @@ public class User : EntityBase<PridContext> {
     public virtual ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
     public virtual ICollection<Tricount> Tricounts { get; set; } = new HashSet<Tricount>();
     public virtual ICollection<Operation> Operations { get; set; } = new HashSet<Operation>();
+    public virtual ICollection<Repartition> Repartitions { get; set; } = new HashSet<Repartition>();
+    public virtual ICollection<TemplateItem> TemplatesItems { get; set; } = new HashSet<TemplateItem>();
 
     public User() {
 
@@ -37,13 +37,6 @@ public class User : EntityBase<PridContext> {
 
      public override string ToString() {
         return $"<User : fullname ={FullName}, " +
-            $"#tricount={Tricounts.Count}, " +
-            $"#subscription={Subscriptions.Count}" +
-            $"#operation={Operations.Count}";
+            $"#subscription = {Subscriptions.Count}";
     }
-
-    //public virtual ICollection<Operation> Operations { get; set; }
-    //public virtual ICollection<Repartition> Repartitions { get; set; }
-    //public virtual ICollection<TemplateItem> TemplateItems { get; set; }
-
 }
