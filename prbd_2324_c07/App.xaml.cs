@@ -63,10 +63,10 @@ public partial class App : ApplicationBase<User,PridContext>{
             Console.WriteLine("********************************");
         }
 
-        //var test = Context.Operations.FirstOrDefault(r => r.Title == "Colruyt");
-        //if (test != null) {
-        //    Context.Operations.Remove(test);
-        //}
+        var test = Context.Users.FirstOrDefault(r => r.FullName == "Boris");
+        if (test != null) {
+            Context.Users.Remove(test);
+        }
         Context.SaveChanges();
         // Un endroit pour tester vos requêtes LINQ
     }
