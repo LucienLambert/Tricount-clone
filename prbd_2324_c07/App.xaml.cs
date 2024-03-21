@@ -4,7 +4,6 @@ using System.Windows;
 using System.Globalization;
 using PRBD_Framework;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
 
 namespace prbd_2324_c07;
@@ -21,6 +20,7 @@ public partial class App : ApplicationBase<User,PridContext>{
         CultureInfo.DefaultThreadCurrentUICulture = ci;
         CultureInfo.CurrentCulture = ci;
         CultureInfo.CurrentUICulture = ci;
+
     }
 
     protected override void OnStartup(StartupEventArgs e) {
@@ -67,6 +67,13 @@ public partial class App : ApplicationBase<User,PridContext>{
         if (test != null) {
             Context.Users.Remove(test);
         }
+
+        //Test Balances
+        var tricountsList = Context.Tricounts.ToList();
+        tricountsList.ForEach(tri => {
+            tri.RefreshBalance();
+        });
+
         Context.SaveChanges();
         // Un endroit pour tester vos requêtes LINQ
     }
