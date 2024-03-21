@@ -10,7 +10,7 @@ public  class Operation {
     [Required, MinLength(3)]
     public String Title { get; set; }
     [Required]
-    public decimal Amount { get; set; }
+    public Double Amount { get; set; }
     [Required, DataType(DataType.Date)]
     public DateTime Operation_date { get; set; }
 
@@ -30,7 +30,7 @@ public  class Operation {
 
     }
 
-    public Operation (string title, Tricount tricount, decimal amount, DateTime operation_date, User initiator) {
+    public Operation (string title, Tricount tricount, Double amount, DateTime operation_date, User initiator) {
         Title = title;
         Amount = amount;
         Tricount = tricount;

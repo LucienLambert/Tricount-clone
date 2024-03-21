@@ -25,8 +25,8 @@ public class PridContext : DbContextBase
          * SQLite
          */
 
-        // var connectionString = ConfigurationManager.ConnectionStrings["SqliteConnectionString"].ConnectionString;
-        // optionsBuilder.UseSqlite(connectionString);
+        //var connectionString = ConfigurationManager.ConnectionStrings["SqliteConnectionString"].ConnectionString;
+        //optionsBuilder.UseSqlite(connectionString);
 
         /*
          * SQL Server
@@ -70,7 +70,7 @@ public class PridContext : DbContextBase
             .HasOne(t => t.Creator)
             .WithMany(u => u.Tricounts)
             .HasForeignKey(t => t.CreatorId)
-            .OnDelete(DeleteBehavior.Cascade); // Si je supprime un utilisateur je veux qu'il me supprime tous les tricounts qu'un user à créé
+            .OnDelete(DeleteBehavior.ClientCascade); 
     }
 
     private void Link_Subscriptions(ModelBuilder modelBuilder) {
@@ -83,14 +83,14 @@ public class PridContext : DbContextBase
             .HasOne(s => s.User)
             .WithMany(u => u.Subscriptions)
             .HasForeignKey(s => s.UserId)
-            .OnDelete(DeleteBehavior.Cascade); // Si je supprime un utilisateur je veux qu'il supprime les subscriptions lié au user
+            .OnDelete(DeleteBehavior.ClientCascade); // Si je supprime un utilisateur je veux qu'il supprime les subscriptions lié au user
 
         // Link Subscription into Tricount
         modelBuilder.Entity<Subscription>()
             .HasOne(s => s.Tricount)
             .WithMany(t => t.Subscriptions)
             .HasForeignKey(s => s.TricountId)
-            .OnDelete(DeleteBehavior.NoAction); // Si je supprime un tricount je veux qu'il supprime les subscriptions également
+            .OnDelete(DeleteBehavior.ClientCascade); // Si je supprime un tricount je veux qu'il supprime les subscriptions également
 
     }
 
@@ -100,14 +100,14 @@ public class PridContext : DbContextBase
             .HasOne(o => o.Initiator)
             .WithMany(u => u.Operations)
             .HasForeignKey(o => o.InitiatorId)
-            .OnDelete(DeleteBehavior.NoAction); // si je supprime une Operation je veux qu'il conserve le user
+            .OnDelete(DeleteBehavior.ClientCascade); // si je supprime une Operation je veux qu'il conserve le user
 
         // Link Operation into Tricount
         modelBuilder.Entity<Operation>()
             .HasOne(o => o.Tricount)
             .WithMany(t => t.Operations)
             .HasForeignKey(o => o.TricountId)
-            .OnDelete(DeleteBehavior.NoAction); // si je supprime une Operation je veux qu'il conserve le tricount
+            .OnDelete(DeleteBehavior.ClientCascade); // si je supprime une Operation je veux qu'il conserve le tricount
     }
 
     private void Link_Repartitions(ModelBuilder modelBuilder) {
@@ -120,14 +120,14 @@ public class PridContext : DbContextBase
             .HasOne(rep => rep.Operation)
             .WithMany(o => o.Repartitions)
             .HasForeignKey(rep => rep.OperationId)
-            .OnDelete(DeleteBehavior.NoAction); // si je supprime une Repartition je veux qu'il conserve l'opération
+            .OnDelete(DeleteBehavior.ClientCascade); // si je supprime une Repartition je veux qu'il conserve l'opération
 
         // Link Repartition  into User
         modelBuilder.Entity<Repartition>()
             .HasOne(rep => rep.User)
             .WithMany(u => u.Repartitions)
             .HasForeignKey(rep => rep.UserId)
-            .OnDelete(DeleteBehavior.NoAction); // si je supprime une Repartition je veux qu'il conserve le user
+            .OnDelete(DeleteBehavior.ClientCascade); // si je supprime une Repartition je veux qu'il conserve le user
     }
 
     private void Link_TemplateItems(ModelBuilder modelBuilder) {
@@ -140,14 +140,14 @@ public class PridContext : DbContextBase
             .HasOne(tempItem => tempItem.User)
             .WithMany(u => u.TemplatesItems)
             .HasForeignKey(tempItem => tempItem.UserId)
-            .OnDelete(DeleteBehavior.NoAction); // si je supprime une TemplateItem je veux qu'il conserve le user
+            .OnDelete(DeleteBehavior.ClientCascade); // si je supprime une TemplateItem je veux qu'il conserve le user
 
         // Link TemplateItem into Template
         modelBuilder.Entity<TemplateItem>()
             .HasOne(tempItem => tempItem.Template)
             .WithMany(t => t.TemplatesItems)
             .HasForeignKey(tempItem => tempItem.TemplateId)
-            .OnDelete(DeleteBehavior.NoAction); // si je supprime une TemplateItem je veux qu'il conserve le Temple
+            .OnDelete(DeleteBehavior.ClientCascade); // si je supprime une TemplateItem je veux qu'il conserve le Temple
     }
 
     private void Link_Templates(ModelBuilder modelBuilder) {
@@ -156,7 +156,12 @@ public class PridContext : DbContextBase
             .HasOne(t => t.Tricount)
             .WithMany(tc => tc.Templates)
             .HasForeignKey(t => t.TricountId)
-            .OnDelete(DeleteBehavior.Cascade); // si je supprime un tricount je veux qu'il supprime les Temples lié.
+            .OnDelete(DeleteBehavior.ClientCascade); // si je supprime un tricount je veux qu'il supprime les Temples lié.
+
+        modelBuilder.Entity<Template>()
+            .HasMany(t => t.TemplatesItems)
+            .WithOne(tempItem => tempItem.Template)
+            .OnDelete(DeleteBehavior.ClientCascade);
     }
 
     private void SetupAttributesUsers(ModelBuilder modelBuilder) {
@@ -220,17 +225,17 @@ public class PridContext : DbContextBase
         );
 
         modelBuilder.Entity<Operation>().HasData(
-            new Operation { OperationId = 1, Title = "Colruyt", TricountId = 4, Amount = (decimal)100f, Operation_date = DateTime.Parse("2023/10/13"), InitiatorId = 2 },
-            new Operation { OperationId = 2, Title = "Plein essence", TricountId = 4, Amount = (decimal)75f, Operation_date = DateTime.Parse("2023/10/13"), InitiatorId = 1 },
-            new Operation { OperationId = 3, Title = "Grosses courses LIDL", TricountId = 4, Amount = (decimal)212.47f, Operation_date = DateTime.Parse("2023/10/13"), InitiatorId = 3 },
-            new Operation { OperationId = 4, Title = "Apéros", TricountId = 4, Amount = (decimal)31.897456217f, Operation_date = DateTime.Parse("2023/10/13"), InitiatorId = 1 },
-            new Operation { OperationId = 5, Title = "Boucherie", TricountId = 4, Amount = (decimal)25.5f, Operation_date = DateTime.Parse("2023/10/26"), InitiatorId = 2 },
-            new Operation { OperationId = 6, Title = "Loterie", TricountId = 4, Amount = (decimal)35f, Operation_date = DateTime.Parse("2023/10/26"), InitiatorId = 1 },
-            new Operation { OperationId = 7, Title = "Sangria", TricountId = 5, Amount = (decimal)42f, Operation_date = DateTime.Parse("2023/08/16"), InitiatorId = 2 },
-            new Operation { OperationId = 8, Title = "Jet Ski", TricountId = 5, Amount = (decimal)250f, Operation_date = DateTime.Parse("2023/08/17"), InitiatorId = 3 },
-            new Operation { OperationId = 9, Title = "PV parking", TricountId = 5, Amount = (decimal)15.5f, Operation_date = DateTime.Parse("2023/08/16"), InitiatorId = 3 },
-            new Operation { OperationId = 10, Title = "Tickets", TricountId = 6, Amount = (decimal)220f, Operation_date = DateTime.Parse("2023/06/08"), InitiatorId = 1 },
-            new Operation { OperationId = 11, Title = "Décathlon", TricountId = 6, Amount = (decimal)199.99f, Operation_date = DateTime.Parse("2023/07/01"), InitiatorId = 2 }
+            new Operation { OperationId = 1, Title = "Colruyt", TricountId = 4, Amount = 100f, Operation_date = DateTime.Parse("2023/10/13"), InitiatorId = 2 },
+            new Operation { OperationId = 2, Title = "Plein essence", TricountId = 4, Amount = 75f, Operation_date = DateTime.Parse("2023/10/13"), InitiatorId = 1 },
+            new Operation { OperationId = 3, Title = "Grosses courses LIDL", TricountId = 4, Amount = 212.47f, Operation_date = DateTime.Parse("2023/10/13"), InitiatorId = 3 },
+            new Operation { OperationId = 4, Title = "Apéros", TricountId = 4, Amount = 31.897456217f, Operation_date = DateTime.Parse("2023/10/13"), InitiatorId = 1 },
+            new Operation { OperationId = 5, Title = "Boucherie", TricountId = 4, Amount = 25.5f, Operation_date = DateTime.Parse("2023/10/26"), InitiatorId = 2 },
+            new Operation { OperationId = 6, Title = "Loterie", TricountId = 4, Amount = 35f, Operation_date = DateTime.Parse("2023/10/26"), InitiatorId = 1 },
+            new Operation { OperationId = 7, Title = "Sangria", TricountId = 5, Amount = 42f, Operation_date = DateTime.Parse("2023/08/16"), InitiatorId = 2 },
+            new Operation { OperationId = 8, Title = "Jet Ski", TricountId = 5, Amount = 250f, Operation_date = DateTime.Parse("2023/08/17"), InitiatorId = 3 },
+            new Operation { OperationId = 9, Title = "PV parking", TricountId = 5, Amount = 15.5f, Operation_date = DateTime.Parse("2023/08/16"), InitiatorId = 3 },
+            new Operation { OperationId = 10, Title = "Tickets", TricountId = 6, Amount = 220f, Operation_date = DateTime.Parse("2023/06/08"), InitiatorId = 1 },
+            new Operation { OperationId = 11, Title = "Décathlon", TricountId = 6, Amount = 199.99f, Operation_date = DateTime.Parse("2023/07/01"), InitiatorId = 2 }
         );
 
         modelBuilder.Entity<Repartition>().HasData(
