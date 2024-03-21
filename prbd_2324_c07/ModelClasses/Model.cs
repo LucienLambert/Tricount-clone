@@ -276,9 +276,9 @@
 //            .WithMany(ope => ope.Repartitions)
 //            .HasForeignKey(rep => rep.OperationId)
 //            .OnDelete(DeleteBehavior.Cascade);
-     
-        
-        
+
+
+
 //        modelBuilder.Entity<Template>()
 //            .Property(t => t.Title)
 //            .HasMaxLength(256)
@@ -454,33 +454,33 @@
 
 
 
-////// l'entité Member ...
-////modelBuilder.Entity<Member>()
-////    // doit utiliser la propriété Role comme discriminateur ...
-////    .HasDiscriminator(m => m.Role)
-////    // en mappant la valeur Role.Member sur le type Member ...
-////    .HasValue<Member>(Role.Member)
-////    // et en mappant la valeur Role.Administator sur le type Administrator ...
-////    .HasValue<Administrator>(Role.Administrator);
+//// l'entité Member ...
+//modelBuilder.Entity<Member>()
+//    // doit utiliser la propriété Role comme discriminateur ...
+//    .HasDiscriminator(m => m.Role)
+//    // en mappant la valeur Role.Member sur le type Member ...
+//    .HasValue<Member>(Role.Member)
+//    // et en mappant la valeur Role.Administator sur le type Administrator ...
+//    .HasValue<Administrator>(Role.Administrator);
 
-////// l'entité User participe à une relation many-to-many ...
-////modelBuilder.Entity<User>()
-////    // avec, d'un côté, la propriété Followees ...
-////    .HasMany(m => m.Followees)
-////    // avec, de l'autre côté, la propriété Followers ...
-////    .WithMany(m => m.Followers)
-////    // en utilisant l'entité Follow comme entité "association"
-////    .UsingEntity<Follow>(
-////        // celle-ci étant constituée d'une relation one-to-many à partir de Followee
-////        right => right.HasOne(f => f.Followee).WithMany().HasForeignKey(nameof(Follow.FolloweePseudo))
-////            .OnDelete(DeleteBehavior.ClientCascade),
-////        // et d'une autre relation one-to-many à partir de Follower
-////        left => left.HasOne(f => f.Follower).WithMany().HasForeignKey(nameof(Follow.FollowerPseudo))
-////            .OnDelete(DeleteBehavior.ClientCascade),
-////        joinEntity => {
-////            // en n'oubliant pas de spécifier la clé primaire composée de la table association
-////            joinEntity.HasKey(f => new { f.FollowerPseudo, f.FolloweePseudo });
-////        });
+//// l'entité User participe à une relation many-to-many ...
+//modelBuilder.Entity<User>()
+//    // avec, d'un côté, la propriété Followees ...
+//    .HasMany(m => m.Followees)
+//    // avec, de l'autre côté, la propriété Followers ...
+//    .WithMany(m => m.Followers)
+//    // en utilisant l'entité Follow comme entité "association"
+//    .UsingEntity<Follow>(
+//        // celle-ci étant constituée d'une relation one-to-many à partir de Followee
+//        right => right.HasOne(f => f.Followee).WithMany().HasForeignKey(nameof(Follow.FolloweePseudo))
+//            .OnDelete(DeleteBehavior.ClientCascade),
+//        // et d'une autre relation one-to-many à partir de Follower
+//        left => left.HasOne(f => f.Follower).WithMany().HasForeignKey(nameof(Follow.FollowerPseudo))
+//            .OnDelete(DeleteBehavior.ClientCascade),
+//        joinEntity => {
+//            // en n'oubliant pas de spécifier la clé primaire composée de la table association
+//            joinEntity.HasKey(f => new { f.FollowerPseudo, f.FolloweePseudo });
+//        });
 
 
 
