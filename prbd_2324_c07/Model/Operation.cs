@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PRBD_Framework;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace prbd_2324_c07.Model;
 
-public  class Operation {
+public  class Operation : EntityBase<PridContext>
+{
     [Key]
     public int OperationId { get; set; }
 
@@ -24,6 +26,8 @@ public  class Operation {
 
     public virtual ICollection<Repartition> Repartitions { get; set; } = new HashSet<Repartition>();
 
+    [NotMapped]
+    public Dictionary<int, float> Balance { get; set; } = new();
 
 
     public Operation() {
@@ -36,6 +40,39 @@ public  class Operation {
         Tricount = tricount;
         Initiator = initiator;
         Operation_date = operation_date;
+    }
+
+    public void RefreshBalance() {
+        Balance.Clear();
+        var repartitions = Context.Repartitions
+            .Where(rep => rep.OperationId == this.OperationId)
+            .ToList();
+
+        int initiator = InitiatorId;
+        int totalWeight = repartitions
+            .Sum(rep => rep.Weight);
+
+        float temp = 0;
+        repartitions.ForEach(rep => {
+
+            if (rep.UserId == InitiatorId) {
+                temp = (float) Amount / totalWeight;
+                temp = temp * (totalWeight - rep.Weight);
+
+                Balance.Add(rep.UserId, temp);
+                temp = 0;
+            } else {
+                temp = (float) Amount / totalWeight;
+                temp = (rep.Weight * temp) * -1;
+                Balance.Add(rep.UserId, temp);
+                temp = 0;
+            }
+        });
+        //foreach (KeyValuePair<int, float> kvp in Balance) {
+        //    Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+        //}
+
+
     }
 
 

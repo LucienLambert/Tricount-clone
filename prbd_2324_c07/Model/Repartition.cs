@@ -8,12 +8,12 @@ public class Repartition {
     [Required]
     public int Weight { get; set; }
 
-    [ForeignKey(nameof(User))]
+    [Required, ForeignKey(nameof(User))]
     public int UserId { get; set; }
     [Required]
     public virtual User User { get; set; }
 
-    [ForeignKey(nameof(Operation))]
+    [Required, ForeignKey(nameof(Operation))]
     public int OperationId { get; set; }
     [Required]
     public virtual Operation Operation { get; set; }

@@ -31,6 +31,9 @@ namespace prbd_2324_c07.Model
         public virtual ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
         public virtual ICollection<Operation> Operations { get; set; } = new HashSet<Operation>();
 
+        [NotMapped]
+        public Dictionary<int, float> Balance { get; set; } = new();
+
         public Tricount() {
 
         }
@@ -41,6 +44,44 @@ namespace prbd_2324_c07.Model
             Creator = creator;
             CreatedAt = DateTime.Now;
         }
+
+        public void RefreshBalance() {
+
+            Balance.Clear();
+
+            var userIds = Context.Subscriptions
+                .Where(s => s.TricountId == this.TricountId)
+                .Select(s => s.UserId)
+                .ToList();
+
+            var operationsList = Context.Operations
+                .Where(op => op.TricountId == this.TricountId)
+                .ToList();
+
+            var totalAmount = Context.Operations
+                .Where(op => op.TricountId == this.TricountId)
+                .Sum(op => op.Amount);
+
+            float temp = 0;
+            foreach (var userId in userIds) {
+                operationsList.ForEach(op => {
+                    op.RefreshBalance();
+                    foreach (var kvp in op.Balance) {
+                        if (kvp.Key == userId) {
+                            temp += kvp.Value;
+                        }
+                    }
+                });
+                Balance.Add(userId, temp);
+                temp = 0;
+            }
+
+            foreach (KeyValuePair<int, float> kvp in Balance) {
+                Console.WriteLine("Tricount ID = {0} User = {1}, Value = {2}", this.TricountId, kvp.Key, kvp.Value);
+            }
+
+        }
+
 
         public override string ToString() {
             return $"<tricount : title  = {Title}, " +
