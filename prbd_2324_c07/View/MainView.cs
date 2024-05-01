@@ -1,5 +1,4 @@
-﻿using prbd_2324_c07;
-using PRBD_Framework;
+﻿using PRBD_Framework;
 using System.Windows;
 
 namespace prbd_2324_c07.View;

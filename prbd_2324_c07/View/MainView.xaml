@@ -21,5 +21,11 @@
             <MenuItem Header="Reload"/>
             <MenuItem Header="Reset"/>
         </Menu>
+        <!-- Ajout du contrôle d'onglets -->
+        <f:MyTabControl x:Name="tabControlNewTricount" Margin="10" Grid.Row="1" HasCloseButton="True">
+            <TabItem x:Name="NewTricountTab" Header="New Tricount" Tag="NewTricount">
+                <vw:NewTricountView/>
+            </TabItem>
+        </f:MyTabControl>
     </Grid>
 </f:WindowBase>
