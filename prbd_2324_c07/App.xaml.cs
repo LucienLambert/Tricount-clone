@@ -3,9 +3,6 @@ using prbd_2324_c07.ViewModel;
 using System.Windows;
 using System.Globalization;
 using PRBD_Framework;
-using Microsoft.EntityFrameworkCore;
-using System;
-using prbd_2324_c07.View;
 
 namespace prbd_2324_c07;
 
@@ -16,7 +13,8 @@ public partial class App : ApplicationBase<User,PridContext>{
         MSG_USER_CHANGED,
         MSG_DISPLAY_USER,
         MSG_CLOSE_TAB,
-        MSG_LOGIN
+        MSG_LOGIN,
+        MSG_LOGOUT
     }
 
     public App() {
@@ -41,6 +39,11 @@ public partial class App : ApplicationBase<User,PridContext>{
 
         // par défaut au start on passera par ce NavigateTo
         NavigateTo<LoginViewModel, User, PridContext>();
+
+        Register(this, Messages.MSG_LOGOUT, () => {
+            Logout();
+            NavigateTo<LoginViewModel, User, PridContext>();
+        });
 
         // si un user est logé alors on passe par ce NavigateTo
         Register<User>(this, Messages.MSG_LOGIN, user => {

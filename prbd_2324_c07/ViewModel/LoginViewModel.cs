@@ -1,10 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using prbd_2324_c07.Model;
-using System.Windows.Controls;
-using Newtonsoft.Json;
+﻿using prbd_2324_c07.Model;
 using System.Windows.Input;
 using PRBD_Framework;
-using Microsoft.Xaml.Behaviors.Core;
+using System.Windows;
 
 namespace prbd_2324_c07.ViewModel;
 

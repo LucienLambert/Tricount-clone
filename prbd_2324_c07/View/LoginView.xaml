@@ -32,7 +32,7 @@
                      f:PasswordHelper.Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
                      Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" />
         <DockPanel Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
-            <Button x:Name="btnCancel" Content="Cancel" 
+            <Button x:Name="btnCancel" Content="Cancel" Click="BtnCancel"
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsCancel="True" Margin="0,0,10,0" />
             <Button x:Name="btnLogin" Content="Login" 
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsDefault="True" Margin="10,0,0,0" 

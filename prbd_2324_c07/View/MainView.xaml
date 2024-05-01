@@ -3,15 +3,23 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
               xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
+              xmlns:vw="clr-namespace:prbd_2324_c07.View"
+              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
               mc:Ignorable="d"
-              WindowStartupLocation="CenterScreen"
-              Title="Main" Height="327" Width="632">
+              Title="{Binding Title}" Height="768" Width="1024" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
     <Grid>
-        <!-- Contenu de la page d'accueil -->
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Bienvenue sur la page d'accueil !" FontSize="24" FontWeight="Bold" Margin="0 0 0 20"/>
-        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Menu>
+            <MenuItem Header="Logout" Click="BtnMenuLogout"/>
+            <MenuItem Header="Reload"/>
+            <MenuItem Header="Reset"/>
+        </Menu>
     </Grid>
 </f:WindowBase>
