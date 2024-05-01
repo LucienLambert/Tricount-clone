@@ -36,7 +36,8 @@ public class User : EntityBase<PridContext> {
     }
 
      public override string ToString() {
-        return $"<User : fullname ={FullName}, " +
-            $"#subscription = {Subscriptions.Count}";
+        return $"<User : fullname ={FullName}, " + $"#Mail = {Mail}," + $"#UserId = {UserId}";
     }
+
+    
 }

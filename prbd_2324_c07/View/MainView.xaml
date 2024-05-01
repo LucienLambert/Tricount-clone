@@ -3,18 +3,23 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
               xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
+              xmlns:vw="clr-namespace:prbd_2324_c07.View"
+              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
               mc:Ignorable="d"
-              d:DataContext="{d:DesignInstance Type=vm:MainViewModel, IsDesignTimeCreatable=True}"
-              WindowStartupLocation="CenterScreen"
-              Title="MainView" Height="400" Width="600">
-
+              Title="{Binding Title}" Height="768" Width="1024" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <vm:MainViewModel x:Name="vm" />
+        <vm:MainViewModel/>
     </Window.DataContext>
-
-    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="32"
-           Text="{Binding Title}" />
-
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Menu>
+            <MenuItem Header="Logout" Click="BtnMenuLogout"/>
+            <MenuItem Header="Reload"/>
+            <MenuItem Header="Reset"/>
+        </Menu>
+    </Grid>
 </f:WindowBase>
