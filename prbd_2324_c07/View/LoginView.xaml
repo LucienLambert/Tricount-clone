@@ -36,7 +36,7 @@
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsCancel="True" Margin="0,0,10,0" />
             <Button x:Name="btnLogin" Content="Login" 
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsDefault="True" Margin="10,0,0,0" 
-                    Command="{Binding LoginCommand}"/>
+                    Command="{Binding LoginButton}"/>
         </DockPanel>
         <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
             <TextBlock Height="auto" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220" >

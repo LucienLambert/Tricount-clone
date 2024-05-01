@@ -5,10 +5,20 @@ using System.Globalization;
 using PRBD_Framework;
 using Microsoft.EntityFrameworkCore;
 using System;
+using prbd_2324_c07.View;
 
 namespace prbd_2324_c07;
 
 public partial class App : ApplicationBase<User,PridContext>{
+    public enum Messages{
+        MSG_NEW_USER,
+        MSG_PSEUDO_CHANGED,
+        MSG_USER_CHANGED,
+        MSG_DISPLAY_USER,
+        MSG_CLOSE_TAB,
+        MSG_LOGIN
+    }
+
     public App() {
         var ci = new CultureInfo("fr-BE") {
             DateTimeFormat = {
@@ -24,10 +34,19 @@ public partial class App : ApplicationBase<User,PridContext>{
     }
 
     protected override void OnStartup(StartupEventArgs e) {
+        base.OnStartup(e);
+
         PrepareDatabase();
         TestQueries();
 
+        // par défaut au start on passera par ce NavigateTo
         NavigateTo<LoginViewModel, User, PridContext>();
+
+        // si un user est logé alors on passe par ce NavigateTo
+        Register<User>(this, Messages.MSG_LOGIN, user => {
+            Login(user);
+            NavigateTo<MainViewModel, User, PridContext>();
+        });
     }
 
     private static void PrepareDatabase() {
@@ -46,28 +65,6 @@ public partial class App : ApplicationBase<User,PridContext>{
     }
 
     private static void TestQueries() {
-
-        Console.WriteLine("Befor Modification");
-        foreach (var user in Context.Users) {
-            Console.WriteLine("USER : " + user.FullName);
-            Console.WriteLine("SUBSCRIPTION : " + user.Subscriptions.Count);
-            Console.WriteLine("TRICOUNT : " + user.Tricounts.Count);
-            Console.WriteLine("OPERATION : " + user.Operations.Count);
-            Console.WriteLine("REPARTITION : " + user.Repartitions.Count);
-            foreach (var tri in Context.Tricounts) {
-                if (tri.CreatorId == user.UserId) {
-                    Console.WriteLine("TEMPLE : " + tri.Templates.Count);
-                }
-            }
-            Console.WriteLine("TEMPLE_ITEMS : " + user.TemplatesItems.Count);
-            Console.WriteLine("********************************");
-        }
-
-        var test = Context.Users.FirstOrDefault(r => r.FullName == "Boris");
-        if (test != null) {
-            Context.Users.Remove(test);
-        }
-
         //Test Balances
         var tricountsList = Context.Tricounts.ToList();
         tricountsList.ForEach(tri => {

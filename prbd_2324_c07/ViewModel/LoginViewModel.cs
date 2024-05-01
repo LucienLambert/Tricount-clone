@@ -2,33 +2,37 @@
 using prbd_2324_c07.Model;
 using System.Windows.Controls;
 using Newtonsoft.Json;
+using System.Windows.Input;
+using PRBD_Framework;
+using Microsoft.Xaml.Behaviors.Core;
 
 namespace prbd_2324_c07.ViewModel;
 
-public class LoginViewModel : PRBD_Framework.ViewModelBase<User, PridContext> {
+public class LoginViewModel : ViewModelBase<User, PridContext> {
 
     private string _pseudo;
     private string _password;
 
-    public LoginViewModel() {
-
-    }
-
     public string Pseudo {
         get => _pseudo;
-        set => SetProperty(ref _pseudo, value, () => Validation());
+        set => SetProperty(ref _pseudo, value, () => Validate());
     }
 
     public string Password {
         get => _password;
-        set => SetProperty(ref _password, value, () => Validation());
+        set => SetProperty(ref _password, value, () => Validate());
     }
 
-    public bool Validation() {
+    public ICommand LoginButton {  get; set; }
+
+    public LoginViewModel() {
+        LoginButton = new RelayCommand(LoginAction);
+    }
+
+    public override bool Validate() {
         ClearErrors();
 
         var user = Context.Users.FirstOrDefault(user => user.FullName == Pseudo);
-        Console.WriteLine(user);
 
         if (string.IsNullOrEmpty(Pseudo)) {
             AddError(nameof(Pseudo), "required");
@@ -41,13 +45,20 @@ public class LoginViewModel : PRBD_Framework.ViewModelBase<User, PridContext> {
                 AddError(nameof(Password), "required");
             } else if (Password.Length < 8) {
                 AddError(nameof(Password), "lenght must be >= 8");
-            } else if (user.Password != Password) {
+            } else if (!SecretHasher.Verify(Password, user.Password)) {
                 AddError(nameof(Password), "Wrong password");
             }
         }
-
             return !HasErrors;
         }
+
+    private void LoginAction() {
+        if (Validate()) { 
+            var user = Context.Users.FirstOrDefault(u => u.FullName == Pseudo);
+            NotifyColleagues(App.Messages.MSG_LOGIN, user);
+            Console.Write("Connexion réussi");
+        }
+    }
 
     protected override void OnRefreshData() {
         // pour plus tard
