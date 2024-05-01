@@ -1,0 +1,11 @@
+﻿using prbd_2324_c07;
+using PRBD_Framework;
+
+namespace prbd_2324_c07.View;
+
+public partial class LoginView : WindowBase {
+
+    public LoginView() {
+        InitializeComponent();
+    }
+}

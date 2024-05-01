@@ -27,7 +27,7 @@ public partial class App : ApplicationBase<User,PridContext>{
         PrepareDatabase();
         TestQueries();
 
-        NavigateTo<MainViewModel, User, PridContext>();
+        NavigateTo<LoginViewModel, User, PridContext>();
     }
 
     private static void PrepareDatabase() {
