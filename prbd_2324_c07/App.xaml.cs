@@ -35,7 +35,7 @@ public partial class App : ApplicationBase<User,PridContext>{
         base.OnStartup(e);
 
         PrepareDatabase();
-        TestQueries();
+        //TestQueries();
 
         // par défaut au start on passera par ce NavigateTo
         NavigateTo<LoginViewModel, User, PridContext>();

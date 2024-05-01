@@ -7,7 +7,8 @@
               xmlns:vw="clr-namespace:prbd_2324_c07.View"
               xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
               mc:Ignorable="d"
-              Title="{Binding Title}" Height="768" Width="1024" WindowStartupLocation="CenterScreen">
+              Title="{Binding Title}" Height="768" Width="1024" WindowStartupLocation="CenterScreen"
+              MinHeight="400" MinWidth="650">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
@@ -21,5 +22,19 @@
             <MenuItem Header="Reload"/>
             <MenuItem Header="Reset"/>
         </Menu>
+
+
+        
+        <f:MyTabControl x:Name="tabControl" Margin="10" Grid.Row="1">
+
+
+            <TabItem x:Name="tricountsTab" Header="My Tricounts" Tag="MyTricounts">
+
+                <vw:TricountsView/>
+
+            </TabItem>
+            
+        </f:MyTabControl>
+
     </Grid>
 </f:WindowBase>
