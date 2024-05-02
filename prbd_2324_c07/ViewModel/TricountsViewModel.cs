@@ -9,16 +9,29 @@ public class TricountsViewModel : ViewModelBase<User, PridContext>
 {
 
     public ObservableCollection<Tricount> Tricounts { get; set; }
-
-
-    public static string Title {
-        get => $"My Tricount ({CurrentUser?.Mail})";
-    }
+    
 
     public TricountsViewModel() : base() {
-        Tricounts = new ObservableCollection<Tricount>(Context.Tricounts);
+        Tricounts = GetTricountsByUser(ViewModelCommon.CurrentUser);
 
     }
+
+    public ObservableCollection<Tricount> GetTricountsByUser(User user) {
+        if (ViewModelCommon.isAdmin){
+            return new ObservableCollection<Tricount>(Context.Tricounts);
+        }
+        // Tricounts crées par l'utilisateur
+        IQueryable<Tricount> createdTricounts = Context.Tricounts.Where(t => t.Creator == user);
+        // Tricounts dont l'utilisateur est participant
+        IQueryable<Tricount> participantTricounts = Context.Subscriptions
+            .Where(sub => sub.User == user)
+            .Select(sub => sub.Tricount);
+        // Union des deux
+        IQueryable<Tricount> allTricounts = createdTricounts.Union(participantTricounts);
+
+        return new ObservableCollection<Tricount>(allTricounts);
+    }
+    
 
     protected override void OnRefreshData() {
         // pour plus tard
