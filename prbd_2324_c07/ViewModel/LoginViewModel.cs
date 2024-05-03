@@ -47,7 +47,7 @@ public class LoginViewModel : ViewModelBase<User, PridContext> {
             }
         }
             return !HasErrors;
-        }
+    }
 
     private void LoginAction() {
         if (Validate()) { 
