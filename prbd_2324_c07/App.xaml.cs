@@ -69,10 +69,10 @@ public partial class App : ApplicationBase<User,PridContext>{
 
     private static void TestQueries() {
         //Test Balances
-        var tricountsList = Context.Tricounts.ToList();
-        tricountsList.ForEach(tri => {
-            tri.RefreshBalance();
-        });
+        //var tricountsList = Context.Tricounts.ToList();
+        //tricountsList.ForEach(tri => {
+        //    tri.RefreshBalance();
+        //});
 
         Context.SaveChanges();
         // Un endroit pour tester vos requêtes LINQ
