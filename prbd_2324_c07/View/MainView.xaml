@@ -7,25 +7,43 @@
               xmlns:vw="clr-namespace:prbd_2324_c07.View"
               xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
               mc:Ignorable="d"
-              Title="{Binding Title}" Height="768" Width="1024" WindowStartupLocation="CenterScreen">
+              Title="{Binding Title}" Height="768" Width="1024" WindowStartupLocation="CenterScreen"
+              MinHeight="400" MinWidth="650">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="13*"/>
+            <ColumnDefinition Width="243*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Menu>
+        <Menu Grid.ColumnSpan="2" Margin="0,0,0,36">
             <MenuItem Header="Logout" Click="BtnMenuLogout"/>
             <MenuItem Header="Reload"/>
             <MenuItem Header="Reset"/>
         </Menu>
-        <!-- Ajout du contrôle d'onglets -->
+
+        <!--<<<<<<< HEAD
+        
         <f:MyTabControl x:Name="tabControlNewTricount" Margin="10" Grid.Row="1" HasCloseButton="True">
             <TabItem x:Name="NewTricountTab" Header="New Tricount" Tag="NewTricount">
                 <vw:TricountDetailView/>
             </TabItem>
         </f:MyTabControl>
+=======-->
+
+
+
+        <f:MyTabControl x:Name="tabControl" Margin="10,28,10,10" Grid.ColumnSpan="2" Grid.RowSpan="2" HasCloseButton="True">
+            <TabItem x:Name="tricountsTab" Header="My Tricounts" Tag="MyTricounts">
+                <vw:TricountsView/>
+            </TabItem>
+        </f:MyTabControl>
+
+        <!-->>>>>>> f25f807fc75f0f0c90d9180d71a764374c1ae20d-->
     </Grid>
 </f:WindowBase>

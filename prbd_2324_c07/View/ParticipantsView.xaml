@@ -39,7 +39,7 @@
                     <Grid Width="464">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" MinWidth="63" />
+                            <ColumnDefinition Width="Auto" MinWidth="63"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{Binding}" Margin="5,5,0,5" Grid.ColumnSpan="2"/>
                         <Button Grid.Column="1" Content="Supprimer" Height="20" Width="64"  Margin="10,3,-10,3"

@@ -9,6 +9,7 @@ namespace prbd_2324_c07;
 public partial class App : ApplicationBase<User,PridContext>{
     public enum Messages{
         MSG_NEW_USER,
+        MSG_NEW_TRICOUNT,
         MSG_PSEUDO_CHANGED,
         MSG_USER_CHANGED,
         MSG_DISPLAY_USER,
@@ -35,7 +36,7 @@ public partial class App : ApplicationBase<User,PridContext>{
         base.OnStartup(e);
 
         PrepareDatabase();
-        TestQueries();
+        //TestQueries();
 
         // par défaut au start on passera par ce NavigateTo
         NavigateTo<LoginViewModel, User, PridContext>();
