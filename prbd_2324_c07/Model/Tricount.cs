@@ -45,6 +45,7 @@ namespace prbd_2324_c07.Model
             CreatedAt = DateTime.Now;
         }
 
+
         public void RefreshBalance() {
 
             Balance.Clear();

@@ -9,16 +9,44 @@ public class TricountsViewModel : ViewModelBase<User, PridContext>
 {
 
     public ObservableCollection<Tricount> Tricounts { get; set; }
-
-
-    public static string Title {
-        get => $"My Tricount ({CurrentUser?.Mail})";
-    }
-
+    
     public TricountsViewModel() : base() {
-        Tricounts = new ObservableCollection<Tricount>(Context.Tricounts);
+        Tricounts = GetTricountsByUser(ViewModelCommon.CurrentUser);
 
     }
+
+    private ObservableCollection<Tricount> GetTricountsByUser(User user) {
+        if (ViewModelCommon.isAdmin){
+            return new ObservableCollection<Tricount>(Context.Tricounts);
+        }
+        // Tricounts crées par l'utilisateur
+        IQueryable<Tricount> createdTricounts = Context.Tricounts.Where(t => t.Creator == user);
+        // Tricounts dont l'utilisateur est participant
+        IQueryable<Tricount> participantTricounts = Context.Subscriptions
+            .Where(sub => sub.User == user)
+            .Select(sub => sub.Tricount);
+        // Union des deux et tri
+        IQueryable<Tricount> allTricounts = createdTricounts.Union(participantTricounts);
+        var sortedTricounts = SortTricountsByDate(new ObservableCollection<Tricount>(allTricounts));
+        
+        return sortedTricounts;
+    }
+
+    private ObservableCollection<Tricount> SortTricountsByDate(ObservableCollection<Tricount> tricounts) {
+        
+        // TODO: ne fonctionne pas totalement, à modifier
+        var sortedTricounts = tricounts
+            .Select(t => new 
+            {
+                Tricount = t,
+                MostRecentOperationDate = t.Operations.Max(o => (DateTime?)o.Operation_date)
+            })
+            .OrderByDescending(t => t.MostRecentOperationDate ?? t.Tricount.CreatedAt)
+            .Select(t => t.Tricount);
+
+        return new ObservableCollection<Tricount>(sortedTricounts);
+    }
+    
 
     protected override void OnRefreshData() {
         // pour plus tard
