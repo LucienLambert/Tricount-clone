@@ -10,13 +10,12 @@ public class TricountsViewModel : ViewModelBase<User, PridContext>
 
     public ObservableCollection<Tricount> Tricounts { get; set; }
     
-
     public TricountsViewModel() : base() {
         Tricounts = GetTricountsByUser(ViewModelCommon.CurrentUser);
 
     }
 
-    public ObservableCollection<Tricount> GetTricountsByUser(User user) {
+    private ObservableCollection<Tricount> GetTricountsByUser(User user) {
         if (ViewModelCommon.isAdmin){
             return new ObservableCollection<Tricount>(Context.Tricounts);
         }
@@ -26,10 +25,26 @@ public class TricountsViewModel : ViewModelBase<User, PridContext>
         IQueryable<Tricount> participantTricounts = Context.Subscriptions
             .Where(sub => sub.User == user)
             .Select(sub => sub.Tricount);
-        // Union des deux
+        // Union des deux et tri
         IQueryable<Tricount> allTricounts = createdTricounts.Union(participantTricounts);
+        var sortedTricounts = SortTricountsByDate(new ObservableCollection<Tricount>(allTricounts));
+        
+        return sortedTricounts;
+    }
 
-        return new ObservableCollection<Tricount>(allTricounts);
+    private ObservableCollection<Tricount> SortTricountsByDate(ObservableCollection<Tricount> tricounts) {
+        
+        // TODO: ne fonctionne pas totalement, à modifier
+        var sortedTricounts = tricounts
+            .Select(t => new 
+            {
+                Tricount = t,
+                MostRecentOperationDate = t.Operations.Max(o => (DateTime?)o.Operation_date)
+            })
+            .OrderByDescending(t => t.MostRecentOperationDate ?? t.Tricount.CreatedAt)
+            .Select(t => t.Tricount);
+
+        return new ObservableCollection<Tricount>(sortedTricounts);
     }
     
 
