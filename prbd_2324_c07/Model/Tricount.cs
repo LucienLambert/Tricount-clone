@@ -27,8 +27,6 @@ namespace prbd_2324_c07.Model
         [Required]
         public virtual User Creator { get; set; }
 
-        //public virtual ICollection<Subscription> Subscriptions { get; set; }
-        //public virtual ICollection<Operation> Operations { get; set; }
         public virtual ICollection<Template> Templates { get; set; } = new HashSet<Template>();
         public virtual ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
         public virtual ICollection<Operation> Operations { get; set; } = new HashSet<Operation>();
@@ -53,6 +51,7 @@ namespace prbd_2324_c07.Model
 
         // Utilisateur createur ou participant
         public static IQueryable<Tricount> GetAllWithUser(User user) {
+            // A déplacer dans VM?
             if (ViewModelCommon.isAdmin) {
                 return Context.Tricounts;
             }
@@ -86,6 +85,29 @@ namespace prbd_2324_c07.Model
 
             return lastOp == null ? null : lastOp.Operation_date;
 
+        }
+
+        public int NumberOfOperations() {
+            var operations = Context.Operations
+                .Where(op=>op.TricountId == this.TricountId)
+                .Count();
+            return operations;
+        }
+        public int NumberOfParticipants() {
+
+            var participants = Context.Subscriptions
+                .Where(sub => sub.TricountId == this.TricountId)
+                .Distinct()
+                .Count();
+            return participants;
+        }
+
+        public double TotalExpenses() {
+            var totalExpenses = Context.Operations
+                .Where(op => op.TricountId == this.TricountId)
+                .Sum(op => op.Amount);
+
+            return totalExpenses;
         }
 
 

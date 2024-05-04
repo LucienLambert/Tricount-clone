@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c="clr-namespace:prbd_2324_c07.Converters"
              xmlns:local="clr-namespace:prbd_2324_c07.View"
              xmlns:m="clr-namespace:prbd_2324_c07.Model"
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
@@ -10,6 +11,9 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:TricountCardViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="300" d:DesignWidth="200">
+    <f:UserControlBase.Resources>
+        <c:ObjectToVisibilityConverter x:Key="ObjectToVisibility"/>
+    </f:UserControlBase.Resources>
     <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Padding="10" Width="200" Height="220">
         <Viewbox>
         <StackPanel>
@@ -20,11 +24,31 @@
                 <Run FontWeight="Bold" Text="{Binding Creator.FullName}" /> 
             </TextBlock>
             <TextBlock Text="{Binding CreatedAt, StringFormat='on {0:dd/MM/yyyy}'}" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
-                <TextBlock TextWrapping="Wrap" Margin="0,5,0,5" TextAlignment="Center" Text="{Binding LastOpDate, TargetNullValue='', StringFormat='Last operation on {0:dd/MM/yyyy}', Mode=OneWay}"/>
-                <TextBlock Text="With x friends" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
-            <TextBlock Text="x operations" TextWrapping="Wrap" Margin="0,5,0,5" TextAlignment="Center" />
-            <TextBlock Text="Total Expense" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
-            <TextBlock Text="My Expense" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
+
+
+
+            <TextBlock TextWrapping="Wrap" Margin="0,5,0,5" TextAlignment="Center" Visibility="{Binding LastOpDate, Converter={StaticResource ObjectToVisibility}}">
+                <Run Text="Last operation on"/>
+                <Run FontWeight="Bold" Text="{Binding LastOpDate, StringFormat={}{0:dd/MM/yyyy}, Mode=OneWay}" />  
+            </TextBlock>
+
+
+
+
+            <TextBlock Text="{Binding NumberOfFriends}" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
+            <TextBlock Text="{Binding NumberOfOperations}" TextWrapping="Wrap" Margin="0,5,0,5" TextAlignment="Center" />
+
+
+                <Grid Visibility="{Binding TotalExpenses, Converter={StaticResource ObjectToVisibility}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Total Expenses:" HorizontalAlignment="Left" />
+                    <TextBlock Grid.Column="1" Text="{Binding TotalExpenses, StringFormat={}{0} €}" HorizontalAlignment="Right"/>
+                </Grid>
+            
+                <TextBlock Text="My Expense" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
             <TextBlock Text="My Balance" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
         </StackPanel>
         </Viewbox>
