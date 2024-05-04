@@ -1,4 +1,6 @@
-﻿using PRBD_Framework;
+﻿using prbd_2324_c07.ViewModel;
+using PRBD_Framework;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -43,6 +45,47 @@ namespace prbd_2324_c07.Model
             Description = description;
             Creator = creator;
             CreatedAt = DateTime.Now;
+        }
+
+        public static IQueryable<Tricount> GetAll() {
+            return Context.Tricounts.OrderBy(t => t.Title);
+        }
+
+        // Utilisateur createur ou participant
+        public static IQueryable<Tricount> GetAllWithUser(User user) {
+            if (ViewModelCommon.isAdmin) {
+                return Context.Tricounts;
+            }
+            // Tricounts crées par l'utilisateur
+            IQueryable<Tricount> createdTricounts = Context.Tricounts.Where(t => t.Creator == user);
+            // Tricounts dont l'utilisateur est participant
+            IQueryable<Tricount> participantTricounts = Context.Subscriptions
+                .Where(sub => sub.User == user)
+                .Select(sub => sub.Tricount);
+            // Union des deux et tri
+            IQueryable<Tricount> allTricounts = createdTricounts.Union(participantTricounts);
+       
+
+            // TODO: tri ne fonctionne pas totalement, à modifier
+            var sortedTricounts = allTricounts
+            .Select(t => new {
+                Tricount = t,
+                MostRecentOperationDate = t.Operations.Max(o => (DateTime?)o.Operation_date)
+            })
+            .OrderByDescending(t => t.MostRecentOperationDate ?? t.Tricount.CreatedAt)
+            .Select(t => t.Tricount);
+
+            return sortedTricounts;
+        }
+
+        public DateTime? GetLastOperationDate() {
+            var lastOp = Context.Operations
+                .Where(op => op.TricountId == this.TricountId)
+                .OrderByDescending(o => o.Operation_date)
+                .FirstOrDefault();
+
+            return lastOp == null ? null : lastOp.Operation_date;
+
         }
 
 
