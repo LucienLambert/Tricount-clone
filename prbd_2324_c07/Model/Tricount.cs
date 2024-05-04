@@ -86,7 +86,6 @@ namespace prbd_2324_c07.Model
             return lastOp == null ? null : lastOp.Operation_date;
 
         }
-
         public int NumberOfOperations() {
             var operations = Context.Operations
                 .Where(op=>op.TricountId == this.TricountId)
@@ -109,7 +108,6 @@ namespace prbd_2324_c07.Model
 
             return totalExpenses;
         }
-
 
         public void RefreshBalance() {
 
