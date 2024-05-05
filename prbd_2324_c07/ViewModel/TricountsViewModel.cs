@@ -1,4 +1,5 @@
-﻿using prbd_2324_c07.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using prbd_2324_c07.Model;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -29,6 +30,7 @@ public class TricountsViewModel : ViewModelBase<User, PridContext> {
 
     protected override void OnRefreshData() {
         var tricounts = Tricount.GetAllWithUser(CurrentUser);
+        //tricounts.ForEachAsync(tricount => { tricount.RefreshBalance(); });
         Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(tricount => new TricountCardViewModel(tricount)));
     }
 

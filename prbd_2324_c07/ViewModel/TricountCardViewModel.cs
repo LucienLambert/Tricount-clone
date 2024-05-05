@@ -18,7 +18,9 @@ namespace prbd_2324_c07.ViewModel
         public User Creator => Tricount.Creator;
         public string NumberOfFriends => GenerateNumberOfFriends();
         public string NumberOfOperations => GenerateNumberOfOperations();
-        public double TotalExpenses => Math.Round(Tricount.TotalExpenses(), 2);
+        public double TotalExpenses => Tricount.TotalExpenses();
+        public double UserExpenses => Tricount.GetUserExpenses(CurrentUser);
+        public double UserBalance => Tricount.GetUserBalance(CurrentUser);
 
 
         public TricountCardViewModel(Tricount tricount) : base() {

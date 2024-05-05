@@ -43,6 +43,7 @@ namespace prbd_2324_c07.Model
             Description = description;
             Creator = creator;
             CreatedAt = DateTime.Now;
+            RefreshBalance();
         }
 
         public static IQueryable<Tricount> GetAll() {
@@ -110,19 +111,24 @@ namespace prbd_2324_c07.Model
 
         public double TotalExpenses() {
             var totalExpenses = Operations
-                .Where(op => op.TricountId == this.TricountId)
                 .Sum(op => op.Amount);
 
-            return totalExpenses;
+            return Math.Round(totalExpenses,2);
+        }
+
+        public double GetUserExpenses(User user) {
+            var expenses = Operations
+                .Where(op=> op.Initiator == user)
+                .Sum(op => op.Amount);
+
+            return Math.Round(expenses, 2);
         }
 
         public double GetUserBalance(User user) {
-
+            RefreshBalance();
             var balance = Balance.GetValueOrDefault(user.UserId);
 
-
-
-            return 0;
+            return Math.Round(balance, 2);
         }
 
         public void RefreshBalance() {
