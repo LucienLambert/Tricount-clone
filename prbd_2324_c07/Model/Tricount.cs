@@ -81,6 +81,21 @@ namespace prbd_2324_c07.Model
             return sortedTricounts;
         }
 
+
+        public static IQueryable<Tricount> GetFiltered(string Filter) {
+
+            //Manque le bon order by, tricounts dont participants = filtre
+            var filtered = from t in Context.Tricounts
+                           where t.Title.Contains(Filter) 
+                           || t.Description.Contains(Filter) 
+                           || t.Creator.FullName.Contains(Filter)
+                           || t.Operations.Any(o=>o.Title.Contains(Filter))
+                           orderby t.CreatedAt
+                           select t;
+
+            return filtered;
+        }
+
         public DateTime? GetLastOperationDate() {
             var lastOp = Operations
                 .Where(op => op.TricountId == this.TricountId)

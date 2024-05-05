@@ -18,10 +18,16 @@ public class TricountsViewModel : ViewModelBase<User, PridContext> {
 
     public ICommand NewTricount { get; set; }
 
- 
+    private string filter;
+
+    public string Filter { get => filter; set => SetProperty(ref filter, value, OnRefreshData); }
+    public ICommand ClearFilter { get; set; }
+
     public TricountsViewModel() : base() {
 
         OnRefreshData();
+
+        ClearFilter = new RelayCommand(() => Filter = "");
 
         NewTricount = new RelayCommand(() => {
             NotifyColleagues(App.Messages.MSG_NEW_TRICOUNT, new Tricount());
@@ -29,8 +35,9 @@ public class TricountsViewModel : ViewModelBase<User, PridContext> {
     }
 
     protected override void OnRefreshData() {
-        var tricounts = Tricount.GetAllWithUser(CurrentUser);
-        //tricounts.ForEachAsync(tricount => { tricount.RefreshBalance(); });
+
+        IQueryable<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Tricount.GetAllWithUser(CurrentUser) : Tricount.GetFiltered(Filter);
+
         Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(tricount => new TricountCardViewModel(tricount)));
     }
 
