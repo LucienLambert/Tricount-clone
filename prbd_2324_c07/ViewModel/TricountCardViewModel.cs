@@ -19,8 +19,7 @@ namespace prbd_2324_c07.ViewModel
         public string NumberOfFriends => GenerateNumberOfFriends();
         public string NumberOfOperations => GenerateNumberOfOperations();
         public double TotalExpenses => Math.Round(Tricount.TotalExpenses(), 2);
-
-        public TricountCardViewModel(Tricount tricount) {
+        public TricountCardViewModel(Tricount tricount) : base() {
             Tricount = tricount;
         }
         public string GenerateNumberOfFriends() {
