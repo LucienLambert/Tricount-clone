@@ -19,12 +19,16 @@ namespace prbd_2324_c07.ViewModel
         public string NumberOfFriends => GenerateNumberOfFriends();
         public string NumberOfOperations => GenerateNumberOfOperations();
         public double TotalExpenses => Math.Round(Tricount.TotalExpenses(), 2);
+
+
         public TricountCardViewModel(Tricount tricount) : base() {
             Tricount = tricount;
         }
+
+
         public string GenerateNumberOfFriends() {
 
-            var number = CalculateNumberOfFriends();
+            var number = Tricount.NumberOfFriends();
             
             switch(number) {
                 case 0:
@@ -35,14 +39,6 @@ namespace prbd_2324_c07.ViewModel
                     return "With " + number + " friends";
             }
             return "error";
-        }
-
-        // Nombre d'amis = participants moins celui qui regarde le Tricount
-        public int CalculateNumberOfFriends() {
-            if (ViewModelCommon.isAdmin && Tricount.CreatorId != CurrentUser.UserId)
-                return Tricount.NumberOfParticipants();
-
-            return Tricount.NumberOfParticipants() - 1;
         }
 
         public string GenerateNumberOfOperations() {

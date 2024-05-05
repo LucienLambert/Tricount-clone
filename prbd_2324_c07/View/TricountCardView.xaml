@@ -14,34 +14,49 @@
     <f:UserControlBase.Resources>
         <c:ObjectToVisibilityConverter x:Key="ObjectToVisibility"/>
     </f:UserControlBase.Resources>
-    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Padding="10" Width="200" Height="220">
-        <Viewbox>
+    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Padding="10" Width="200" Height="240">
         <StackPanel>
             <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16" TextAlignment="Center" />
             <TextBlock Text="{Binding Description, TargetNullValue='No Description'}" FontStyle="{x:Static FontStyles.Italic}" TextWrapping="Wrap" Margin="0,5,0,5" TextAlignment="Center" />
             <TextBlock TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center">
                 <Run Text="Created by" />
-                <Run FontWeight="Bold" Text="{Binding Creator.FullName}" /> 
+                <Run FontWeight="Bold" Text="{Binding Creator.FullName}" />
             </TextBlock>
             <TextBlock Text="{Binding CreatedAt, StringFormat='on {0:dd/MM/yyyy}'}" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
-                <TextBlock TextWrapping="Wrap" Margin="0,5,0,5" TextAlignment="Center" Visibility="{Binding LastOpDate, Converter={StaticResource ObjectToVisibility}}">
+            <TextBlock TextWrapping="Wrap" Margin="0,5,0,5" TextAlignment="Center" Visibility="{Binding LastOpDate, Converter={StaticResource ObjectToVisibility}}">
                 <Run Text="Last operation on"/>
                 <Run FontWeight="Bold" Text="{Binding LastOpDate, StringFormat={}{0:dd/MM/yyyy}, Mode=OneWay}" />
-                </TextBlock>
-                <TextBlock Text="{Binding NumberOfFriends}" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
-                <TextBlock Text="{Binding NumberOfOperations}" TextWrapping="Wrap" Margin="0,5,0,5" TextAlignment="Center" />
-                <Grid Visibility="{Binding TotalExpenses, Converter={StaticResource ObjectToVisibility}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Total Expenses:" HorizontalAlignment="Left" />
-                    <TextBlock Grid.Column="1" Text="{Binding TotalExpenses, StringFormat={}{0} €}" HorizontalAlignment="Right"/>
-                </Grid>
+            </TextBlock>
+            <TextBlock Text="{Binding NumberOfFriends}" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
+            <TextBlock Text="{Binding NumberOfOperations}" TextWrapping="Wrap" Margin="0,5,0,5" TextAlignment="Center" />
 
-                <TextBlock Text="My Expense" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
-                <TextBlock Text="My Balance" TextWrapping="Wrap" Margin="0,5,0,0" TextAlignment="Center" />
-            </StackPanel>
-        </Viewbox>
+
+            <Grid Visibility="{Binding TotalExpenses, Converter={StaticResource ObjectToVisibility}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Total Expenses:" HorizontalAlignment="Left" />
+                <TextBlock Grid.Column="1" Text="{Binding TotalExpenses, StringFormat={}{0} €}" HorizontalAlignment="Right"/>
+            </Grid>
+
+            <Grid Visibility="{Binding TotalExpenses, Converter={StaticResource ObjectToVisibility}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="My Expenses:" HorizontalAlignment="Left" />
+                <TextBlock Grid.Column="1" Text="{Binding TotalExpenses, StringFormat={}{0} €}" HorizontalAlignment="Right"/>
+            </Grid>
+
+            <Grid Visibility="{Binding TotalExpenses, Converter={StaticResource ObjectToVisibility}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock FontWeight="Bold" Grid.Column="0" Text="My Balance:" HorizontalAlignment="Left" />
+                <TextBlock Grid.Column="1" Text="{Binding TotalExpenses, StringFormat={}{0} €}" HorizontalAlignment="Right"/>
+            </Grid>
+        </StackPanel>
     </Border>
 </f:UserControlBase>

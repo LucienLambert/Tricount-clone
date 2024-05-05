@@ -28,8 +28,7 @@ public class TricountsViewModel : ViewModelBase<User, PridContext> {
     }
 
     protected override void OnRefreshData() {
-        IQueryable<Tricount> tricounts = Tricount.GetAllWithUser(CurrentUser);
-        //TODO: déplacer filtre ?
+        var tricounts = Tricount.GetAllWithUser(CurrentUser);
         Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(tricount => new TricountCardViewModel(tricount)));
     }
 

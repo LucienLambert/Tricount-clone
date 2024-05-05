@@ -51,19 +51,22 @@ namespace prbd_2324_c07.Model
 
         // Utilisateur createur ou participant
         public static IQueryable<Tricount> GetAllWithUser(User user) {
-            // A déplacer dans VM?
-            if (ViewModelCommon.isAdmin) {
-                return Context.Tricounts;
-            }
-            // Tricounts crées par l'utilisateur
-            IQueryable<Tricount> createdTricounts = Context.Tricounts.Where(t => t.Creator == user);
-            // Tricounts dont l'utilisateur est participant
-            IQueryable<Tricount> participantTricounts = Context.Subscriptions
+
+            IQueryable<Tricount> createdTricounts;
+            IQueryable<Tricount> participantsTricounts;
+
+            if (user is Administrator) {
+                createdTricounts = Context.Tricounts;   
+                participantsTricounts = Context.Tricounts;
+            } else {
+                createdTricounts = Context.Tricounts.Where(t => t.Creator == user);
+                participantsTricounts = Context.Subscriptions
                 .Where(sub => sub.User == user)
                 .Select(sub => sub.Tricount);
+            }
+
             // Union des deux et tri
-            IQueryable<Tricount> allTricounts = createdTricounts.Union(participantTricounts);
-       
+            IQueryable<Tricount> allTricounts = createdTricounts.Union(participantsTricounts);
 
             // TODO: tri ne fonctionne pas totalement, à modifier
             var sortedTricounts = allTricounts
@@ -78,7 +81,7 @@ namespace prbd_2324_c07.Model
         }
 
         public DateTime? GetLastOperationDate() {
-            var lastOp = Context.Operations
+            var lastOp = Operations
                 .Where(op => op.TricountId == this.TricountId)
                 .OrderByDescending(o => o.Operation_date)
                 .FirstOrDefault();
@@ -87,26 +90,39 @@ namespace prbd_2324_c07.Model
 
         }
         public int NumberOfOperations() {
-            var operations = Context.Operations
+            var operations = Operations
                 .Where(op=>op.TricountId == this.TricountId)
                 .Count();
             return operations;
         }
         public int NumberOfParticipants() {
 
-            var participants = Context.Subscriptions
+            var participants = Subscriptions
                 .Where(sub => sub.TricountId == this.TricountId)
                 .Distinct()
                 .Count();
             return participants;
         }
+        // Participants ajoutés au Tricount par le créateur
+        public int NumberOfFriends() {
+            return NumberOfParticipants() - 1;
+        }
 
         public double TotalExpenses() {
-            var totalExpenses = Context.Operations
+            var totalExpenses = Operations
                 .Where(op => op.TricountId == this.TricountId)
                 .Sum(op => op.Amount);
 
             return totalExpenses;
+        }
+
+        public double GetUserBalance(User user) {
+
+            var balance = Balance.GetValueOrDefault(user.UserId);
+
+
+
+            return 0;
         }
 
         public void RefreshBalance() {
@@ -140,9 +156,9 @@ namespace prbd_2324_c07.Model
                 temp = 0;
             }
 
-            foreach (KeyValuePair<int, float> kvp in Balance) {
-                Console.WriteLine("Tricount ID = {0} User = {1}, Value = {2}", this.TricountId, kvp.Key, kvp.Value);
-            }
+            //foreach (KeyValuePair<int, float> kvp in Balance) {
+            //    Console.WriteLine("Tricount ID = {0} User = {1}, Value = {2}", this.TricountId, kvp.Key, kvp.Value);
+            //}
 
         }
 
