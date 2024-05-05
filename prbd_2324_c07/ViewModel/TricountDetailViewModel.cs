@@ -1,75 +1,100 @@
 ﻿using prbd_2324_c07.Model;
 using PRBD_Framework;
+using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
 
-public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
+public class TricountDetailViewModel : ViewModelBase<User, PridContext>
+{
 
     private string _defaultHeader;
 
     public string DefaultHeader {
-        get => $"<New Tricount> - No Description\nCreated by {CurrentUser.FullName} on {DateTime.Now.Date.ToString("dd/MM/yyyy")}";
+        get => _defaultHeader;
+        set => SetProperty(ref _defaultHeader, value);
     }
 
-    private DateTime _date;
-
-    public DateTime Date {
-        get => _date;
-        set => SetProperty(ref _date, value, () => Validate());
+    private Tricount _tricount;
+    public Tricount Tricount {
+        get => _tricount;
+        set => SetProperty(ref _tricount, value);
     }
 
-    private string _title;
+    private bool _isNew;
+    public bool IsNew {
+        get => _isNew;
+        set => SetProperty(ref _isNew, value);
+    }
 
     public string Title {
-        get => _title;
-        set => SetProperty(ref _title, value, () => Validate());
+        get => Tricount?.Title;
+        set => SetProperty(Tricount.Title, value, Tricount, (t, v) => {
+            t.Title = v;
+            Validate();
+            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+        });
     }
-
-    private string _description;
 
     public string Description {
-        get => _description;
-        set => SetProperty(ref _description, value ,() => Validate());
+        get => Tricount?.Description;
+        set => SetProperty(Tricount?.Description, value, Tricount, (t, d) => {
+            t.Description = d;
+            Validate();
+        });
     }
 
-    private bool _conditionButtonSave;
-
-    public bool ConditionButtonSave { 
-        get => _conditionButtonSave;
-        set => SetProperty(ref _conditionButtonSave, value);
+    public DateTime CreatedAt {
+        get => (DateTime)Tricount?.CreatedAt;
+        set => SetProperty(Tricount?.CreatedAt, value, Tricount, (t, c) => {
+            t.CreatedAt = (DateTime)c;
+            Validate();
+        });
     }
+
+    public ICommand BtnCancel { get; set; }
 
     public TricountDetailViewModel() {
 
     }
 
-    public TricountDetailViewModel(Tricount tricount, bool isNew) { 
-        Date = DateTime.Now;
+    public TricountDetailViewModel(Tricount tricount, bool isNew) {
+        Tricount = tricount;
+        IsNew = isNew;
+        CreatedAt = DateTime.Now;
+        HeaderDefaultSet();
+        BtnCancel = new RelayCommand(CancelAction, CanCancelAction);
+    }
+
+    private void HeaderDefaultSet() {
+        if (IsNew) {
+            DefaultHeader = $"<New Tricount> - No Description\nCreated by {CurrentUser.FullName} on {DateTime.Now.Date.ToString("dd/MM/yyyy")}";
+        } else {
+            DefaultHeader = $"{Tricount.Title} - {Tricount.Description}\nCreated by {Tricount.Creator} on {Tricount.CreatedAt.ToString("dd/MM/yyyy")}";
+        }
     }
 
     public override bool Validate() {
         ClearErrors();
 
-        var tricount = Context.Tricounts.FirstOrDefault(Tricount => Tricount.Title == Title);
+        Tricount.Validate();
 
-        if (Title == null) {
-            AddError(nameof(Title), "required");
-        } else if (Title.Length < 3) {
-            AddError(nameof(Title), "Min 3 characters");
-        } else if (tricount != null) {
-            AddError(nameof(Title), "this tricount's title is already in use");
-        } 
+        AddErrors(Tricount.Errors);
 
-        if(!string.IsNullOrEmpty(Description)) {
-            if (Description.Length < 3) {
-                    AddError(nameof(Description), "Min 3 characters");
-            }
-        }
-
-        if (Date.CompareTo(DateTime.Now) > 0) {
-            AddError(nameof(Date), "the date cannot be greater than the current date");
-        }
-        ConditionButtonSave = !HasErrors;
         return !HasErrors;
+    }
+
+    public override void CancelAction() {
+        ClearErrors();
+        if (IsNew) {
+            IsNew = false;
+            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+        } else {
+            Tricount.Reload();
+            RaisePropertyChanged();
+        }
+    }
+
+    private bool CanCancelAction() {
+        return Tricount != null && (IsNew || Tricount.IsModified);
     }
 }

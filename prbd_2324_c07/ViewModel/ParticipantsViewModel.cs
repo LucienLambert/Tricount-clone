@@ -1,7 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using prbd_2324_c07.Model;
 using PRBD_Framework;
-using System.Collections.ObjectModel;
 
 namespace prbd_2324_c07.ViewModel;
 
@@ -40,7 +39,6 @@ class ParticipantsViewModel : ViewModelBase<User, PridContext> {
         } else {
             ConditionButtonAdd = true;
         }
-        Console.WriteLine(ConditionButtonAdd);
     }
 
 }

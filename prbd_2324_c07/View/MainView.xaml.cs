@@ -2,6 +2,7 @@
 using PRBD_Framework;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace prbd_2324_c07.View;
 
@@ -31,7 +32,6 @@ public partial class MainView : WindowBase {
     }
 
     private void DoCloseTab(Tricount tricount) {
-        Console.Write("razerazerazerazer");
         tabControl.CloseByTag(string.IsNullOrEmpty(tricount.Title) ? "<New Tricount>" : tricount.Title);
     }
 

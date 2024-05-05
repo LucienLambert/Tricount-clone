@@ -1,6 +1,7 @@
 ﻿using PRBD_Framework;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace prbd_2324_c07.Model
@@ -35,7 +36,6 @@ namespace prbd_2324_c07.Model
         public Dictionary<int, float> Balance { get; set; } = new();
 
         public Tricount() {
-
         }
 
         public Tricount(string title, string description, User creator) {
@@ -43,6 +43,28 @@ namespace prbd_2324_c07.Model
             Description = description;
             Creator = creator;
             CreatedAt = DateTime.Now;
+        }
+
+        public override bool Validate() {
+            ClearErrors();
+
+            if(string.IsNullOrEmpty(Title)) {
+                AddError(nameof(Title), "required");
+            } else if(Title.Length < 3) {
+                AddError(nameof(Title), " length must be >= 3");
+            } else if((IsDetached || IsAdded) && Context.Tricounts.Any(t => t.Title == Title)) {
+                    AddError(nameof(Title), "title arleady exists");
+            }
+
+
+            if (!string.IsNullOrEmpty(Description) && Description.Length < 3) {
+                AddError(nameof(Description), "the length must be > 3 or empty");
+            }
+
+            if (DateTime.Now.CompareTo(CreatedAt) < 0) {
+                AddError(nameof(CreatedAt), "the date cannot be greater than the current date");
+            }
+            return !HasErrors;
         }
 
 
