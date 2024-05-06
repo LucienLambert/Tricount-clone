@@ -71,27 +71,37 @@ namespace prbd_2324_c07.Model
 
             // TODO: tri ne fonctionne pas totalement, à modifier
             var sortedTricounts = allTricounts
-            .Select(t => new {
-                Tricount = t,
-                MostRecentOperationDate = t.Operations.Max(o => (DateTime?)o.Operation_date)
-            })
-            .OrderByDescending(t => t.MostRecentOperationDate ?? t.Tricount.CreatedAt)
-            .Select(t => t.Tricount);
+                .Select(t => new {
+                    Tricount = t,
+                    MostRecentDate = t.Operations.Any() ? t.Operations.Max(o => o.Operation_date) : t.CreatedAt
+                })
+                .OrderByDescending(t => t.MostRecentDate)
+                .Select(t => t.Tricount);
 
             return sortedTricounts;
         }
 
 
-        public static IQueryable<Tricount> GetFiltered(string Filter) {
+        public static IQueryable<Tricount> GetFiltered(string Filter, User user) {
 
-            //Manque le bon order by, tricounts dont participants = filtre
-            var filtered = from t in Context.Tricounts
+            var allTricounts = GetAllWithUser(user);
+
+            var filtered = from t in allTricounts
                            where t.Title.Contains(Filter) 
                            || t.Description.Contains(Filter) 
                            || t.Creator.FullName.Contains(Filter)
                            || t.Operations.Any(o=>o.Title.Contains(Filter))
-                           orderby t.CreatedAt
+                           || t.Subscriptions.Any(s => s.User.FullName.Contains(Filter)) 
                            select t;
+
+            // Peut-être redondant
+            var sortedTricounts = filtered
+                .Select(t => new {
+                    Tricount = t,
+                    MostRecentDate = t.Operations.Any() ? t.Operations.Max(o => o.Operation_date) : t.CreatedAt
+                })
+                .OrderByDescending(t => t.MostRecentDate)
+                .Select(t => t.Tricount);
 
             return filtered;
         }
