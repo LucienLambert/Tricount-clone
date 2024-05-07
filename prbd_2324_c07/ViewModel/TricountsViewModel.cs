@@ -22,6 +22,7 @@ public class TricountsViewModel : ViewModelBase<User, PridContext> {
 
     public string Filter { get => filter; set => SetProperty(ref filter, value, OnRefreshData); }
     public ICommand ClearFilter { get; set; }
+    public ICommand DisplayTricountDetails { get; set; }
 
     public TricountsViewModel() : base() {
 
@@ -32,6 +33,11 @@ public class TricountsViewModel : ViewModelBase<User, PridContext> {
         NewTricount = new RelayCommand(() => {
             NotifyColleagues(App.Messages.MSG_NEW_TRICOUNT, new Tricount());
         });
+
+        DisplayTricountDetails = new RelayCommand<TricountCardViewModel>(vm => {
+            NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, vm.Tricount);
+        });
+
     }
 
     protected override void OnRefreshData() {

@@ -11,11 +11,13 @@ public partial class MainView : WindowBase {
         InitializeComponent();
         Register<Tricount>(App.Messages.MSG_NEW_TRICOUNT, tricount => DoDisplayTricount(tricount, true));
         Register<Tricount>(App.Messages.MSG_CLOSE_TAB, tricount => DoCloseTab(tricount));
+        Register<Tricount>(App.Messages.MSG_DISPLAY_TRICOUNT,
+                tricount => DoDisplayTricount(tricount, false));
     }
 
     private void DoDisplayTricount(Tricount tricount, bool isNew) {
         if (tricount != null)
-            OpenTab(isNew ? "<New Tricount>" : tricount.Title, tricount.Title, () => new TricountDetailView(tricount, isNew));
+            OpenTab(isNew ? "<New Tricount>" : tricount.Title, tricount.Title, () => new TricountCardDetailView(tricount, isNew));
     }
 
     private void OpenTab(string header, string tag, Func<UserControlBase> createView) {

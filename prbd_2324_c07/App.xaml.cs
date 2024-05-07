@@ -13,6 +13,7 @@ public partial class App : ApplicationBase<User,PridContext>{
         MSG_PSEUDO_CHANGED,
         MSG_USER_CHANGED,
         MSG_DISPLAY_USER,
+        MSG_DISPLAY_TRICOUNT,
         MSG_CLOSE_TAB,
         MSG_LOGIN,
         MSG_LOGOUT

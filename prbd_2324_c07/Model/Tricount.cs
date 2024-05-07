@@ -160,21 +160,20 @@ namespace prbd_2324_c07.Model
 
             Balance.Clear();
 
-            var userIds = Context.Subscriptions
+            var participantsIds = Subscriptions
                 .Where(s => s.TricountId == this.TricountId)
                 .Select(s => s.UserId)
                 .ToList();
 
-            var operationsList = Context.Operations
+            var operationsList = Operations
                 .Where(op => op.TricountId == this.TricountId)
                 .ToList();
 
-            var totalAmount = Context.Operations
-                .Where(op => op.TricountId == this.TricountId)
+            var totalAmount = operationsList
                 .Sum(op => op.Amount);
 
             float temp = 0;
-            foreach (var userId in userIds) {
+            foreach (var userId in participantsIds) {
                 operationsList.ForEach(op => {
                     op.RefreshBalance();
                     foreach (var kvp in op.Balance) {
@@ -186,11 +185,6 @@ namespace prbd_2324_c07.Model
                 Balance.Add(userId, temp);
                 temp = 0;
             }
-
-            //foreach (KeyValuePair<int, float> kvp in Balance) {
-            //    Console.WriteLine("Tricount ID = {0} User = {1}, Value = {2}", this.TricountId, kvp.Key, kvp.Value);
-            //}
-
         }
 
 
