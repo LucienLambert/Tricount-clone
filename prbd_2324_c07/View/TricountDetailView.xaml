@@ -52,7 +52,7 @@
         <vw:ParticipantsView Margin="6,0,14,0" Grid.Row="7" Grid.ColumnSpan="2" Height="221" VerticalAlignment="Center"/>
 
         <!-- Templates section -->
-        <Label Content="Label" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center" Height="25" Width="38" Margin="28,0,0,0" Grid.Column="2"/>
+        <Label Content="Templates" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center" Height="25" Width="62" Margin="28,0,0,0" Grid.Column="2"/>
 
         <!-- Button Save or Cancel Formulaire -->
         <Button Grid.Column="2" Content="Cancel" HorizontalAlignment="Left" Margin="316,0,0,0" Grid.Row="8" VerticalAlignment="Center" Height="20" Width="39"

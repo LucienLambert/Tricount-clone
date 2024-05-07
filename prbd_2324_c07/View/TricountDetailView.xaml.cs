@@ -9,10 +9,6 @@ public partial class TricountDetailView : UserControlBase{
     private readonly TricountDetailViewModel _vm;
     
 
-    public TricountDetailView() {
-
-    }
-
     public TricountDetailView(Tricount tricount, bool isNew){
         InitializeComponent();
         DataContext = _vm = new TricountDetailViewModel(tricount, isNew);

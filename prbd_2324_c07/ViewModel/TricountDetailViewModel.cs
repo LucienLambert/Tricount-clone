@@ -1,11 +1,15 @@
-﻿using prbd_2324_c07.Model;
+﻿using Microsoft.IdentityModel.Tokens;
+using prbd_2324_c07.Model;
 using PRBD_Framework;
+using System.Configuration;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
 
-public class TricountDetailViewModel : ViewModelBase<User, PridContext>
-{
+public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
+
+    // --------- Gestion TricountView ---------
 
     private string _defaultHeader;
 
@@ -31,7 +35,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext>
         set => SetProperty(Tricount.Title, value, Tricount, (t, v) => {
             t.Title = v;
             Validate();
-            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+            //NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         });
     }
 
@@ -52,17 +56,63 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext>
     }
 
     public ICommand BtnCancel { get; set; }
+    public ICommand BtnSave { get; set; }
 
-    public TricountDetailViewModel() {
+    // --------- Gestion Participant ---------
 
+    public ICommand AddUserCommand { get; set; }
+    public ICommand AddMySelfCommand { get; set; }
+    public ICommand AddEveryBodyCommand { get; set; }
+    public ICommand DelUserCommand { get; set; }
+
+    private User _userSelected;
+    public User UserSelected {
+        get => _userSelected;
+        set => SetProperty(ref _userSelected, value);
     }
+
+    private ObservableCollectionFast<User> _non_Participant;
+    public ObservableCollectionFast<User> Non_Participant {
+        get => _non_Participant;
+        set => SetProperty(ref _non_Participant, value);
+    }
+
+    private ObservableCollectionFast<User> _participant;
+    public ObservableCollectionFast<User> Participant {
+        get => _participant;
+        set => SetProperty(ref _participant, value);
+    }
+
+    
+
+    //public TricountDetailViewModel() {
+    //    //Console.WriteLine("constructeur vide");
+    //    //Tricount = new Tricount();
+    //    //IsNew = true;
+    //    //IgnitializeDataView();
+    //}
 
     public TricountDetailViewModel(Tricount tricount, bool isNew) {
         Tricount = tricount;
         IsNew = isNew;
+        InitializeDataView();
+        RaisePropertyChanged();
+    }
+
+    private void InitializeDataView() {
+        BtnCancel = new RelayCommand(CancelAction, CanCancelAction);
+        BtnSave = new RelayCommand(SaveAction, CanSaveAction);
+        AddUserCommand = new RelayCommand(AddAction);
+        AddMySelfCommand = new RelayCommand(AddMySelfAction);
+        AddEveryBodyCommand = new RelayCommand(AddEveryBodyAction);
+        DelUserCommand = new RelayCommand<User>(DelAction);
+        
+
         CreatedAt = DateTime.Now;
         HeaderDefaultSet();
-        BtnCancel = new RelayCommand(CancelAction, CanCancelAction);
+        
+        ListNon_Participant();
+        ListParticipant();
     }
 
     private void HeaderDefaultSet() {
@@ -77,7 +127,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext>
         ClearErrors();
 
         Tricount.Validate();
-
+        
         AddErrors(Tricount.Errors);
 
         return !HasErrors;
@@ -96,5 +146,87 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext>
 
     private bool CanCancelAction() {
         return Tricount != null && (IsNew || Tricount.IsModified);
+    }
+
+    public override void SaveAction() {
+        if (IsNew) {
+            Tricount.CreatorId = CurrentUser.UserId;
+            Context.Add(Tricount);
+            Context.AddRange(Tricount.Subscriptions);
+            IsNew = false;
+        }
+        Context.SaveChanges();
+        RaisePropertyChanged();
+        NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+    }
+
+    private bool CanSaveAction() {
+        if (IsNew)
+            return Tricount.Validate() && !HasErrors;
+        return Tricount != null && Tricount.IsModified && !HasErrors;
+    }
+
+    private void ListNon_Participant() {
+        Non_Participant = new ObservableCollectionFast<User>();
+        if (IsNew) {
+            var listUser = Context.Users.OrderBy(u => u.FullName);
+            foreach (var user in listUser) {
+                Non_Participant.Add(user);
+            }
+        } else {
+            foreach(Subscription s in Tricount.Subscriptions) {
+                if (!Participant.Contains(s.User)) {
+                    Non_Participant.Add(s.User);
+                }
+            }
+        }         
+    }
+
+    private void ListParticipant() {
+        Participant = new ObservableCollectionFast<User>();
+        if (IsNew) {
+            var listParticipant = Tricount.ParticipantTricount();
+            foreach(Subscription sub in Tricount.Subscriptions) {
+                Participant.Add(sub.User);
+            }
+        } else {
+            
+        }
+    }
+
+    private void AddAction() {
+        if(UserSelected != null) {
+            Tricount.AddUserSubTricount(UserSelected.FullName);
+            Participant.Add(UserSelected);
+            Non_Participant.Remove(UserSelected);
+        }
+    }
+
+    private void AddMySelfAction() {
+        if (!Participant.Contains(CurrentUser)) {
+            Tricount.AddUserSubTricount(CurrentUser.FullName);
+            Participant.Add(CurrentUser);
+            Non_Participant.Remove(CurrentUser);
+        } else { 
+            //Console.WriteLine("CurrentUser déjà dans la liste Participant");
+        }
+    }
+
+    private void AddEveryBodyAction() {
+        if(!Non_Participant.IsNullOrEmpty()) {
+            foreach(var p in Non_Participant) {
+                Tricount.AddUserSubTricount(p.FullName);
+                Participant.Add(p);
+            }
+            Non_Participant.Clear();
+        } else {
+            //Console.WriteLine("tout les users participe déjà");
+        }
+    }
+
+    private void DelAction(User user) {
+        Participant.Remove(user);
+        Non_Participant.Add(user);
+        //Console.WriteLine("click supprimer : "+ user.FullName);
     }
 }
