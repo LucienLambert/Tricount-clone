@@ -1,55 +1,50 @@
-﻿using prbd_2324_c07.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using prbd_2324_c07.Model;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
 
-public class TricountsViewModel : ViewModelBase<User, PridContext>
-{
+public class TricountsViewModel : ViewModelBase<User, PridContext> {
 
-    public ObservableCollection<Tricount> Tricounts { get; set; }
-    
+    private ObservableCollection<TricountCardViewModel> _tricounts;
+
+
+    public ObservableCollection<TricountCardViewModel> Tricounts {
+        get => _tricounts;
+        set => SetProperty(ref _tricounts, value);
+    }
+
+    public ICommand NewTricount { get; set; }
+
+    private string filter;
+
+    public string Filter { get => filter; set => SetProperty(ref filter, value, OnRefreshData); }
+    public ICommand ClearFilter { get; set; }
+    public ICommand DisplayTricountDetails { get; set; }
+
     public TricountsViewModel() : base() {
-        Tricounts = GetTricountsByUser(ViewModelCommon.CurrentUser);
+
+        OnRefreshData();
+
+        ClearFilter = new RelayCommand(() => Filter = "");
+
+        NewTricount = new RelayCommand(() => {
+            NotifyColleagues(App.Messages.MSG_NEW_TRICOUNT, new Tricount());
+        });
+
+        DisplayTricountDetails = new RelayCommand<TricountCardViewModel>(vm => {
+            NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, vm.Tricount);
+        });
 
     }
-
-    private ObservableCollection<Tricount> GetTricountsByUser(User user) {
-        if (ViewModelCommon.isAdmin){
-            return new ObservableCollection<Tricount>(Context.Tricounts);
-        }
-        // Tricounts crées par l'utilisateur
-        IQueryable<Tricount> createdTricounts = Context.Tricounts.Where(t => t.Creator == user);
-        // Tricounts dont l'utilisateur est participant
-        IQueryable<Tricount> participantTricounts = Context.Subscriptions
-            .Where(sub => sub.User == user)
-            .Select(sub => sub.Tricount);
-        // Union des deux et tri
-        IQueryable<Tricount> allTricounts = createdTricounts.Union(participantTricounts);
-        var sortedTricounts = SortTricountsByDate(new ObservableCollection<Tricount>(allTricounts));
-        
-        return sortedTricounts;
-    }
-
-    private ObservableCollection<Tricount> SortTricountsByDate(ObservableCollection<Tricount> tricounts) {
-        
-        // TODO: ne fonctionne pas totalement, à modifier
-        var sortedTricounts = tricounts
-            .Select(t => new 
-            {
-                Tricount = t,
-                MostRecentOperationDate = t.Operations.Max(o => (DateTime?)o.Operation_date)
-            })
-            .OrderByDescending(t => t.MostRecentOperationDate ?? t.Tricount.CreatedAt)
-            .Select(t => t.Tricount);
-
-        return new ObservableCollection<Tricount>(sortedTricounts);
-    }
-    
 
     protected override void OnRefreshData() {
-        // pour plus tard
+
+        IQueryable<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Tricount.GetAllWithUser(CurrentUser) : Tricount.GetFiltered(Filter, CurrentUser);
+
+        Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(tricount => new TricountCardViewModel(tricount)));
     }
 
 

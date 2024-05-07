@@ -9,9 +9,11 @@ namespace prbd_2324_c07;
 public partial class App : ApplicationBase<User,PridContext>{
     public enum Messages{
         MSG_NEW_USER,
+        MSG_NEW_TRICOUNT,
         MSG_PSEUDO_CHANGED,
         MSG_USER_CHANGED,
         MSG_DISPLAY_USER,
+        MSG_DISPLAY_TRICOUNT,
         MSG_CLOSE_TAB,
         MSG_LOGIN,
         MSG_LOGOUT
@@ -68,7 +70,7 @@ public partial class App : ApplicationBase<User,PridContext>{
     }
 
     private static void TestQueries() {
-        //Test Balances
+
         var tricountsList = Context.Tricounts.ToList();
         tricountsList.ForEach(tri => {
             tri.RefreshBalance();

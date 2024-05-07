@@ -40,16 +40,16 @@ public  class Operation : EntityBase<PridContext>
         Tricount = tricount;
         Initiator = initiator;
         Operation_date = operation_date;
+        RefreshBalance();
     }
 
     public void RefreshBalance() {
         Balance.Clear();
-        var repartitions = Context.Repartitions
-            .Where(rep => rep.OperationId == this.OperationId)
+
+        var repartitions = Repartitions
             .ToList();
 
-        int initiator = InitiatorId;
-        int totalWeight = repartitions
+        int totalWeight = Repartitions
             .Sum(rep => rep.Weight);
 
         float temp = 0;
@@ -68,11 +68,6 @@ public  class Operation : EntityBase<PridContext>
                 temp = 0;
             }
         });
-        //foreach (KeyValuePair<int, float> kvp in Balance) {
-        //    Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-        //}
-
-
     }
 
 
