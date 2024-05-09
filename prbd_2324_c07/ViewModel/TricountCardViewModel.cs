@@ -31,29 +31,23 @@ namespace prbd_2324_c07.ViewModel
         public string GenerateNumberOfFriends() {
 
             var number = Tricount.NumberOfFriends();
-            
-            switch(number) {
-                case 0:
-                    return "With no friend";
-                case 1:
-                    return "With 1 friend";
-                case > 1:
-                    return "With " + number + " friends";
-            }
-            return "error";
+
+            return number switch {
+                0 => "With no friend",
+                1 => "With 1 friend",
+                > 1 => "With " + number + " friends",
+                _ => "error",
+            };
         }
 
         public string GenerateNumberOfOperations() {
             var number = Tricount.NumberOfOperations();
-            switch(number) {
-                case 0:
-                    return "no operation";
-                case 1:
-                    return "1 operation";
-                case > 1:
-                    return number + " operations";
-            }
-            return "error";
+            return number switch {
+                0 => "no operation",
+                1 => "1 operation",
+                > 1 => number + " operations",
+                _ => "error",
+            };
         }
 
     }
