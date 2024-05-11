@@ -12,11 +12,8 @@ namespace prbd_2324_c07.ViewModel
             private init => SetProperty(ref _operation, value);
         }
 
-        //public string Title => Tricount.Title;
-        //public string Description => Tricount.Description;
-        //public DateTime CreatedAt => Tricount.CreatedAt;
-        //public DateTime? LastOpDate => Tricount.GetLastOperationDate();
-        //public User Creator => Tricount.Creator;
+
+        public double OperationAmount => Math.Round(Operation.Amount,2);
 
 
         public OperationCardViewModel(Operation operation) : base() {

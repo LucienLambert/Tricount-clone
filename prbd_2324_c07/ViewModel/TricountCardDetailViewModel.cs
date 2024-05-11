@@ -23,17 +23,25 @@ namespace prbd_2324_c07.ViewModel
             set => SetProperty(ref _isNew, value);
         }
 
+        public string TricountTitle => Tricount.Title;
+
+        public string TricountDescription => Tricount.Description;
+
+        public string TricountCreator => Tricount.Creator.FullName;
+
+        public DateTime CreatedAt => Tricount.CreatedAt;
 
         public ICommand EditTricount { get; set; }
 
         public ICommand DeleteTricount { get; set; }
 
 
+        public TricountCardDetailViewModel() {
+            
+        }
         public TricountCardDetailViewModel(Tricount tricount, bool isNew) {
             Tricount = tricount;
             IsNew = IsNew;
-
-
         }
 
 

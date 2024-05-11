@@ -8,6 +8,7 @@
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
              xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:TricountCardDetailViewModel, IsDesignTimeCreatable=False}"
              FontSize="14" d:DesignHeight="390" d:DesignWidth="528">
     <Grid >
         <Grid.RowDefinitions>
@@ -17,10 +18,18 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical">
-            <TextBlock Text="Titre Tricount" HorizontalAlignment="Center">
-                <Run Text="- description tricount"></Run>
-            </TextBlock>
-            <TextBlock Text="Creator + Date Tricount" HorizontalAlignment="Center"></TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock TextWrapping="Wrap" Text="{Binding Tricount.Title}" />
+                <TextBlock Text=" - " />
+                <TextBlock TextWrapping="Wrap" Text="{Binding Tricount.Description, TargetNullValue='No Description'}"  />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock TextWrapping="Wrap" Text="Created by " />
+                <TextBlock Text="{Binding Tricount.Creator.FullName}" />
+                <TextBlock Text="{Binding Tricount.CreatedAt,  StringFormat=' on {0:dd/MM/yyyy}'}" />
+            </StackPanel>
+
         </StackPanel>
 
         <Grid Grid.Row="1">

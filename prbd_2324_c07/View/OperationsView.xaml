@@ -21,7 +21,7 @@
             <RowDefinition Height="1*" ></RowDefinition>
         </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Height="450">
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Height="450" Margin="0,20,0,0">
 
             <ListView x:Name="listView" ItemsSource="{Binding Operations}" Grid.Row="0" BorderBrush="Transparent" SelectionMode="Single">
             <i:Interaction.Triggers>
