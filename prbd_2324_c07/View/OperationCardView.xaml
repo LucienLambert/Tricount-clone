@@ -18,8 +18,8 @@
             </Border.Effect>
             <StackPanel Orientation="Vertical">
                 <Grid>
-                    <TextBlock Text="{Binding Operation.Title}" TextAlignment="Left" />
-                    <TextBlock Text="{Binding OperationAmount, StringFormat='{}{0} €'}" TextAlignment="Right" />
+                    <TextBlock FontWeight="Bold" Text="{Binding Operation.Title}" TextAlignment="Left" />
+                    <TextBlock FontWeight="Bold" Text="{Binding OperationAmount, StringFormat='{}{0} €'}" TextAlignment="Right" />
                 </Grid>
                 <Grid>
                     <TextBlock TextWrapping="Wrap" Text="Paid by ">

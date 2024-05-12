@@ -7,7 +7,8 @@
               xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
               mc:Ignorable="d"
               WindowStartupLocation="CenterScreen"
-              Title="Login" Height="200" Width="250">
+              Title="Login" Height="200" Width="250"
+              ResizeMode="NoResize">
     <Window.DataContext>
         <vm:LoginViewModel x:Name="vm"/>
     </Window.DataContext>
@@ -41,7 +42,14 @@
         <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
             <TextBlock Height="auto" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220" >
                 <Run Text="If you don't have a login and a password, click"/>
-                <Hyperlink><Run Text="here"/></Hyperlink>
+                <Button x:Name="btnSignup" Content="here" Command="{Binding SignupClick}" BorderThickness="0" Background="Transparent" Margin="0,-3" Foreground="Blue" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <TextBlock Text="{TemplateBinding Content}" TextDecorations="Underline" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
                 <Run Text="to sign-up."/>
             </TextBlock>
         </DockPanel>

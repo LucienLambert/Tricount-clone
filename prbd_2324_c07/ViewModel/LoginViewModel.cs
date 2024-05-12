@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using PRBD_Framework;
 using System.Windows;
+using prbd_2324_c07.View;
 
 namespace prbd_2324_c07.ViewModel;
 
@@ -21,10 +22,14 @@ public class LoginViewModel : ViewModelBase<User, PridContext> {
     }
 
     public ICommand LoginButton {  get; set; }
+    public ICommand SignupClick { get; set; }
 
     public LoginViewModel() {
         LoginButton = new RelayCommand(LoginAction);
+        SignupClick = new RelayCommand(SignupAction);
     }
+
+
 
     public override bool Validate() {
         ClearErrors();
@@ -55,6 +60,10 @@ public class LoginViewModel : ViewModelBase<User, PridContext> {
             NotifyColleagues(App.Messages.MSG_LOGIN, user);
             Console.Write("Connexion réussi");
         }
+    }
+
+    private void SignupAction() {
+        NotifyColleagues(App.Messages.MSG_SIGNUP_REQUESTED);
     }
 
     protected override void OnRefreshData() {

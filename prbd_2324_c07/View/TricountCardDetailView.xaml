@@ -19,15 +19,16 @@
 
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock TextWrapping="Wrap" Text="{Binding Tricount.Title}" />
+                <TextBlock FontWeight="Bold" TextWrapping="Wrap" Text="{Binding Tricount.Title}" />
                 <TextBlock Text=" - " />
-                <TextBlock TextWrapping="Wrap" Text="{Binding Tricount.Description, TargetNullValue='No Description'}"  />
+                <TextBlock FontStyle="Italic" TextWrapping="Wrap" Text="{Binding Tricount.Description, TargetNullValue='No Description'}"  />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock TextWrapping="Wrap" Text="Created by " />
-                <TextBlock Text="{Binding Tricount.Creator.FullName}" />
-                <TextBlock Text="{Binding Tricount.CreatedAt,  StringFormat=' on {0:dd/MM/yyyy}'}" />
+                <TextBlock FontSize="12" TextWrapping="Wrap" Text="Created by " />
+                <TextBlock FontSize="12" FontWeight="Bold" Text="{Binding Tricount.Creator.FullName}" />
+                <TextBlock FontSize="12" Text=" on"/>
+                <TextBlock FontSize="12" FontWeight="Bold" Text="{Binding Tricount.CreatedAt,  StringFormat=' {0:dd/MM/yyyy}'}" />
             </StackPanel>
 
         </StackPanel>

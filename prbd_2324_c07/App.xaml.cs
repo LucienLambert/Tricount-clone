@@ -9,6 +9,7 @@ namespace prbd_2324_c07;
 public partial class App : ApplicationBase<User,PridContext>{
     public enum Messages{
         MSG_NEW_USER,
+        MSG_SIGNUP_REQUESTED,
         MSG_NEW_TRICOUNT,
         MSG_PSEUDO_CHANGED,
         MSG_USER_CHANGED,
@@ -52,6 +53,11 @@ public partial class App : ApplicationBase<User,PridContext>{
             Login(user);
             NavigateTo<MainViewModel, User, PridContext>();
         });
+
+        Register(this, Messages.MSG_SIGNUP_REQUESTED, () => {
+            NavigateTo<SignupViewModel, User, PridContext>();
+        });
+
     }
 
     private static void PrepareDatabase() {

@@ -13,4 +13,5 @@ public partial class LoginView : WindowBase {
     private void BtnCancel(object sender, RoutedEventArgs e) {
         Close();
     }
+
 }
