@@ -55,11 +55,10 @@
         </DockPanel>
 
         <!--DEBUG-->
-        <ComboBox Grid.Row="4" SelectionChanged="FastLogin">
+        <ComboBox Grid.Row="4" SelectionChanged="FastLogin" Width="20" Height="15">
             <ComboBoxItem>Administrator</ComboBoxItem>
             <ComboBoxItem>Benoît</ComboBoxItem>
             <ComboBoxItem>Boris</ComboBoxItem>
-            <ComboBoxItem>Bruno</ComboBoxItem>
             <ComboBoxItem>Marc</ComboBoxItem>
             <ComboBoxItem>Xavier</ComboBoxItem>
         </ComboBox>
