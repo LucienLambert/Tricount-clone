@@ -1,12 +1,12 @@
 ﻿using prbd_2324_c07.Model;
-using System.Windows.Input;
 using PRBD_Framework;
-using System.Windows;
-using prbd_2324_c07.View;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
 
-public class LoginViewModel : ViewModelBase<User, PridContext> {
+public class LoginViewModel : ViewModelBase<User, PridContext>
+{
 
     private string _pseudo;
     private string _password;
@@ -21,7 +21,7 @@ public class LoginViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(ref _password, value, () => Validate());
     }
 
-    public ICommand LoginButton {  get; set; }
+    public ICommand LoginButton { get; set; }
     public ICommand SignupClick { get; set; }
 
     public LoginViewModel() {
@@ -51,11 +51,11 @@ public class LoginViewModel : ViewModelBase<User, PridContext> {
                 AddError(nameof(Password), "Wrong password");
             }
         }
-            return !HasErrors;
+        return !HasErrors;
     }
 
     private void LoginAction() {
-        if (Validate()) { 
+        if (Validate()) {
             var user = Context.Users.FirstOrDefault(u => u.FullName == Pseudo);
             NotifyColleagues(App.Messages.MSG_LOGIN, user);
             Console.Write("Connexion réussi");
@@ -66,7 +66,21 @@ public class LoginViewModel : ViewModelBase<User, PridContext> {
         NotifyColleagues(App.Messages.MSG_SIGNUP_REQUESTED);
     }
 
+    //DEBUG
+    public void FastLoginAction(object param) {
+
+        var comboBox = param as ComboBox;
+        var selectedItem = comboBox.SelectedItem as ComboBoxItem;
+        string name = selectedItem.Content as string;
+        User usr = Context.Users
+            .Where(usr=>usr.FullName == name)
+            .FirstOrDefault();
+        NotifyColleagues(App.Messages.MSG_LOGIN, usr);
+
+    }
+
     protected override void OnRefreshData() {
         // pour plus tard
     }
 }
+

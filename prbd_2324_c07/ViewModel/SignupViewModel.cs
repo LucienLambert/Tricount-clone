@@ -116,7 +116,7 @@ namespace prbd_2324_c07.ViewModel
             if (Validate()) {
                 var hashedPass = SecretHasher.Hash(Password);
 
-                User newuser = new User(Mail, hashedPass, Name);
+                User newuser = new(Mail, hashedPass, Name);
 
                 Context.Users.Add(newuser);
                 Context.SaveChanges();

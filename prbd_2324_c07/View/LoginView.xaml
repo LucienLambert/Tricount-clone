@@ -53,6 +53,17 @@
                 <Run Text="to sign-up."/>
             </TextBlock>
         </DockPanel>
+
+        <!--DEBUG-->
+        <ComboBox Grid.Row="4" SelectionChanged="FastLogin">
+            <ComboBoxItem>Administrator</ComboBoxItem>
+            <ComboBoxItem>Benoît</ComboBoxItem>
+            <ComboBoxItem>Boris</ComboBoxItem>
+            <ComboBoxItem>Bruno</ComboBoxItem>
+            <ComboBoxItem>Marc</ComboBoxItem>
+            <ComboBoxItem>Xavier</ComboBoxItem>
+        </ComboBox>
+
     </Grid>
 
 </f:WindowBase>
