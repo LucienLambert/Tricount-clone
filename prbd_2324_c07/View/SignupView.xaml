@@ -7,12 +7,55 @@
               xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
               mc:Ignorable="d"
               WindowStartupLocation="CenterScreen"
-              Title="Signup" Height="250" Width="250"
+              Title="Signup" Height="250" Width="400"
               ResizeMode="NoResize">
     <Window.DataContext>
         <vm:SignupViewModel x:Name="vm"/>
     </Window.DataContext>
-    <Grid Margin="10">
-    </Grid>
 
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label x:Name="labelName" Content="Name" VerticalAlignment="Center" Padding="5" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" />
+        <TextBox x:Name="txtPseudo" TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Center" Grid.Row="0"
+            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Label x:Name="labelMail" Content="Mail" VerticalAlignment="Center" Padding="5" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" />
+        <TextBox x:Name="txtMail" TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Center" Grid.Row="1"
+            Text="{Binding Mail, UpdateSourceTrigger=PropertyChanged}" />
+
+
+
+        <Label Content="Password" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="5"/>
+        <PasswordBox x:Name="txtPassword"
+                    f:PasswordHelper.Attach="True"
+                    f:PasswordHelper.Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
+                    Grid.Column="1" Grid.Row="2" Height="18" />
+
+        <Label x:Name="labelConfirmPassword" Content="Confirm Password" VerticalAlignment="Center" Padding="5" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" />
+        <PasswordBox x:Name="txtConfirmPassword"
+                    f:PasswordHelper.Attach="True"
+                    f:PasswordHelper.Password="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}" 
+                    Grid.Column="1" Grid.Row="3" Height="18" />
+
+        <DockPanel Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+            <Button x:Name="btnCancel" Content="Cancel" Click="BtnCancel"
+                   HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsCancel="True" Margin="0,0,10,0" />
+            <Button x:Name="btnSignup" Content="Signup" 
+                   HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsDefault="True" Margin="10,0,0,0" 
+                   Command="{Binding SignupButton}"/>
+        </DockPanel>
+
+    </Grid>
+    
 </f:WindowBase>

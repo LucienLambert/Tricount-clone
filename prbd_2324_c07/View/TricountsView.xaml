@@ -28,7 +28,12 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" FontSize="14" />
-            <Button Content="Clear" Grid.Column="1" Command="{Binding ClearFilter}" Margin="5,0,0,0" />
+            <Button Content="Clear" Grid.Column="1" Command="{Binding ClearFilter}" Margin="5,0,0,0">
+                <Button.ToolTip>
+                    <ToolTip Content="Clear the filter"/>
+                </Button.ToolTip>
+
+            </Button>
         </Grid>
         <ListView x:Name="listView" ItemsSource="{Binding Tricounts}" Grid.Row="1" BorderBrush="Transparent" SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <i:Interaction.Triggers>
@@ -54,7 +59,11 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="btnNew" Content="New Tricount" Command="{Binding NewTricount}" HorizontalAlignment="Left" Margin="10,10" Padding="5,1"/>
+            <Button x:Name="btnNew" Content="New Tricount" Command="{Binding NewTricount}" HorizontalAlignment="Left" Margin="10,10" Padding="5,1">
+                <Button.ToolTip>
+                    <ToolTip Content="Create a new Tricount"/>
+                </Button.ToolTip>
+            </Button>
             <StackPanel Orientation="Horizontal" Grid.Column="1">
                 <Rectangle Width="50" Height="15" Fill="LightGray" />
                 <TextBlock Text="Null Balance" Margin="10" />

@@ -115,12 +115,23 @@ namespace prbd_2324_c07.Model
             return lastOp == null ? null : lastOp.Operation_date;
 
         }
+
+        public static IQueryable<Operation> GetOperationsForTricount(Tricount tricount) {
+            var operations = Context.Operations
+                .Where(op => op.TricountId == tricount.TricountId)
+                .OrderBy(op => op.Operation_date);
+            return operations;
+        }
+
+
         public int NumberOfOperations() {
             var operations = Operations
-                .Where(op=>op.TricountId == this.TricountId)
+                .Where(op => op.TricountId == this.TricountId)
                 .Count();
             return operations;
         }
+
+
         public int NumberOfParticipants() {
 
             var participants = Subscriptions

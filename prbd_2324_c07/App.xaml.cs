@@ -10,6 +10,7 @@ public partial class App : ApplicationBase<User,PridContext>{
     public enum Messages{
         MSG_NEW_USER,
         MSG_SIGNUP_REQUESTED,
+        MSG_SIGNUP_CANCELED,
         MSG_NEW_TRICOUNT,
         MSG_PSEUDO_CHANGED,
         MSG_USER_CHANGED,
@@ -57,6 +58,11 @@ public partial class App : ApplicationBase<User,PridContext>{
         Register(this, Messages.MSG_SIGNUP_REQUESTED, () => {
             NavigateTo<SignupViewModel, User, PridContext>();
         });
+
+        Register(this, Messages.MSG_SIGNUP_CANCELED, () => {
+            NavigateTo<LoginViewModel, User, PridContext>();
+        });
+
 
     }
 
