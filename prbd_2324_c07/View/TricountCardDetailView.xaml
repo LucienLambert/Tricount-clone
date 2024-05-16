@@ -43,8 +43,8 @@
             </Grid.RowDefinitions>
             
             <StackPanel Grid.Column="0">
-
-                <vw:OperationsView/>
+                
+                <vw:OperationsView DataContext="{Binding OperationsVM}"/>
 
             </StackPanel>
         </Grid>

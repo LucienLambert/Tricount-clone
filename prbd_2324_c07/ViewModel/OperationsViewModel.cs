@@ -9,6 +9,12 @@ namespace prbd_2324_c07.ViewModel
     public class OperationsViewModel : ViewModelBase<User, PridContext>
     {
 
+        private Tricount _tricount;
+        public Tricount Tricount {
+            get => _tricount;
+            set => SetProperty(ref _tricount, value);
+        }
+
         private ObservableCollection<OperationCardViewModel> _operations;
 
 
@@ -22,20 +28,23 @@ namespace prbd_2324_c07.ViewModel
         public ICommand NewOperation { get; set; }
 
 
-        public OperationsViewModel() : base() {
-
+        public OperationsViewModel(Tricount tricount) : base() {
+            Tricount= tricount;
             OnRefreshData();
 
         }
 
         protected override void OnRefreshData() {
 
+            Console.WriteLine(Tricount.Title);
             //a modifier
             var operations = Context.Operations;
 
             Operations = new ObservableCollection<OperationCardViewModel>(operations.Select(operation => new OperationCardViewModel(operation)));
 
         }
+
+
 
 
     }

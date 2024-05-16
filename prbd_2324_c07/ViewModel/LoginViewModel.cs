@@ -63,7 +63,7 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
     }
 
     private void SignupAction() {
-        NotifyColleagues(App.Messages.MSG_SIGNUP_REQUESTED);
+        NotifyColleagues(App.Messages.MSG_NEW_USER);
     }
 
     //DEBUG

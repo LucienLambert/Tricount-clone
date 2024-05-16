@@ -10,11 +10,6 @@
              xmlns:vw="clr-namespace:prbd_2324_c07.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
-    <UserControl.DataContext>
-        <vm:OperationsViewModel/>
-    </UserControl.DataContext>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*" ></RowDefinition>
