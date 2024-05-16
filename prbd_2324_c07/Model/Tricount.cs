@@ -8,7 +8,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace prbd_2324_c07.Model
 {
-    public class Tricount : EntityBase<PridContext> {
+    public class Tricount : EntityBase<PridContext>
+    {
 
         [Key]
         public int TricountId { get; set; }
@@ -57,7 +58,7 @@ namespace prbd_2324_c07.Model
             IQueryable<Tricount> participantsTricounts;
 
             if (user is Administrator) {
-                createdTricounts = Context.Tricounts;   
+                createdTricounts = Context.Tricounts;
                 participantsTricounts = Context.Tricounts;
             } else {
                 createdTricounts = Context.Tricounts.Where(t => t.Creator == user);
@@ -87,11 +88,11 @@ namespace prbd_2324_c07.Model
             var allTricounts = GetAllWithUser(user);
 
             var filtered = from t in allTricounts
-                           where t.Title.Contains(Filter) 
-                           || t.Description.Contains(Filter) 
+                           where t.Title.Contains(Filter)
+                           || t.Description.Contains(Filter)
                            || t.Creator.FullName.Contains(Filter)
-                           || t.Operations.Any(o=>o.Title.Contains(Filter))
-                           || t.Subscriptions.Any(s => s.User.FullName.Contains(Filter)) 
+                           || t.Operations.Any(o => o.Title.Contains(Filter))
+                           || t.Subscriptions.Any(s => s.User.FullName.Contains(Filter))
                            select t;
 
             // Peut-être redondant
@@ -117,7 +118,7 @@ namespace prbd_2324_c07.Model
         }
         public int NumberOfOperations() {
             var operations = Operations
-                .Where(op=>op.TricountId == this.TricountId)
+                .Where(op => op.TricountId == this.TricountId)
                 .Count();
             return operations;
         }
@@ -138,15 +139,22 @@ namespace prbd_2324_c07.Model
             var totalExpenses = Operations
                 .Sum(op => op.Amount);
 
-            return Math.Round(totalExpenses,2);
+            return Math.Round(totalExpenses, 2);
         }
 
         public double GetUserExpenses(User user) {
             var expenses = Operations
-                .Where(op=> op.Initiator == user)
+                .Where(op => op.Initiator == user)
                 .Sum(op => op.Amount);
 
             return Math.Round(expenses, 2);
+        }
+
+        public double GetUserBalance(User user) {
+            RefreshBalance();
+            var balance = Balance.GetValueOrDefault(user.UserId);
+
+            return Math.Round(balance, 2);
         }
 
         public override bool Validate() {
