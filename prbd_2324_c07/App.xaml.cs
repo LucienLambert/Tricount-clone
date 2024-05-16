@@ -8,18 +8,15 @@ namespace prbd_2324_c07;
 
 public partial class App : ApplicationBase<User,PridContext>{
     public enum Messages{
-        //TRICOUNT
+        MSG_NEW_USER,
+        MSG_SIGNUP_CANCELED,
         MSG_NEW_TRICOUNT,
         MSG_TRICOUNT_CHANGED,
-        //USER
-        MSG_NEW_USER,
         MSG_FULLNAME_CHANGED,
         MSG_USER_CHANGED,
-        //INTERFACE
         MSG_DISPLAY_USER,
         MSG_DISPLAY_TRICOUNT,
         MSG_CLOSE_TAB,
-        //LOG
         MSG_LOGIN,
         MSG_LOGOUT
     }
@@ -57,6 +54,16 @@ public partial class App : ApplicationBase<User,PridContext>{
             Login(user);
             NavigateTo<MainViewModel, User, PridContext>();
         });
+
+        Register(this, Messages.MSG_NEW_USER, () => {
+            NavigateTo<SignupViewModel, User, PridContext>();
+        });
+
+        Register(this, Messages.MSG_SIGNUP_CANCELED, () => {
+            NavigateTo<LoginViewModel, User, PridContext>();
+        });
+
+
     }
 
     private static void PrepareDatabase() {
