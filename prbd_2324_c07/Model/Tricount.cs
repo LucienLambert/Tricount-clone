@@ -3,12 +3,12 @@ using PRBD_Framework;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace prbd_2324_c07.Model
 {
-    public class Tricount : EntityBase<PridContext>
-    {
+    public class Tricount : EntityBase<PridContext> {
 
         [Key]
         public int TricountId { get; set; }
@@ -149,12 +149,28 @@ namespace prbd_2324_c07.Model
             return Math.Round(expenses, 2);
         }
 
-        public double GetUserBalance(User user) {
-            RefreshBalance();
-            var balance = Balance.GetValueOrDefault(user.UserId);
+        public override bool Validate() {
+            ClearErrors();
 
-            return Math.Round(balance, 2);
+            if (string.IsNullOrEmpty(Title)) {
+                AddError(nameof(Title), "required");
+            } else if (Title.Length < 3) {
+                AddError(nameof(Title), " length must be >= 3");
+            } else if ((IsDetached || IsAdded) && Context.Tricounts.Any(t => t.Title == Title)) {
+                AddError(nameof(Title), "title arleady exists");
+            }
+
+
+            if (!string.IsNullOrEmpty(Description) && Description.Length < 3) {
+                AddError(nameof(Description), "the length must be > 3 or empty");
+            }
+
+            if (DateTime.Now.CompareTo(CreatedAt) < 0) {
+                AddError(nameof(CreatedAt), "the date cannot be greater than the current date");
+            }
+            return !HasErrors;
         }
+
 
         public void RefreshBalance() {
 
@@ -187,10 +203,23 @@ namespace prbd_2324_c07.Model
             }
         }
 
+        // crée une subscription qui lie un user à un tricount.
+        public void AddUserSubTricount(string user) {
+            var userSelected = Context.Users.FirstOrDefault(u => u.FullName == user);
+            Console.Write(userSelected);
+            Subscriptions.Add(new Subscription(userSelected, this));
+            //Context.SaveChanges();
+        }
+
+        // return la liste des subscriptants du tricount
+        public ICollection<Subscription> ParticipantTricount() {
+            return Subscriptions;
+        }
 
         public override string ToString() {
-            return $"<tricount : title  = {Title}, " +
-                $"#creator = {CreatorId}, " +
+            return $"<tricount : title  = {Title}\n" +
+                $"#description = {Description}\n" +
+                $"#creatorId = {CreatorId}\n" +
                 $"#subscription = {Subscriptions.Count}";
         }
     }

@@ -1,75 +1,243 @@
-﻿using prbd_2324_c07.Model;
+﻿using Microsoft.IdentityModel.Tokens;
+using prbd_2324_c07.Model;
 using PRBD_Framework;
+using System.Configuration;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
 
 public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
+    // --------- Gestion TricountView ---------
+
     private string _defaultHeader;
 
     public string DefaultHeader {
-        get => $"<New Tricount> - No Description\nCreated by {CurrentUser.FullName} on {DateTime.Now.Date.ToString("dd/MM/yyyy")}";
+        get => _defaultHeader;
+        set => SetProperty(ref _defaultHeader, value);
     }
 
-    private DateTime _date;
-
-    public DateTime Date {
-        get => _date;
-        set => SetProperty(ref _date, value, () => Validate());
+    private Tricount _tricount;
+    public Tricount Tricount {
+        get => _tricount;
+        set => SetProperty(ref _tricount, value);
     }
 
-    private string _title;
+    private bool _isNew;
+    public bool IsNew {
+        get => _isNew;
+        set => SetProperty(ref _isNew, value);
+    }
 
     public string Title {
-        get => _title;
-        set => SetProperty(ref _title, value, () => Validate());
+        get => Tricount?.Title;
+        set => SetProperty(Tricount.Title, value, Tricount, (t, v) => {
+            t.Title = v;
+            Validate();
+            //NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+        });
     }
-
-    private string _description;
 
     public string Description {
-        get => _description;
-        set => SetProperty(ref _description, value ,() => Validate());
+        get => Tricount?.Description;
+        set => SetProperty(Tricount?.Description, value, Tricount, (t, d) => {
+            t.Description = d;
+            Validate();
+        });
     }
 
-    private bool _conditionButtonSave;
-
-    public bool ConditionButtonSave { 
-        get => _conditionButtonSave;
-        set => SetProperty(ref _conditionButtonSave, value);
+    public DateTime CreatedAt {
+        get => (DateTime)Tricount?.CreatedAt;
+        set => SetProperty(Tricount?.CreatedAt, value, Tricount, (t, c) => {
+            t.CreatedAt = (DateTime)c;
+            Validate();
+        });
     }
 
-    public TricountDetailViewModel() {
+    public ICommand BtnCancel { get; set; }
+    public ICommand BtnSave { get; set; }
 
+    // --------- Gestion Participant ---------
+
+    public ICommand AddUserCommand { get; set; }
+    public ICommand AddMySelfCommand { get; set; }
+    public ICommand AddEveryBodyCommand { get; set; }
+    public ICommand DelUserCommand { get; set; }
+
+    private User _userSelected;
+    public User UserSelected {
+        get => _userSelected;
+        set => SetProperty(ref _userSelected, value);
     }
 
-    public TricountDetailViewModel(Tricount tricount, bool isNew) { 
-        Date = DateTime.Now;
+    private ObservableCollectionFast<User> _non_Participant;
+    public ObservableCollectionFast<User> Non_Participant {
+        get => _non_Participant;
+        set => SetProperty(ref _non_Participant, value);
+    }
+
+    private ObservableCollectionFast<User> _participant;
+    public ObservableCollectionFast<User> Participant {
+        get => _participant;
+        set => SetProperty(ref _participant, value);
+    }
+
+    
+
+    //public TricountDetailViewModel() {
+    //    //Console.WriteLine("constructeur vide");
+    //    //Tricount = new Tricount();
+    //    //IsNew = true;
+    //    //IgnitializeDataView();
+    //}
+
+    public TricountDetailViewModel(Tricount tricount, bool isNew) {
+        Tricount = tricount;
+        IsNew = isNew;
+        InitializeDataView();
+        RaisePropertyChanged();
+    }
+
+    private void InitializeDataView() {
+        BtnCancel = new RelayCommand(CancelAction, CanCancelAction);
+        BtnSave = new RelayCommand(SaveAction, CanSaveAction);
+        AddUserCommand = new RelayCommand(AddAction);
+        AddMySelfCommand = new RelayCommand(AddMySelfAction);
+        AddEveryBodyCommand = new RelayCommand(AddEveryBodyAction);
+        DelUserCommand = new RelayCommand<User>(DelAction);
+        
+
+        CreatedAt = DateTime.Now;
+        HeaderDefaultSet();
+        
+        ListNon_Participant();
+        ListParticipant();
+    }
+
+    private void HeaderDefaultSet() {
+        if (IsNew) {
+            DefaultHeader = $"<New Tricount> - No Description\nCreated by {CurrentUser.FullName} on {DateTime.Now.Date.ToString("dd/MM/yyyy")}";
+        } else {
+            DefaultHeader = $"{Tricount.Title} - {Tricount.Description}\nCreated by {Tricount.Creator} on {Tricount.CreatedAt.ToString("dd/MM/yyyy")}";
+        }
     }
 
     public override bool Validate() {
         ClearErrors();
 
-        var tricount = Context.Tricounts.FirstOrDefault(Tricount => Tricount.Title == Title);
+        Tricount.Validate();
+        
+        AddErrors(Tricount.Errors);
 
-        if (Title == null) {
-            AddError(nameof(Title), "required");
-        } else if (Title.Length < 3) {
-            AddError(nameof(Title), "Min 3 characters");
-        } else if (tricount != null) {
-            AddError(nameof(Title), "this tricount's title is already in use");
-        } 
-
-        if(!string.IsNullOrEmpty(Description)) {
-            if (Description.Length < 3) {
-                    AddError(nameof(Description), "Min 3 characters");
-            }
-        }
-
-        if (Date.CompareTo(DateTime.Now) > 0) {
-            AddError(nameof(Date), "the date cannot be greater than the current date");
-        }
-        ConditionButtonSave = !HasErrors;
         return !HasErrors;
+    }
+
+    public override void CancelAction() {
+        ClearErrors();
+        if (IsNew) {
+            IsNew = false;
+            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+        } else {
+            Tricount.Reload();
+            RaisePropertyChanged();
+        }
+    }
+
+    private bool CanCancelAction() {
+        return Tricount != null && (IsNew || Tricount.IsModified);
+    }
+
+    public override void SaveAction() {
+        if (IsNew) {
+            Tricount.CreatorId = CurrentUser.UserId;
+            Context.Add(Tricount);
+            Context.AddRange(Tricount.Subscriptions);
+            IsNew = false;
+        }
+        Context.SaveChanges();
+        RaisePropertyChanged();
+        NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+    }
+
+    private bool CanSaveAction() {
+        if (IsNew)
+            return Tricount.Validate() && !HasErrors;
+        return Tricount != null && Tricount.IsModified && !HasErrors;
+    }
+
+    private void ListNon_Participant() {
+        Non_Participant = new ObservableCollectionFast<User>();
+        if (IsNew) {
+            var listUser = Context.Users.OrderBy(u => u.FullName);
+            foreach (var user in listUser) {
+                Non_Participant.Add(user);
+            }
+        } else {
+            foreach(Subscription s in Tricount.Subscriptions) {
+                if (!Participant.Contains(s.User)) {
+                    Non_Participant.Add(s.User);
+                }
+            }
+        } 
+        Non_Participant.Remove(CurrentUser);
+    }
+
+    private void ListParticipant() {
+        Participant = new ObservableCollectionFast<User>();
+        Participant.Add(CurrentUser);
+        if (IsNew) {
+            var listParticipant = Tricount.ParticipantTricount();
+            foreach(Subscription sub in Tricount.Subscriptions) {
+                Participant.Add(sub.User);
+            }
+        } else {
+            
+        }
+    }
+
+    private void AddAction() {
+        if(UserSelected != null) {
+            Tricount.AddUserSubTricount(UserSelected.FullName);
+            Participant.Add(UserSelected);
+            Non_Participant.Remove(UserSelected);
+        }
+    }
+
+    private void AddMySelfAction() {
+        if (!Participant.Contains(CurrentUser)) {
+            Tricount.AddUserSubTricount(CurrentUser.FullName);
+            Participant.Add(CurrentUser);
+            Non_Participant.Remove(CurrentUser);
+        } else { 
+            //Console.WriteLine("CurrentUser déjà dans la liste Participant");
+        }
+    }
+
+    private void AddEveryBodyAction() {
+        if(!Non_Participant.IsNullOrEmpty()) {
+            foreach(var p in Non_Participant) {
+                Tricount.AddUserSubTricount(p.FullName);
+                Participant.Add(p);
+            }
+            Non_Participant.Clear();
+        } else {
+            //Console.WriteLine("tout les users participe déjà");
+        }
+    }
+
+    private void DelAction(User user) {
+        if (IsNew) {
+            if (!user.Equals(CurrentUser)) {
+                Participant.Remove(user);
+                Non_Participant.Add(user);
+            } else {
+                Console.WriteLine("you can't del the currentUser into the Participant");
+            }
+        } else {
+
+        }
+
+        //Console.WriteLine("click supprimer : "+ user.FullName);
     }
 }

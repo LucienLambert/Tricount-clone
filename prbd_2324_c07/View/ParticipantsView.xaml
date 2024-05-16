@@ -6,15 +6,16 @@
              xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
              xmlns:vw="clr-namespace:prbd_2324_c07.View"
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
-             mc:Ignorable="d">
-    <UserControl.DataContext>
-        <vm:ParticipantsViewModel/>
-    </UserControl.DataContext>
-    <Grid Height="208" Width="514">
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             d:DataContext="{d:DesignInstance Type=vm:TricountDetailViewModel, IsDesignTimeCreatable=False}"
+             mc:Ignorable="d" Height="154">
+
+    <Grid Height="175" Width="514">
 
         <Grid.RowDefinitions>
             <!-- 3/4 de la hauteur -->
-            <RowDefinition/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="3*"/>
             <!-- 1/4 de la hauteur -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -24,11 +25,9 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Height="142" VerticalAlignment="Top" Margin="0,14,0,0">
-            <TextBlock Text="{Binding UserFullName}"/>
-        </StackPanel>
-
-        <ListView x:Name="listView" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,4,67" ItemsSource="{Binding UserFullName}" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <!--<ListView x:Name="listView" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,4,3" 
+                  ItemsSource="{Binding Participant}" d:ItemsSource="{d:SampleData ItemCount=3}"
+                  SelectedItem="{Binding UserSelected}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="vertical"/>
@@ -38,23 +37,56 @@
                 <DataTemplate>
                     <Grid Width="464">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" MinWidth="63"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" MinWidth="63" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding}" Margin="5,5,0,5" Grid.ColumnSpan="2"/>
-                        <Button Grid.Column="1" Content="Supprimer" Height="20" Width="64"  Margin="10,3,-10,3"
-                                Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
-                                CommandParameter="{Binding}"/>
+                        <TextBlock Grid.Column="0" Text="{Binding FullName}" Margin="5,5,5,5" />
+                        <Button Grid.Column="1" Content="Supprimer" Height="20" Width="64" Margin="5,3,5,3"
+                                Command="{Binding DataContext.DelUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                CommandParameter="{Binding UserSelected}"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>
+        </ListView>-->
 
-        <ComboBox ItemsSource="{Binding ListUserFullName}" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="456" Height="20" Margin="0,146,58,0" Grid.ColumnSpan="2"/>
-        <Button Grid.Row="0" Grid.Column="1" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="48" Margin="76,146,0,0"
-                IsEnabled="{Binding ConditionButtonAdd}"/>
-        <Button Grid.Row="0" Grid.Column="0" Content="Add My Self" VerticalAlignment="Top" Height="24" Margin="149,172,134,0"/>
-        <Button Grid.Row="0" Content="Add Everybody" Margin="256,172,26,0" VerticalAlignment="Top" Height="24"/>
+        <!--<ListView ItemsSource="{Binding Participant}" SelectedItem="{Binding UserSelected}" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Margin="0,0,4,0">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="479">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding FullName}" Margin="5" />
+                        <Button Content="Supprimer" Command="{Binding DataContext.DelUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                        CommandParameter="{Binding UserSelected}" Margin="5" Grid.Column="1" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
+
+        <ListBox x:Name="ListBox" ItemsSource="{Binding Participant}" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Margin="0,0,4,0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FullName}" Margin="5" Width="399" IsHitTestVisible="False"/>
+                        <Button Content="Supprimer" Command="{Binding DataContext.DelUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                CommandParameter="{Binding}" Margin="5"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <ComboBox x:Name="ComboBox" ItemsSource="{Binding Non_Participant}" SelectedItem="{Binding UserSelected}" DisplayMemberPath="FullName" 
+                  Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="456" Height="20" Margin="0,2,58,0" Grid.ColumnSpan="2"/>
+        
+        <Button x:Name="BoutonAdd" Command="{Binding AddUserCommand}" CommandParameter="{Binding UserSelected}" 
+                Grid.Row="1" Grid.Column="1" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="48" Margin="76,2,0,0"/>
+
+        <Button x:Name="BoutonAdd_My_Self" Command="{Binding AddMySelfCommand}"
+                Grid.Row="1" Grid.Column="0" Content="Add My Self" VerticalAlignment="Center" Height="24" Margin="149,0,134,0"/>
+        <Button x:Name="BoutonAdd_Everybody" Command="{Binding AddEveryBodyCommand}" 
+                Grid.Row="1" Content="Add Everybody" Margin="256,0,26,0" VerticalAlignment="Center" Height="24"/>
 
     </Grid>
 </f:UserControlBase>

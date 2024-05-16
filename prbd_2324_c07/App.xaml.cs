@@ -8,13 +8,18 @@ namespace prbd_2324_c07;
 
 public partial class App : ApplicationBase<User,PridContext>{
     public enum Messages{
-        MSG_NEW_USER,
+        //TRICOUNT
         MSG_NEW_TRICOUNT,
-        MSG_PSEUDO_CHANGED,
+        MSG_TRICOUNT_CHANGED,
+        //USER
+        MSG_NEW_USER,
+        MSG_FULLNAME_CHANGED,
         MSG_USER_CHANGED,
+        //INTERFACE
         MSG_DISPLAY_USER,
         MSG_DISPLAY_TRICOUNT,
         MSG_CLOSE_TAB,
+        //LOG
         MSG_LOGIN,
         MSG_LOGOUT
     }

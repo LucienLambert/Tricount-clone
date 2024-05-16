@@ -53,7 +53,7 @@ public class LoginViewModel : ViewModelBase<User, PridContext> {
         if (Validate()) { 
             var user = Context.Users.FirstOrDefault(u => u.FullName == Pseudo);
             NotifyColleagues(App.Messages.MSG_LOGIN, user);
-            Console.Write("Connexion réussi");
+            Console.WriteLine("Connexion réussi");
         }
     }
 
