@@ -179,11 +179,13 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
                     Non_Participant.Add(s.User);
                 }
             }
-        }         
+        } 
+        Non_Participant.Remove(CurrentUser);
     }
 
     private void ListParticipant() {
         Participant = new ObservableCollectionFast<User>();
+        Participant.Add(CurrentUser);
         if (IsNew) {
             var listParticipant = Tricount.ParticipantTricount();
             foreach(Subscription sub in Tricount.Subscriptions) {
@@ -225,8 +227,17 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
     }
 
     private void DelAction(User user) {
-        Participant.Remove(user);
-        Non_Participant.Add(user);
+        if (IsNew) {
+            if (!user.Equals(CurrentUser)) {
+                Participant.Remove(user);
+                Non_Participant.Add(user);
+            } else {
+                Console.WriteLine("you can't del the currentUser into the Participant");
+            }
+        } else {
+
+        }
+
         //Console.WriteLine("click supprimer : "+ user.FullName);
     }
 }
