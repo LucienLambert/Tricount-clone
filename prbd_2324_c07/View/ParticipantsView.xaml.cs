@@ -11,4 +11,8 @@ public partial class ParticipantsView : UserControlBase {
     private void listView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
 
     }
+
+    private void ListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
+
+    }
 }
