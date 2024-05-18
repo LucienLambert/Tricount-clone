@@ -42,11 +42,16 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
-            <StackPanel Grid.Column="0">
+            <Grid Grid.Column="0" >
                 
                 <vw:OperationsView DataContext="{Binding OperationsVM}"/>
 
-            </StackPanel>
+            </Grid>
+            <Grid Grid.Column="1"  >
+
+                <vw:TricountGraphView />
+
+            </Grid>
         </Grid>
         
         <Grid Grid.Row="2">

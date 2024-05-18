@@ -1,0 +1,21 @@
+﻿<f:UserControlBase x:Class="prbd_2324_c07.View.TricountGraphView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:m="clr-namespace:prbd_2324_c07"
+             xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
+             xmlns:vw="clr-namespace:prbd_2324_c07.View"
+             mc:Ignorable="d"
+                   VerticalAlignment="Stretch"
+                   HorizontalAlignment="Stretch">
+    <Grid Background="Azure">
+
+
+        <TextBlock Text="Graph" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+
+    </Grid>
+</f:UserControlBase>

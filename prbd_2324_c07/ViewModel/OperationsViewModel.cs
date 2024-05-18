@@ -36,9 +36,7 @@ namespace prbd_2324_c07.ViewModel
 
         protected override void OnRefreshData() {
 
-            Console.WriteLine(Tricount.Title);
-            //a modifier
-            var operations = Context.Operations;
+            var operations = Tricount.Operations;
 
             Operations = new ObservableCollection<OperationCardViewModel>(operations.Select(operation => new OperationCardViewModel(operation)));
 
