@@ -223,11 +223,12 @@ namespace prbd_2324_c07.Model
         }
 
         // crée une subscription qui lie un user à un tricount.
-        public void AddUserSubTricount(string user) {
-            var userSelected = Context.Users.FirstOrDefault(u => u.FullName == user);
-            Console.Write(userSelected);
-            Subscriptions.Add(new Subscription(userSelected, this));
-            //Context.SaveChanges();
+        public void AddUserSubTricount(User user) {
+            Subscriptions.Add(new Subscription(user, this));
+        }
+
+        public void RemoveUserSubTricount(User user) {
+            Subscriptions.Remove(new Subscription(user, this));
         }
 
         // return la liste des subscriptants du tricount

@@ -106,7 +106,9 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         AddMySelfCommand = new RelayCommand(AddMySelfAction);
         AddEveryBodyCommand = new RelayCommand(AddEveryBodyAction);
         DelUserCommand = new RelayCommand<User>(DelAction);
-        
+
+        Participant = new ObservableCollectionFast<User>();
+        Non_Participant = new ObservableCollectionFast<User>();
 
         CreatedAt = DateTime.Now;
         HeaderDefaultSet();
@@ -119,7 +121,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         if (IsNew) {
             DefaultHeader = $"<New Tricount> - No Description\nCreated by {CurrentUser.FullName} on {DateTime.Now.Date.ToString("dd/MM/yyyy")}";
         } else {
-            DefaultHeader = $"{Tricount.Title} - {Tricount.Description}\nCreated by {Tricount.Creator} on {Tricount.CreatedAt.ToString("dd/MM/yyyy")}";
+            DefaultHeader = $"{Tricount.Title} - {Tricount.Description}\nCreated by {Tricount.Creator.FullName} on {Tricount.CreatedAt.ToString("dd/MM/yyyy")}";
         }
     }
 
@@ -151,10 +153,17 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
     public override void SaveAction() {
         if (IsNew) {
             Tricount.CreatorId = CurrentUser.UserId;
-            Context.Add(Tricount);
-            Context.AddRange(Tricount.Subscriptions);
             IsNew = false;
         }
+        Context.Add(Tricount);
+        foreach (var u in Participant) {
+            Tricount.AddUserSubTricount(u);
+        }
+
+        foreach (var u in Tricount.Subscriptions) {
+            Console.WriteLine(u.User.FullName);
+        }
+        Context.AddRange(Tricount.Subscriptions);
         Context.SaveChanges();
         RaisePropertyChanged();
         NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
@@ -167,38 +176,34 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
     }
 
     private void ListNon_Participant() {
-        Non_Participant = new ObservableCollectionFast<User>();
+        var listUser = Context.Users.OrderBy(u => u.FullName);
         if (IsNew) {
-            var listUser = Context.Users.OrderBy(u => u.FullName);
             foreach (var user in listUser) {
                 Non_Participant.Add(user);
             }
         } else {
-            foreach(Subscription s in Tricount.Subscriptions) {
-                if (!Participant.Contains(s.User)) {
-                    Non_Participant.Add(s.User);
-                }
+            var nonSubscribedUsers = Context.Users
+        .Where(u => !Context.Subscriptions.Any(s => s.UserId == u.UserId && s.TricountId == Tricount.TricountId));
+            foreach (var user in nonSubscribedUsers) {
+                Non_Participant.Add(user);
             }
         } 
         Non_Participant.Remove(CurrentUser);
     }
 
     private void ListParticipant() {
-        Participant = new ObservableCollectionFast<User>();
-        Participant.Add(CurrentUser);
         if (IsNew) {
-            var listParticipant = Tricount.ParticipantTricount();
-            foreach(Subscription sub in Tricount.Subscriptions) {
+            Participant.Add(CurrentUser);
+        } else {
+            foreach (Subscription sub in Tricount.Subscriptions) {
                 Participant.Add(sub.User);
             }
-        } else {
-            
         }
     }
 
     private void AddAction() {
         if(UserSelected != null) {
-            Tricount.AddUserSubTricount(UserSelected.FullName);
+            //Tricount.AddUserSubTricount(UserSelected);
             Participant.Add(UserSelected);
             Non_Participant.Remove(UserSelected);
         }
@@ -206,23 +211,19 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
     private void AddMySelfAction() {
         if (!Participant.Contains(CurrentUser)) {
-            Tricount.AddUserSubTricount(CurrentUser.FullName);
+            //Tricount.AddUserSubTricount(CurrentUser);
             Participant.Add(CurrentUser);
             Non_Participant.Remove(CurrentUser);
-        } else { 
-            //Console.WriteLine("CurrentUser déjà dans la liste Participant");
         }
     }
 
     private void AddEveryBodyAction() {
         if(!Non_Participant.IsNullOrEmpty()) {
-            foreach(var p in Non_Participant) {
-                Tricount.AddUserSubTricount(p.FullName);
+            foreach(var p in Non_Participant) { 
+                //Tricount.AddUserSubTricount(p);
                 Participant.Add(p);
             }
             Non_Participant.Clear();
-        } else {
-            //Console.WriteLine("tout les users participe déjà");
         }
     }
 
@@ -231,13 +232,13 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
             if (!user.Equals(CurrentUser)) {
                 Participant.Remove(user);
                 Non_Participant.Add(user);
-            } else {
-                Console.WriteLine("you can't del the currentUser into the Participant");
             }
         } else {
-
+            if(user.UserId != Tricount.CreatorId) {
+                Participant.Remove(user);
+                Non_Participant.Add(user);
+                Tricount.RemoveUserSubTricount(user);
+            }
         }
-
-        //Console.WriteLine("click supprimer : "+ user.FullName);
     }
 }
