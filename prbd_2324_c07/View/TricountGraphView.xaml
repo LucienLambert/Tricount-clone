@@ -11,11 +11,21 @@
              mc:Ignorable="d"
                    VerticalAlignment="Stretch"
                    HorizontalAlignment="Stretch">
-    <Grid Background="Azure">
+    
+    <Grid>
 
-
-        <TextBlock Text="Graph" VerticalAlignment="Center" HorizontalAlignment="Center" />
-
+        <ListView x:Name="listView" ItemsSource="{Binding TricountGraphBars}" BorderBrush="Transparent" SelectionMode="Single" HorizontalAlignment="Center" Margin="10">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <vw:TricountGraphBarView />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
     </Grid>
 </f:UserControlBase>
