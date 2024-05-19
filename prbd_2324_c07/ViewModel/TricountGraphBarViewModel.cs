@@ -1,11 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using prbd_2324_c07.Model;
+﻿using prbd_2324_c07.Model;
 using PRBD_Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace prbd_2324_c07.ViewModel
 {
@@ -15,18 +9,50 @@ namespace prbd_2324_c07.ViewModel
 
         private double _amount;
 
-        public double Amount { 
+        public double Amount {
             get => _amount;
             set => SetProperty(ref _amount, value);
         }
-        public string UserName => IsCreator ? Participant.FullName + " (me)" : Participant.FullName;
 
-        public bool IsCreator;
+        public Dictionary<int, float> Balance;
 
-        public TricountGraphBarViewModel(User user, double amount, bool isCreator) {
+        public string UserName => Participant == CurrentUser ? Participant.FullName + " (me)" : Participant.FullName;
+
+        private double _rectangleWidth;
+
+        public double RectangleWidth {
+            get => _rectangleWidth;
+            set => SetProperty(ref _rectangleWidth, value);
+        }
+
+        private double CalculateRectangleWidth() {
+
+            if (Amount < 0) {
+                var total = Balance
+                    .Where(kvp => kvp.Value < 0)
+                    .Select(kvp => Math.Abs(kvp.Value))
+                    .Sum();
+                return (Math.Abs(Amount) / total) * 200;
+
+
+            } else if (Amount > 0) {
+
+                var total = Balance
+                    .Where(kvp => kvp.Value > 0)
+                    .Select(kvp => Math.Abs(kvp.Value))
+                    .Sum();
+                return (Amount / total) * 200;
+
+            }
+            return 0;
+        }
+
+        public TricountGraphBarViewModel(User user, double amount, Dictionary<int, float> balance) {
             Participant = user;
             Amount = amount;
-            IsCreator = isCreator;
+            Balance = balance;
+            RectangleWidth = CalculateRectangleWidth();
+            OnRefreshData();
         }
     }
 }

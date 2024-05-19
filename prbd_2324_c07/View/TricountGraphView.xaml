@@ -9,12 +9,17 @@
              xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
              xmlns:vw="clr-namespace:prbd_2324_c07.View"
              mc:Ignorable="d"
-                   VerticalAlignment="Stretch"
-                   HorizontalAlignment="Stretch">
+             VerticalAlignment="Stretch"
+             HorizontalAlignment="Stretch">
     
     <Grid>
 
         <ListView x:Name="listView" ItemsSource="{Binding TricountGraphBars}" BorderBrush="Transparent" SelectionMode="Single" HorizontalAlignment="Center" Margin="10">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="IsEnabled" Value="False" />
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Vertical"/>
@@ -26,6 +31,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
 
     </Grid>
 </f:UserControlBase>

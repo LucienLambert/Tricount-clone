@@ -36,10 +36,11 @@ namespace prbd_2324_c07.ViewModel
 
             var participants = Tricount.ParticipantTricount()
                  .Select(par => par.User)
-                 .Distinct();
+                 .Distinct()
+                 .OrderBy(user=>user.FullName);
 
             TricountGraphBars = new ObservableCollection<TricountGraphBarViewModel>(participants.Select(user =>
-                new TricountGraphBarViewModel(user, Tricount.GetUserBalance(user), user == Tricount.Creator ? true : false)
+                new TricountGraphBarViewModel(user, Tricount.GetUserBalance(user), Tricount.Balance)
             ));
 
         }
