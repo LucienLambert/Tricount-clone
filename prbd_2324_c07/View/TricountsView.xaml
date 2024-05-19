@@ -64,7 +64,7 @@
                     <ToolTip Content="Create a new Tricount"/>
                 </Button.ToolTip>
             </Button>
-            <StackPanel Orientation="Horizontal" Grid.Column="1">
+            <WrapPanel Orientation="Horizontal" Grid.Column="1">
                 <Rectangle Width="50" Height="15" Fill="LightGray" />
                 <TextBlock Text="Null Balance" Margin="10" />
 
@@ -73,7 +73,7 @@
 
                 <Rectangle Width="50" Height="15" Fill="AntiqueWhite"  />
                 <TextBlock Text="Negative Balance" Margin="10" />
-            </StackPanel>
+            </WrapPanel>
         </Grid>
 
 

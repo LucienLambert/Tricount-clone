@@ -23,7 +23,7 @@
                 <TextBlock Text=" - " />
                 <TextBlock FontStyle="Italic" TextWrapping="Wrap" Text="{Binding Tricount.Description, TargetNullValue='No Description'}"  />
             </StackPanel>
-
+        
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock FontSize="12" TextWrapping="Wrap" Text="Created by " />
                 <TextBlock FontSize="12" FontWeight="Bold" Text="{Binding Tricount.Creator.FullName}" />
@@ -41,12 +41,15 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-            <StackPanel Grid.Column="0">
-                
+
+            <Grid Grid.Column="0" >
                 <vw:OperationsView DataContext="{Binding OperationsVM}"/>
 
-            </StackPanel>
+            </Grid>
+            <Grid Grid.Column="1"  >
+                <vw:TricountGraphView DataContext="{Binding TricountGraphVM}" />
+
+            </Grid>
         </Grid>
         
         <Grid Grid.Row="2">

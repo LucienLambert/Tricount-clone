@@ -18,6 +18,12 @@ namespace prbd_2324_c07.ViewModel
             set => SetProperty(ref _operationsVM, value);
         }
 
+        private TricountGraphViewModel _tricountGraphVM;
+        public TricountGraphViewModel TricountGraphVM {
+            get => _tricountGraphVM;
+            set => SetProperty(ref _tricountGraphVM, value);
+        }
+
         private Tricount _tricount;
         public Tricount Tricount {
             get => _tricount;
@@ -50,6 +56,7 @@ namespace prbd_2324_c07.ViewModel
             Tricount = tricount;
             IsNew = IsNew;
             OperationsVM = new OperationsViewModel(tricount);
+            TricountGraphVM = new TricountGraphViewModel(tricount);
         }
 
 
