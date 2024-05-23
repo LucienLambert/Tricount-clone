@@ -154,11 +154,25 @@ namespace prbd_2324_c07.Model
         }
 
         public double GetUserExpenses(User user) {
-            var expenses = Operations
-                .Where(op => op.Initiator == user)
-                .Sum(op => op.Amount);
+            //var expenses = Operations
+            //    .Where(op => op.Initiator == user)
+            //    .Sum(op => op.Amount);
 
-            return Math.Round(expenses, 2);
+            int totalWeight = 0;
+            int userWeight = 0;
+            double expenses = 0;
+            double expense = 0;
+
+            //foreach(var op in Operations) {
+            //    userWeight = op.Repartitions.Where(rep => rep.UserId == userId).FirstOrDefault;
+            //    totalWeight = op.Repartitions.Sum(rep=>rep.Weight);
+            //    expense = (op.Amount/totalWeight) * 
+            //}
+
+
+
+            //return Math.Round(expenses, 2);
+            return 0;
         }
 
         public double GetUserBalance(User user) {
@@ -196,12 +210,10 @@ namespace prbd_2324_c07.Model
             Balance.Clear();
 
             var participantsIds = Subscriptions
-                .Where(s => s.TricountId == this.TricountId)
                 .Select(s => s.UserId)
                 .ToList();
 
             var operationsList = Operations
-                .Where(op => op.TricountId == this.TricountId)
                 .ToList();
 
             var totalAmount = operationsList

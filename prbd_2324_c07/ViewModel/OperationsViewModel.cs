@@ -36,9 +36,15 @@ namespace prbd_2324_c07.ViewModel
 
         protected override void OnRefreshData() {
 
-            var operations = Tricount.Operations.OrderByDescending(op=>op.Operation_date);
 
-            Operations = new ObservableCollection<OperationCardViewModel>(operations.Select(operation => new OperationCardViewModel(operation)));
+            // Pour les convertisseurs
+            if (Tricount.Operations.Count() == 0) {
+                Operations = null;
+            } else {
+                var operations = Tricount.Operations.OrderByDescending(op => op.Operation_date);
+                Operations = new ObservableCollection<OperationCardViewModel>(operations.Select(operation => new OperationCardViewModel(operation)));
+            }
+            
 
         }
 

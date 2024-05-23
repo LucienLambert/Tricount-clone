@@ -1,4 +1,6 @@
-﻿using System;
+﻿using prbd_2324_c07.ViewModel;
+using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -14,9 +16,11 @@ namespace prbd_2324_c07.Converters
                 return string.IsNullOrWhiteSpace(str) ? Visibility.Collapsed : Visibility.Visible;
             } else if (value is DateTime dt) {
                 return dt == default(DateTime) ? Visibility.Collapsed : Visibility.Visible;
-            } else if (value is Double db) { 
+            } else if (value is Double db) {
                 return db == 0 ? Visibility.Collapsed : Visibility.Visible;
-            }else {
+            } else if (value is ObservableCollection<OperationCardViewModel> op) { 
+                return op == null ? Visibility.Collapsed : Visibility.Visible;
+            } else {
                 return Visibility.Collapsed;
             }
         }
