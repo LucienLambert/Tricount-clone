@@ -6,8 +6,11 @@ namespace prbd_2324_c07.View;
 
 public partial class TricountDetailView : UserControlBase{
 
-    private readonly TricountDetailViewModel _vm;
+    public readonly TricountDetailViewModel _vm;
     
+    public TricountDetailView() {
+        InitializeComponent();
+    }
 
     public TricountDetailView(Tricount tricount, bool isNew){
         InitializeComponent();

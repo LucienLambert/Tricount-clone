@@ -24,5 +24,14 @@ public class Subscription : EntityBase<PridContext>{
         User = user;
         Tricount = tricount;
     }
+
+    //check si user passé en paramètre est le même que le user du sub
+    //public override bool Equals(object obj) {
+    //    if(obj == null || !(obj is Subscription)) {
+    //        return false;
+    //    } else {
+    //        return this.User == ((Subscription)obj).User;
+    //    }
+    //}
 }
 

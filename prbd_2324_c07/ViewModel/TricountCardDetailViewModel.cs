@@ -9,8 +9,7 @@ using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel
 {
-    public class TricountCardDetailViewModel : ViewModelBase<User, PridContext>
-    {
+    public class TricountCardDetailViewModel : ViewModelBase<User, PridContext> {
 
         private OperationsViewModel _operationsVM;
         public OperationsViewModel OperationsVM {
@@ -22,6 +21,12 @@ namespace prbd_2324_c07.ViewModel
         public TricountGraphViewModel TricountGraphVM {
             get => _tricountGraphVM;
             set => SetProperty(ref _tricountGraphVM, value);
+        }
+
+        private TricountDetailViewModel _tricountDetailVM;
+        public TricountDetailViewModel TricountDetailVM {
+            get => _tricountDetailVM;
+            set => SetProperty(ref _tricountDetailVM, value);
         }
 
         private Tricount _tricount;
@@ -48,6 +53,17 @@ namespace prbd_2324_c07.ViewModel
 
         public ICommand DeleteTricount { get; set; }
 
+        private bool _visibleTricountCard;
+        public bool VisibleTricountCard {
+            get => _visibleTricountCard;
+            set => SetProperty(ref _visibleTricountCard, value);
+        }
+
+        private bool _visibleTricountDetail;
+        public bool VisibleTricountDetal {
+            get => _visibleTricountDetail;
+            set => SetProperty(ref _visibleTricountDetail, value);
+        }
 
         public TricountCardDetailViewModel() {
             
@@ -57,9 +73,15 @@ namespace prbd_2324_c07.ViewModel
             IsNew = IsNew;
             OperationsVM = new OperationsViewModel(tricount);
             TricountGraphVM = new TricountGraphViewModel(tricount);
+            VisibleTricountCard = true;
+            VisibleTricountDetal = false;
+            EditTricount = new RelayCommand(EditAction);
         }
 
-
-
+        private void EditAction() {
+            VisibleTricountCard = false;
+            VisibleTricountDetal = true;
+            TricountDetailVM = new TricountDetailViewModel(Tricount, false);
+        }
     }
 }
