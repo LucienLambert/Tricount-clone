@@ -154,25 +154,22 @@ namespace prbd_2324_c07.Model
         }
 
         public double GetUserExpenses(User user) {
-            //var expenses = Operations
-            //    .Where(op => op.Initiator == user)
-            //    .Sum(op => op.Amount);
 
             int totalWeight = 0;
             int userWeight = 0;
             double expenses = 0;
-            double expense = 0;
 
-            //foreach(var op in Operations) {
-            //    userWeight = op.Repartitions.Where(rep => rep.UserId == userId).FirstOrDefault;
-            //    totalWeight = op.Repartitions.Sum(rep=>rep.Weight);
-            //    expense = (op.Amount/totalWeight) * 
-            //}
+            foreach (var op in Operations) {
+                userWeight = op.Repartitions.FirstOrDefault(rep => rep.UserId == user.UserId)?.Weight ?? 0;
+                if (userWeight == 0) {
+                    break;
+                }
+                totalWeight = op.Repartitions.Sum(rep => rep.Weight);
 
+                expenses += (op.Amount / totalWeight) * userWeight;
+            }
 
-
-            //return Math.Round(expenses, 2);
-            return 0;
+            return Math.Round(expenses, 2);
         }
 
         public double GetUserBalance(User user) {
