@@ -168,7 +168,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
             foreach(var s in Tricount.Subscriptions) {
                 //check si un participant ne se trouve pas dans Sub avant d'add le sub à la DB
                 if (!Participant.Contains(s.User)) {
-                    //add le sub à la DB
+                    //add le sub à la DB s'il n'est pas déjà présent dans la list des sub
                     Context.Add(s);
                 }
             }
@@ -213,12 +213,11 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
     private void AddAction() {
         if(UserSelected != null) {
-            //Console.WriteLine(UserSelected);
+            User user = UserSelected;
             Participant.Add(UserSelected);
             Non_Participant.Remove(UserSelected);
             if (!IsNew) {
-                Console.WriteLine($"AddAction : {UserSelected}");
-                Tricount.AddUserSubTricount(UserSelected);
+                Tricount.AddUserSubTricount(user);
             }
         }
     }
