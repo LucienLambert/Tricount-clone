@@ -1,66 +1,79 @@
 ﻿<f:UserControlBase x:Class="prbd_2324_c07.View.TricountCardDetailView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
-             xmlns:vw="clr-namespace:prbd_2324_c07.View"
-             xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
-             xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
-             mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance Type=vm:TricountCardDetailViewModel, IsDesignTimeCreatable=False}"
-             FontSize="14" d:DesignHeight="390" d:DesignWidth="528">
-    <Grid >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
-        </Grid.RowDefinitions>
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                   xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
+                   xmlns:vw="clr-namespace:prbd_2324_c07.View"
+                   xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+                   xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+                   xmlns:conv="clr-namespace:prbd_2324_c07.Converters"
+                   mc:Ignorable="d" 
+                   d:DataContext="{d:DesignInstance Type=vm:TricountCardDetailViewModel, IsDesignTimeCreatable=False}"
+                   FontSize="14" d:DesignHeight="390" d:DesignWidth="528">
 
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-                <TextBlock FontWeight="Bold" TextWrapping="Wrap" Text="{Binding Tricount.Title}" />
-                <TextBlock Text=" - " />
-                <TextBlock FontStyle="Italic" TextWrapping="Wrap" Text="{Binding Tricount.Description, TargetNullValue='No Description'}"  />
-            </StackPanel>
-        
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock FontSize="12" TextWrapping="Wrap" Text="Created by " />
-                <TextBlock FontSize="12" FontWeight="Bold" Text="{Binding Tricount.Creator.FullName}" />
-                <TextBlock FontSize="12" Text=" on"/>
-                <TextBlock FontSize="12" FontWeight="Bold" Text="{Binding Tricount.CreatedAt,  StringFormat=' {0:dd/MM/yyyy}'}" />
-            </StackPanel>
+    <!-- Déclaration des ressources -->
+    <f:UserControlBase.Resources>
+        <conv:BoolToVisibleConverter x:Key="BoolToVisibleConverter"/>
+    </f:UserControlBase.Resources>
 
-        </StackPanel>
-
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <!-- Grid principale -->
+    <Grid>
+        <!-- Grid visible en mode non-édition -->
+        <Grid Visibility="{Binding VisibleTricountCard, Converter={StaticResource BoolToVisibleConverter}}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0" >
-                <vw:OperationsView DataContext="{Binding OperationsVM}"/>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" Text="{Binding Tricount.Title}" />
+                    <TextBlock Text=" - " />
+                    <TextBlock FontStyle="Italic" TextWrapping="Wrap" Text="{Binding Tricount.Description, TargetNullValue='No Description'}" />
+                </StackPanel>
 
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock FontSize="12" TextWrapping="Wrap" Text="Created by " />
+                    <TextBlock FontSize="12" FontWeight="Bold" Text="{Binding Tricount.Creator.FullName}" />
+                    <TextBlock FontSize="12" Text=" on"/>
+                    <TextBlock FontSize="12" FontWeight="Bold" Text="{Binding Tricount.CreatedAt, StringFormat=' {0:dd/MM/yyyy}'}" />
+                </StackPanel>
+            </StackPanel>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Column="0">
+                    <vw:OperationsView DataContext="{Binding OperationsVM}" />
+                </Grid>
+                <Grid Grid.Column="1">
+                    <vw:TricountGraphView DataContext="{Binding TricountGraphVM}" />
+                </Grid>
             </Grid>
-            <Grid Grid.Column="1"  >
-                <vw:TricountGraphView DataContext="{Binding TricountGraphVM}" />
 
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                    <Button x:Name="btnEdit" Content="Edit" Command="{Binding EditTricount}" Width="60" Margin="10,10" Padding="5,1"/>
+                    <Button x:Name="btnDelete" Content="Delete" Command="{Binding DeleteTricount}" Width="60" Margin="10,10" Padding="5,1"/>
+                </StackPanel>
             </Grid>
         </Grid>
-        
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
-                <Button x:Name="btnEdit" Content="Edit" Command="{Binding EditTricount}" Width="60" Margin="10,10" Padding="5,1"/>
-                <Button x:Name="btnDelete" Content="Delete" Command="{Binding DeleteTricount}" Width="60" Margin="10,10" Padding="5,1"/>
-            </StackPanel>
+
+        <!-- Grid visible en mode édition -->
+        <Grid Visibility="{Binding VisibleTricountDetal, Converter={StaticResource BoolToVisibleConverter}}">
+            <vw:TricountDetailView DataContext="{Binding TricountDetailVM}" />
         </Grid>
     </Grid>
 </f:UserControlBase>

@@ -65,12 +65,12 @@
             </ListView.ItemTemplate>
         </ListView>-->
 
-        <ListBox x:Name="ListBox" ItemsSource="{Binding Participant}" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Margin="0,0,4,0">
+        <ListBox x:Name="ListBox" ItemsSource="{Binding Participant}" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Margin="0,0,4,0" SelectionChanged="ListBox_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding FullName}" Margin="5" Width="399" IsHitTestVisible="False"/>
-                        <Button Content="Supprimer" Command="{Binding DataContext.DelUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                        <Button Content=" 🗑 " Command="{Binding DataContext.DelUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                 CommandParameter="{Binding}" Margin="5"/>
                     </StackPanel>
                 </DataTemplate>
