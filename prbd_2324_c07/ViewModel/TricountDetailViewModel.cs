@@ -152,18 +152,28 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
     public override void SaveAction() {
         if (IsNew) {
+            //add idUser -> creatorID
             Tricount.CreatorId = CurrentUser.UserId;
+            //add Tricount à la DB
+            Context.Add(Tricount);
+            //crée les sub du tricount
+            foreach(var u in Participant) {
+                Tricount.AddUserSubTricount(u);
+            }
+            //add les sub à la DB
+            Context.AddRange(Tricount.Subscriptions);
             IsNew = false;
+        } else {
+            //parcours la liste de sub
+            foreach(var s in Tricount.Subscriptions) {
+                //check si un participant ne se trouve pas dans Sub avant d'add le sub à la DB
+                if (!Participant.Contains(s.User)) {
+                    //add le sub à la DB
+                    Context.Add(s);
+                }
+            }
         }
-        Context.Add(Tricount);
-        foreach (var u in Participant) {
-            Tricount.AddUserSubTricount(u);
-        }
-
-        foreach (var u in Tricount.Subscriptions) {
-            Console.WriteLine(u.User.FullName);
-        }
-        Context.AddRange(Tricount.Subscriptions);
+        
         Context.SaveChanges();
         RaisePropertyChanged();
         NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
@@ -203,9 +213,13 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
     private void AddAction() {
         if(UserSelected != null) {
-            //Tricount.AddUserSubTricount(UserSelected);
+            //Console.WriteLine(UserSelected);
             Participant.Add(UserSelected);
             Non_Participant.Remove(UserSelected);
+            if (!IsNew) {
+                Console.WriteLine($"AddAction : {UserSelected}");
+                Tricount.AddUserSubTricount(UserSelected);
+            }
         }
     }
 
@@ -220,8 +234,10 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
     private void AddEveryBodyAction() {
         if(!Non_Participant.IsNullOrEmpty()) {
             foreach(var p in Non_Participant) { 
-                //Tricount.AddUserSubTricount(p);
                 Participant.Add(p);
+                if(!IsNew) {
+                    Tricount.AddUserSubTricount(p);
+                }
             }
             Non_Participant.Clear();
         }
