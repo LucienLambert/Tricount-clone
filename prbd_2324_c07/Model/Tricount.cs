@@ -153,6 +153,7 @@ namespace prbd_2324_c07.Model
             return Math.Round(totalExpenses, 2);
         }
 
+        // PAS COMPRIS A QUOI CA SERT
         public double GetUserExpenses(User user) {
             //var expenses = Operations
             //    .Where(op => op.Initiator == user)

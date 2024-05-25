@@ -256,4 +256,9 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
             }
         }
     }
+
+    //peut être supprimé sans souci
+    public void testCommit() {
+
+    }
 }
