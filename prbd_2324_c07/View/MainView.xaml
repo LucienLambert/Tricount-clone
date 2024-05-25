@@ -23,8 +23,8 @@
         </Grid.RowDefinitions>
         <Menu Grid.ColumnSpan="2" Margin="0,0,0,36">
             <MenuItem Header="Logout" Click="BtnMenuLogout"/>
-            <MenuItem Header="Reload"/>
-            <MenuItem Header="Reset"/>
+            <MenuItem Header="Reload" Click="BtnReload"/>
+            <MenuItem Header="Reset" Click="BtnReset"/>
         </Menu>
         <f:MyTabControl x:Name="tabControl" Margin="10,28,10,10" Grid.ColumnSpan="2" Grid.RowSpan="2" HasCloseButton="True">
             <TabItem x:Name="tricountsTab" Header="My Tricounts" Tag="MyTricounts">

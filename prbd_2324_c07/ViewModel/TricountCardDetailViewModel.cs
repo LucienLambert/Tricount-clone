@@ -66,7 +66,7 @@ namespace prbd_2324_c07.ViewModel
         }
 
         public TricountCardDetailViewModel() {
-            
+
         }
         public TricountCardDetailViewModel(Tricount tricount, bool isNew) {
             Tricount = tricount;

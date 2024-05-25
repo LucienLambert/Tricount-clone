@@ -12,13 +12,16 @@ public partial class App : ApplicationBase<User,PridContext>{
         MSG_SIGNUP_CANCELED,
         MSG_NEW_TRICOUNT,
         MSG_TRICOUNT_CHANGED,
+        MSG_OPERATION_CHANGED,
         MSG_FULLNAME_CHANGED,
         MSG_USER_CHANGED,
         MSG_DISPLAY_USER,
         MSG_DISPLAY_TRICOUNT,
         MSG_CLOSE_TAB,
         MSG_LOGIN,
-        MSG_LOGOUT
+        MSG_LOGOUT,
+        MSG_RELOAD_ASKED,
+        MSG_RESET_ASKED
     }
 
     public App() {
@@ -62,6 +65,12 @@ public partial class App : ApplicationBase<User,PridContext>{
         Register(this, Messages.MSG_SIGNUP_CANCELED, () => {
             NavigateTo<LoginViewModel, User, PridContext>();
         });
+
+        Register(this, Messages.MSG_RESET_ASKED, () => {
+            PrepareDatabase();
+            NavigateTo<MainViewModel, User, PridContext>();
+        });
+
 
 
     }
