@@ -35,6 +35,10 @@ public class User : EntityBase<PridContext> {
         FullName = fullname;
     }
 
+    public static User GetByFullName(String FullName) {
+        return Context.Users.SingleOrDefault(u => u.FullName == FullName);
+    }
+
      public override string ToString() {
         return $"<User : fullname ={FullName}, " + $"#Mail = {Mail}," + $"#UserId = {UserId}";
     }

@@ -56,7 +56,7 @@
 
         <!-- Button Save or Cancel Formulaire -->
         <Button Grid.Column="2" Content="Cancel" HorizontalAlignment="Left" Margin="316,0,0,0" Grid.Row="8" VerticalAlignment="Center" Height="20" Width="39"
-                Command="{Binding BtnCancel}" IsCancel="True"/>
+                Command="{Binding BtnCancel}"/>
         <Button Grid.Column="2" Content="Save" HorizontalAlignment="Left" Margin="272,0,0,0" Grid.Row="8" VerticalAlignment="Center" Width="39" Height="20"
                  Command="{Binding BtnSave}" IsDefault="True"/>
     </Grid>

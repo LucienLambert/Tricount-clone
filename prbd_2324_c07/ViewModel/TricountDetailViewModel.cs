@@ -1,7 +1,9 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using prbd_2324_c07.Model;
 using PRBD_Framework;
 using System.Configuration;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -81,30 +83,21 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
     public ObservableCollectionFast<User> Participant {
         get => _participant;
         set => SetProperty(ref _participant, value);
-    }
-
-    
-
-    //public TricountDetailViewModel() {
-    //    //Console.WriteLine("constructeur vide");
-    //    //Tricount = new Tricount();
-    //    //IsNew = true;
-    //    //IgnitializeDataView();
-    //}
+    }   
 
     public TricountDetailViewModel(Tricount tricount, bool isNew) {
         Tricount = tricount;
         IsNew = isNew;
         InitializeDataView();
-        RaisePropertyChanged();
+        //RaisePropertyChanged();
     }
 
     private void InitializeDataView() {
         BtnCancel = new RelayCommand(CancelAction, CanCancelAction);
         BtnSave = new RelayCommand(SaveAction, CanSaveAction);
-        AddUserCommand = new RelayCommand(AddAction);
-        AddMySelfCommand = new RelayCommand(AddMySelfAction);
-        AddEveryBodyCommand = new RelayCommand(AddEveryBodyAction);
+        AddUserCommand = new RelayCommand(AddAction, () => !Non_Participant.IsNullOrEmpty());
+        AddMySelfCommand = new RelayCommand(AddMySelfAction, CanAddMySelf);
+        AddEveryBodyCommand = new RelayCommand(AddEveryBodyAction, () => !Non_Participant.IsNullOrEmpty());
         DelUserCommand = new RelayCommand<User>(DelAction);
 
         Participant = new ObservableCollectionFast<User>();
@@ -127,23 +120,28 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
     public override bool Validate() {
         ClearErrors();
-
-        Tricount.Validate();
-        
+        Tricount.Validate(); 
         AddErrors(Tricount.Errors);
-
         return !HasErrors;
+    }
+
+    private bool CanAddMySelf() {
+        return !Participant.Contains(CurrentUser);
     }
 
     public override void CancelAction() {
         ClearErrors();
         if (IsNew) {
+            Tricount.Title = null;
             IsNew = false;
-            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
         } else {
+            if (Tricount.IsModified) {
+                Tricount.Subscriptions = Context.Subscriptions.Where(s => s.TricountId == Tricount.TricountId).ToList();
+            }
             Tricount.Reload();
-            RaisePropertyChanged();
+            //RaisePropertyChanged();
         }
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
     }
 
     private bool CanCancelAction() {
@@ -165,7 +163,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
             IsNew = false;
         } else {
             //parcours la liste de sub
-            foreach(var s in Tricount.Subscriptions) {
+            foreach (var s in Tricount.Subscriptions) {
                 //check si un participant ne se trouve pas dans Sub avant d'add le sub à la DB
                 if (!Participant.Contains(s.User)) {
                     //add le sub à la DB s'il n'est pas déjà présent dans la list des sub
@@ -173,15 +171,15 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
                 }
             }
         }
-        
         Context.SaveChanges();
         RaisePropertyChanged();
-        NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+        NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, Tricount);
     }
 
     private bool CanSaveAction() {
-        if (IsNew)
+        if (IsNew) {
             return Tricount.Validate() && !HasErrors;
+        }
         return Tricount != null && Tricount.IsModified && !HasErrors;
     }
 
@@ -231,6 +229,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
     }
 
     private void AddEveryBodyAction() {
+
         if(!Non_Participant.IsNullOrEmpty()) {
             foreach(var p in Non_Participant) { 
                 Participant.Add(p);
@@ -252,13 +251,8 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
             if(user.UserId != Tricount.CreatorId) {
                 Participant.Remove(user);
                 Non_Participant.Add(user);
-                Tricount.RemoveUserSubTricount(user);
+                Tricount.RemoveUserSubTricount(user);   
             }
         }
-    }
-
-    //peut être supprimé sans souci
-    public void testCommit() {
-
     }
 }

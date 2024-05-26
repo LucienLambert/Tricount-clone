@@ -36,14 +36,14 @@ namespace prbd_2324_c07.Model
         public Dictionary<int, float> Balance { get; set; } = new();
 
         public Tricount() {
-
+            
         }
 
         public Tricount(string title, string description, User creator) {
             Title = title;
             Description = description;
             Creator = creator;
-            CreatedAt = DateTime.Now;
+            //CreatedAt = DateTime.Now;
             RefreshBalance();
         }
 
@@ -153,27 +153,30 @@ namespace prbd_2324_c07.Model
             return Math.Round(totalExpenses, 2);
         }
 
-        // PAS COMPRIS A QUOI CA SERT
+        // récupère les expesense du user (paramètre) du tricount actuel
         public double GetUserExpenses(User user) {
-            //var expenses = Operations
-            //    .Where(op => op.Initiator == user)
-            //    .Sum(op => op.Amount);
-
             int totalWeight = 0;
             int userWeight = 0;
             double expenses = 0;
             double expense = 0;
 
-            //foreach(var op in Operations) {
-            //    userWeight = op.Repartitions.Where(rep => rep.UserId == userId).FirstOrDefault;
-            //    totalWeight = op.Repartitions.Sum(rep=>rep.Weight);
-            //    expense = (op.Amount/totalWeight) * 
-            //}
+            foreach (var op in Operations) {
+                userWeight = op.Repartitions.FirstOrDefault(rep => rep.UserId == user.UserId)?.Weight ?? 0;
+                if (userWeight == 0) {
+                    break;
+                }
+                totalWeight = op.Repartitions.Sum(rep => rep.Weight);
+                expenses += (op.Amount / totalWeight) * userWeight;
+
+            }
+            return Math.Round(expenses, 2);
+        }
+
+        public int GetNbExpenseByUser(User user) {
+            int totalExpenses = 0;
 
 
-
-            //return Math.Round(expenses, 2);
-            return 0;
+            return totalExpenses;
         }
 
         public double GetUserBalance(User user) {
@@ -237,7 +240,6 @@ namespace prbd_2324_c07.Model
 
         // crée une subscription qui lie un user à un tricount.
         public void AddUserSubTricount(User user) {
-            Console.WriteLine($"AddUserSubTricount : {user}");
             Subscriptions.Add(new Subscription(user, this));
         }
 

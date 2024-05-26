@@ -75,13 +75,18 @@ namespace prbd_2324_c07.ViewModel
             TricountGraphVM = new TricountGraphViewModel(tricount);
             VisibleTricountCard = true;
             VisibleTricountDetal = false;
-            EditTricount = new RelayCommand(EditAction);
+            EditTricount = new RelayCommand(EditAction, CanEditAction);
         }
 
         private void EditAction() {
             VisibleTricountCard = false;
             VisibleTricountDetal = true;
             TricountDetailVM = new TricountDetailViewModel(Tricount, false);
+        }
+
+        //Permet d'activer le bouton EditAction si CurrentUser = Creator ou Admin
+        private bool CanEditAction() {
+            return CurrentUser.Equals(Tricount.Creator) || ViewModelCommon.isAdmin;
         }
     }
 }

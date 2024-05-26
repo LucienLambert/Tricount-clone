@@ -34,7 +34,7 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
     public override bool Validate() {
         ClearErrors();
 
-        var user = Context.Users.FirstOrDefault(user => user.FullName == Pseudo);
+        var user = Context.Users.SingleOrDefault(user => user.FullName == Pseudo);
 
         if (string.IsNullOrEmpty(Pseudo)) {
             AddError(nameof(Pseudo), "required");
