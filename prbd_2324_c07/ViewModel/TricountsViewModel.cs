@@ -3,6 +3,7 @@ using prbd_2324_c07.Model;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using static prbd_2324_c07.App;
 
 namespace prbd_2324_c07.ViewModel;
 
@@ -37,6 +38,12 @@ public class TricountsViewModel : ViewModelBase<User, PridContext> {
         DisplayTricountDetails = new RelayCommand<TricountCardViewModel>(vm => {
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, vm.Tricount);
         });
+
+        Register<Tricount>(Messages.MSG_TRICOUNT_CHANGED, tricount => {
+            OnRefreshData();
+        });
+
+        Register(Messages.MSG_RELOAD_ASKED, OnRefreshData);
 
     }
 

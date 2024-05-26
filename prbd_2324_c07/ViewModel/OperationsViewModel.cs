@@ -2,6 +2,7 @@
 using PRBD_Framework;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using static prbd_2324_c07.App;
 
 
 namespace prbd_2324_c07.ViewModel
@@ -31,6 +32,11 @@ namespace prbd_2324_c07.ViewModel
         public OperationsViewModel(Tricount tricount) : base() {
             Tricount= tricount;
             OnRefreshData();
+
+
+            Register<Operation>(Messages.MSG_OPERATION_CHANGED, operation => OnRefreshData());
+
+            Register(Messages.MSG_RELOAD_ASKED, OnRefreshData);
 
         }
 

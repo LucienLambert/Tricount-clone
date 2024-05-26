@@ -10,7 +10,7 @@ namespace prbd_2324_c07.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 
             if (value is double number) {
-                return number > 0 ? Visibility.Visible : Visibility.Collapsed;
+                return number >= 0 ? Visibility.Visible : Visibility.Collapsed;
             } else {
                 return Visibility.Collapsed;
             }
