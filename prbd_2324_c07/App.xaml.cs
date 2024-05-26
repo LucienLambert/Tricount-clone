@@ -46,6 +46,8 @@ public partial class App : ApplicationBase<User,PridContext>{
 
         Register(this, Messages.MSG_LOGOUT, () => {
             Console.WriteLine("test");
+            App.ClearContext();
+            PrepareDatabase();
             Logout();
             NavigateTo<LoginViewModel, User, PridContext>();
         });

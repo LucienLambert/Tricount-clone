@@ -136,9 +136,8 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
             IsNew = false;
         } else {
             if (Tricount.IsModified) {
-                Tricount.Subscriptions = Context.Subscriptions.Where(s => s.TricountId == Tricount.TricountId).ToList();
+                //Tricount.Subscriptions = Context.Subscriptions.Where(s => s.TricountId == Tricount.TricountId).ToList();
             }
-            Tricount.Reload();
             //RaisePropertyChanged();
         }
         NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
