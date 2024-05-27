@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel
@@ -76,6 +77,7 @@ namespace prbd_2324_c07.ViewModel
             VisibleTricountCard = true;
             VisibleTricountDetal = false;
             EditTricount = new RelayCommand(EditAction, CanEditAction);
+            DeleteTricount = new RelayCommand(DeleteTricountAction, CanDeleteAction);
         }
 
         private void EditAction() {
@@ -88,5 +90,22 @@ namespace prbd_2324_c07.ViewModel
         private bool CanEditAction() {
             return CurrentUser.Equals(Tricount.Creator) || ViewModelCommon.isAdmin;
         }
+
+
+        private void DeleteTricountAction() {
+
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("You're about to delete this Tricount. \nDo you confirm ?", "Confirmation", System.Windows.MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes) {
+                Tricount.Delete();
+                NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+                NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+            }
+        }
+
+        private bool CanDeleteAction() {
+            return CurrentUser.Equals(Tricount.Creator) || ViewModelCommon.isAdmin;
+        }
+
+
     }
 }

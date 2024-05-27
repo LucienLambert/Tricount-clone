@@ -51,6 +51,11 @@ namespace prbd_2324_c07.Model
             return Context.Tricounts.OrderBy(t => t.Title);
         }
 
+        public void Delete() {
+            Context.Tricounts.Remove(this);
+            Context.SaveChanges();
+        }
+
         // Utilisateur createur ou participant
         public static IQueryable<Tricount> GetAllWithUser(User user) {
 
