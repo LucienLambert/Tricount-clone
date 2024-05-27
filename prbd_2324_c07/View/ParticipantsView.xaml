@@ -8,12 +8,12 @@
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:conv="clr-namespace:prbd_2324_c07.Converters"
-             d:DataContext="{d:DesignInstance Type=vm:TricountDetailViewModel, IsDesignTimeCreatable=False}"
+             d:DataContext="{d:DesignInstance Type=vm:ParticipantsViewModel, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" Height="154">
 
     <!-- Déclaration des ressources -->
     <f:UserControlBase.Resources>
-        <conv:NameConverterCreator x:Key="NameConverterCreator"/>
+        <conv:BoolToVisibleConverter x:Key="BoolToVisibleConverter"/>
     </f:UserControlBase.Resources>
 
     <Grid Height="175" Width="514">
@@ -30,18 +30,29 @@
             <!-- 1/4 de la largeur -->
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-
-        <ListBox x:Name="ListBox" ItemsSource="{Binding Participant}" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Margin="0,0,4,0" SelectionChanged="ListBox_SelectionChanged">
+        <ListView x:Name="listView" ItemsSource="{Binding ParticipantCards}" BorderBrush="Transparent" Grid.Row="0"  SelectionMode="Single" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Margin="0,0,4,0">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <vw:ParticipantCard />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--<ListBox x:Name="ListBox" ItemsSource="{Binding Participant}" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Margin="0,0,4,0" SelectionChanged="ListBox_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding FullName}" Margin="5" Width="399" IsHitTestVisible="False"/>
-                        <Button Content=" 🗑 " Command="{Binding DataContext.DelUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                        <Button Visibility="{Binding VisibleDel, Converter={StaticResource BoolToVisibleConverter}}" Content=" 🗑 " Command="{Binding DataContext.DelUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                 CommandParameter="{Binding}" Margin="5"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
+        </ListBox>-->
 
         <ComboBox x:Name="ComboBox" ItemsSource="{Binding Non_Participant}" SelectedItem="{Binding UserSelected}" DisplayMemberPath="FullName" 
                   Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="456" Height="20" Margin="0,2,58,0" Grid.ColumnSpan="2"/>

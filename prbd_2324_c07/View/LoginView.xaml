@@ -7,7 +7,7 @@
               xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
               mc:Ignorable="d"
               WindowStartupLocation="CenterScreen"
-              Title="Login" Height="200" Width="250"
+              Title="Login" Height="226" Width="250"
               ResizeMode="NoResize">
     <Window.DataContext>
         <vm:LoginViewModel x:Name="vm"/>

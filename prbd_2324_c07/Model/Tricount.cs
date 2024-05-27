@@ -178,16 +178,17 @@ namespace prbd_2324_c07.Model
             return Math.Round(balance, 2);
         }
 
-        public override bool Validate() {
+        public bool Validate(User user) {
             ClearErrors();
 
             if (string.IsNullOrEmpty(Title)) {
                 AddError(nameof(Title), "required");
             } else if (Title.Length < 3) {
                 AddError(nameof(Title), " length must be >= 3");
-            } else if ((IsDetached || IsAdded) && Context.Tricounts.Any(t => t.Title == Title)) {
+            } else if ((IsDetached || IsAdded) && Context.Tricounts.Any((t => t.Title == Title && t.CreatorId == user.UserId))) {
                 AddError(nameof(Title), "title arleady exists");
             }
+            //Context.Tricounts.Any(t => t.Title == Title)
 
 
             if (!string.IsNullOrEmpty(Description) && Description.Length < 3) {

@@ -8,10 +8,11 @@ namespace prbd_2324_c07.Converters;
 [ValueConversion(typeof(bool), typeof(Visibility))]
 public class BoolToVisibleConverter : MarkupExtension, IValueConverter {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-        if (value != null && value is bool)
+        if (value != null && value is bool) {
             return (bool)value ? Visibility.Visible : Visibility.Collapsed;
-        else
+        } else {
             return Visibility.Collapsed;
+        }
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

@@ -39,7 +39,7 @@ namespace prbd_2324_c07.ViewModel
 
 
         public SignupViewModel() {
-            SignupButton = new RelayCommand(SignupAction);
+            SignupButton = new RelayCommand(SignupAction, CanSignupAction);
         }
 
         public override bool Validate() {
@@ -112,6 +112,7 @@ namespace prbd_2324_c07.ViewModel
             }
             return !HasErrors;
         }
+
         private void SignupAction() {
             if (Validate()) {
                 var hashedPass = SecretHasher.Hash(Password);
@@ -124,7 +125,11 @@ namespace prbd_2324_c07.ViewModel
                 NotifyColleagues(App.Messages.MSG_LOGIN, newuser);
 
             }
+        }
 
+
+        private bool CanSignupAction() {
+            return Validate();
         }
     }
 }

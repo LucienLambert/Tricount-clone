@@ -31,19 +31,6 @@ public partial class MainView : WindowBase {
             tabControl.SetFocus(tab);
     }
 
-    private void BtnMenuLogout(object sender, RoutedEventArgs e) {
-        NotifyColleagues(App.Messages.MSG_LOGOUT);
-    }
-
-    private void BtnReload(object sender, RoutedEventArgs e) {
-        NotifyColleagues(App.Messages.MSG_RELOAD_ASKED);
-    }
-
-    private void BtnReset(object sender, RoutedEventArgs e) {
-        NotifyColleagues(App.Messages.MSG_RESET_ASKED);
-    }
-
-
     private void DoCloseTab(Tricount tricount) {
         tabControl.CloseByTag(string.IsNullOrEmpty(tricount.Title) ? "<New Tricount>" : tricount.Title);
     }

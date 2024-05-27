@@ -25,7 +25,7 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
     public ICommand SignupClick { get; set; }
 
     public LoginViewModel() {
-        LoginButton = new RelayCommand(LoginAction);
+        LoginButton = new RelayCommand(LoginAction, CanLoginAction);
         SignupClick = new RelayCommand(SignupAction);
     }
 
@@ -60,6 +60,10 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
             NotifyColleagues(App.Messages.MSG_LOGIN, user);
             Console.WriteLine("Connexion réussi");
         }
+    }
+
+    private bool CanLoginAction() {
+        return Validate();
     }
 
     private void SignupAction() {

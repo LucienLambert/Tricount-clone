@@ -1,4 +1,5 @@
-﻿using prbd_2324_c07.ViewModel;
+﻿using prbd_2324_c07.Model;
+using prbd_2324_c07.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;

@@ -35,7 +35,7 @@
 
             </Button>
         </Grid>
-        <ListView x:Name="listView" ItemsSource="{Binding Tricounts}" Grid.Row="1" BorderBrush="Transparent" SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListView x:Name="listView" ItemsSource="{Binding Tricounts}" Grid.Row="1" BorderBrush="Transparent" SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding DisplayTricountDetails}"

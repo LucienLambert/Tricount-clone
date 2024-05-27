@@ -4,35 +4,23 @@
 
 ### Liste des bugs connus
 
-  - Bouton Reset 
-
-Ne fonctionne pas (retire bien les Tricounts supplémentaires mais ne modifie pas les participants, de plus chaque nouvelle fenêtre consomme un peu plus de ram)
-
-
-- Login
-
-Bouton Login apparent, doit être désactivé jusqu'à ce que les credentials bons
+***MAIN***
+probleme user tracking apres un Reload et un reset quand edit_tricount or new_tricount
 
 
-- Signup
-
-Bouton Signup apparent, faut-il faire comme dans Login ? Il y a un flou
-
-
-- Tricounts List
-
+***- Tricounts List***
 Legendes non responsive
 
 
-- Add tricount
+***NEW_tricount et EDIT_TRICOUNT***
 
-Lorsque l'on rentre un titre de tricount déjà existant, on obtient "tricount already exists", il faut check si le Tricount est déjà existant pour l'utilisateur en question, pas si il est deja existant tout court
+Il manque le (creator) sur le créateur du Tricount dans la liste des participants
 
-Les dates du futur passent par la validation alors qu'elles doivent être désactivées dans le calendrier
+Le bouton Save doit fermer l'onglet
 
-Il manque le (creator) sur le créateur du Tricount dans la liste des participants, et le bouton supprimer doit disparaitre pour lui
 
-Le bouton Save doit fermer l'onglet et ouvrir le Tricount (TricountCardDetailView)
+
+
 
 ### Liste des fonctionnalités supplémentaires
 

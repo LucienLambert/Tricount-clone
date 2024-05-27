@@ -21,7 +21,9 @@ public partial class App : ApplicationBase<User,PridContext>{
         MSG_LOGIN,
         MSG_LOGOUT,
         MSG_RELOAD_ASKED,
-        MSG_RESET_ASKED
+        MSG_RESET_ASKED,
+        MSG_REVOME_PARTICIPANT,
+        MSG_ADD_PARTICIPANT
     }
 
     public App() {
@@ -49,8 +51,6 @@ public partial class App : ApplicationBase<User,PridContext>{
 
         Register(this, Messages.MSG_LOGOUT, () => {
             Console.WriteLine("test");
-            App.ClearContext();
-            PrepareDatabase();
             Logout();
             NavigateTo<LoginViewModel, User, PridContext>();
         });
@@ -70,6 +70,7 @@ public partial class App : ApplicationBase<User,PridContext>{
         });
 
         Register(this, Messages.MSG_RESET_ASKED, () => {
+            App.ClearContext();
             PrepareDatabase();
             NavigateTo<MainViewModel, User, PridContext>();
         });
