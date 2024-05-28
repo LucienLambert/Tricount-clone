@@ -3,6 +3,7 @@ using prbd_2324_c07.ViewModel;
 using System.Windows;
 using System.Globalization;
 using PRBD_Framework;
+using prbd_2324_c07.View;
 
 namespace prbd_2324_c07;
 
@@ -23,7 +24,8 @@ public partial class App : ApplicationBase<User,PridContext>{
         MSG_RELOAD_ASKED,
         MSG_RESET_ASKED,
         MSG_REVOME_PARTICIPANT,
-        MSG_ADD_PARTICIPANT
+        MSG_ADD_PARTICIPANT,
+        MSG_NEW_OPERATION
     }
 
     public App() {
@@ -73,6 +75,11 @@ public partial class App : ApplicationBase<User,PridContext>{
             App.ClearContext();
             PrepareDatabase();
             NavigateTo<MainViewModel, User, PridContext>();
+        });
+
+        Register(this, Messages.MSG_NEW_OPERATION, () => {
+            AddOperationView addOperationsWindow = new AddOperationView();
+            addOperationsWindow.ShowDialog();
         });
 
 

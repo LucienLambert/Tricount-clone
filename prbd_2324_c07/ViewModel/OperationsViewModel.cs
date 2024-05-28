@@ -26,17 +26,24 @@ namespace prbd_2324_c07.ViewModel
 
         public ICommand EditOperation { get; set; }
 
-        public ICommand NewOperation { get; set; }
-
+        public ICommand AddOperation { get; set; }
+        
 
         public OperationsViewModel(Tricount tricount) : base() {
             Tricount= tricount;
-            OnRefreshData();
+            AddOperation = new RelayCommand(AddOperationAction);
 
+            OnRefreshData();
 
             Register<Operation>(Messages.MSG_OPERATION_CHANGED, operation => OnRefreshData());
 
             Register(Messages.MSG_RELOAD_ASKED, OnRefreshData);
+
+        }
+
+        protected void AddOperationAction() {
+            
+            NotifyColleagues(Messages.MSG_NEW_OPERATION);
 
         }
 
