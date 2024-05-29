@@ -6,11 +6,20 @@
              xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
              xmlns:vw="clr-namespace:prbd_2324_c07.View"
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
-             mc:Ignorable="d" 
+             xmlns:xctk="clr-namespace:NumericUpDownLib;assembly=NumericUpDownLib"
+                   mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:OperationParticipantCardViewModel, IsDesignTimeCreatable=False}">
-    <Grid >
-        <Label Content="test"></Label>
-        <Button Content="test"></Button>
-
+    <Grid Height="auto" Width="285">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="96"/>
+            <ColumnDefinition Width="94"/>
+            <ColumnDefinition Width="71"/>
+        </Grid.ColumnDefinitions>
+        <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" Width="16" Height="16" />
+        <Label Content="{Binding Participant.FullName}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="86" Height="28" Grid.Column="1" />
+        <xctk:NumericUpDown Name="numericUpDown" MinValue="0" MaxValue="100" Width="36" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                            Value="{Binding Path=Counter, Mode=TwoWay}" Grid.Column="2" Margin="0,5,0,0"/>
+        <Label Content="0,00 €" IsHitTestVisible="False" Width="70" Grid.Column="3" HorizontalAlignment="Center" Height="28" VerticalAlignment="Center"/>
     </Grid>
 </f:UserControlBase>

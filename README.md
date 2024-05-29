@@ -15,8 +15,7 @@ Legendes non responsive
 ***NEW_tricount et EDIT_TRICOUNT***
 
 Il manque le (creator) sur le créateur du Tricount dans la liste des participants
-
-Le bouton Save doit fermer l'onglet
+Le tricount n'est pas notifier des changement quand j'add ou remove uniquement un participant.
 
 ***Tricount***
 

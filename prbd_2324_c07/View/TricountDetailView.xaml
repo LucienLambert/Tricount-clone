@@ -41,9 +41,9 @@
         <TextBox Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="798" Grid.ColumnSpan="2" Height="26" Margin="10,0,0,0"
                  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                  IsReadOnly="{Binding !IsNew}"/>
-        <DatePicker Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="3"  VerticalAlignment="Center" Width="798" Grid.ColumnSpan="2"
+        <DatePicker x:Name="MyDatePicker" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="3"  VerticalAlignment="Center" Width="798" Grid.ColumnSpan="2"
                     DisplayDateStart="01/01/1900" 
-                    DisplayDateEnd="{Binding CreatedAt}" 
+                    DisplayDateEnd="{Binding DatePicker}" 
                     Height="30" Margin="10,0,0,0"
                     SelectedDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" 
                     DisplayDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}"/>

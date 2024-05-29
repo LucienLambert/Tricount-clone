@@ -25,8 +25,6 @@ namespace prbd_2324_c07.ViewModel
 
         public OperationParticipantCardViewModel(User user) { 
             Participant = user;
-            Console.WriteLine(user);
-            Console.WriteLine(Participant);
         }
     
     }

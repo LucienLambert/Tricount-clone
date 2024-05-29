@@ -40,7 +40,6 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(Tricount.Title, value, Tricount, (t, v) => {
             t.Title = v;
             Validate();
-            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         });
     }
 
@@ -49,7 +48,6 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(Tricount?.Description, value, Tricount, (t, d) => {
             t.Description = d;
             Validate();
-            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         });
     }
 
@@ -58,8 +56,13 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(Tricount?.CreatedAt, value, Tricount, (t, c) => {
             t.CreatedAt = (DateTime)c;
             Validate();
-            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         });
+    }
+
+    private DateTime _DatePicker;
+    public DateTime DatePicker {
+        get => _DatePicker;
+        set => SetProperty(ref _DatePicker, value);
     }
 
     //ajout
@@ -74,10 +77,17 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
     private ObservableCollectionFast<User> listParticipant;
 
+    string titleTemp;
+
     public TricountDetailViewModel(Tricount tricount, bool isNew) {
         ParticipantVM = new ParticipantsViewModel(tricount, isNew);
         Tricount = tricount;
         IsNew = isNew;
+        if(IsNew) {
+            titleTemp = "<New Tricount>";
+        } else {
+            titleTemp = tricount.Title;
+        }
         InitializeDataView();
 
         RaisePropertyChanged();
@@ -90,7 +100,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         if(IsNew) {
             CreatedAt = DateTime.Now;
         }
-
+        DatePicker = DateTime.Now;
         listParticipant = new ObservableCollectionFast<User>();
 
         HeaderDefaultSet();
@@ -122,7 +132,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
             RaisePropertyChanged();
         }
         listParticipant.Clear();
-        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, titleTemp);
     }
 
     public override void SaveAction() {
@@ -153,9 +163,10 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         }
 
         Context.SaveChanges();
-        //RaisePropertyChanged();
+        RaisePropertyChanged(nameof(Title));
         listParticipant.Clear();
-        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+        
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, titleTemp);
         NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, Tricount);
         

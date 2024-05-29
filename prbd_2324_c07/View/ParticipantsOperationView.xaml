@@ -9,22 +9,20 @@
              xmlns:m="clr-namespace:prbd_2324_c07"
              xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
              xmlns:vw="clr-namespace:prbd_2324_c07.View"
-             mc:Ignorable="d"
+             mc:Ignorable="d" Height="234"
              d:DataContext="{d:DesignInstance Type=vm:ParticipantsOperationViewModel, IsDesignTimeCreatable=False}">
-<Grid>
-        <ListView x:Name="listView" ItemsSource="{Binding OperationParticipantCardVMs}" BorderBrush="Transparent" Grid.Row="0"  SelectionMode="Single" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10">
-            <ListView.ItemsPanel>
+    <Grid Width="300">
+        <ItemsControl x:Name="listView" ItemsSource="{Binding OperationParticipantCardVMs}" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Center" Width="300" Margin="0,2,0,0">
+            <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Vertical"/>
                 </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <vw:OperationParticipantCardView />
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
-  
 </f:UserControlBase>

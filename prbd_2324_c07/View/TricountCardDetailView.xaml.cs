@@ -9,6 +9,7 @@ namespace prbd_2324_c07.View
     public partial class TricountCardDetailView : UserControlBase
     {
         private readonly TricountCardDetailViewModel _vm;
+        private OperationDetailView OperationDetailWindow;
 
         public TricountCardDetailView(Tricount tricount, bool isNew) {
             InitializeComponent();
@@ -21,11 +22,14 @@ namespace prbd_2324_c07.View
             InitializeComponent();
 
             Register<Tricount>(App.Messages.MSG_NEW_OPERATION, tricount => {
-                OperationDetailView OperationDetailWindow = new OperationDetailView(tricount);
+                OperationDetailWindow = new OperationDetailView(tricount);
                 OperationDetailWindow.ShowDialog();
             });
 
-
+            //DOIT FERMER LE FENETRE OPERATION => FONCTIONNE QUE DANS LE CAS DE NEW_OPERATION (A TEST AVEC EDIT_OPERATION);
+            Register(App.Messages.MSG_CLOSE_OPERATION, () => {
+                OperationDetailWindow.Close();
+            });
         }
     }
 }

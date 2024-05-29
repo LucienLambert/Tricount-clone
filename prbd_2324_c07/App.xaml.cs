@@ -25,7 +25,8 @@ public partial class App : ApplicationBase<User,PridContext>{
         MSG_RESET_ASKED,
         MSG_REVOME_PARTICIPANT,
         MSG_ADD_PARTICIPANT,
-        MSG_NEW_OPERATION
+        MSG_NEW_OPERATION,
+        MSG_CLOSE_OPERATION
     }
 
     public App() {
@@ -76,12 +77,6 @@ public partial class App : ApplicationBase<User,PridContext>{
             PrepareDatabase();
             NavigateTo<MainViewModel, User, PridContext>();
         });
-
-
-
-
-
-
     }
 
     private static void PrepareDatabase() {
