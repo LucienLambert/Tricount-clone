@@ -16,4 +16,8 @@ public partial class TricountDetailView : UserControlBase{
         InitializeComponent();
         DataContext = _vm = new TricountDetailViewModel(tricount, isNew);
     }
+
+    private void ParticipantsView_Loaded(object sender, System.Windows.RoutedEventArgs e) {
+
+    }
 }

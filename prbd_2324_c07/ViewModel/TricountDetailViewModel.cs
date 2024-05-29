@@ -1,13 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using prbd_2324_c07.Model;
-using prbd_2324_c07.View;
+﻿using prbd_2324_c07.Model;
 using PRBD_Framework;
-using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
@@ -34,7 +26,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         get => _isNew;
         set => SetProperty(ref _isNew, value);
     }
-
+   
     public string Title {
         get => Tricount?.Title;
         set => SetProperty(Tricount.Title, value, Tricount, (t, v) => {

@@ -3,6 +3,7 @@ using PRBD_Framework;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -254,6 +255,10 @@ namespace prbd_2324_c07.Model
                 $"#description = {Description}\n" +
                 $"#creatorId = {CreatorId}\n" +
                 $"#subscription = {Subscriptions.Count}";
+        }
+
+        private bool AmountValide(string amount) {
+            return double.TryParse(amount, NumberStyles.Currency, CultureInfo.CurrentCulture, out _);
         }
     }
 }

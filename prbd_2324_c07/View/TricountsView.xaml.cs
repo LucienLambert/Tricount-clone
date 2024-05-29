@@ -9,5 +9,9 @@ public partial class TricountsView : UserControlBase {
     public TricountsView() {
         InitializeComponent();
     }
+
+    private void btnNew_Click(object sender, System.Windows.RoutedEventArgs e) {
+
+    }
 }
 
