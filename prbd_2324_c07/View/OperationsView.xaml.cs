@@ -1,4 +1,5 @@
 ﻿using PRBD_Framework;
+using static prbd_2324_c07.App;
 
 namespace prbd_2324_c07.View
 {
@@ -6,6 +7,13 @@ namespace prbd_2324_c07.View
     {
         public OperationsView() {
             InitializeComponent();
+
         }
+
+
+
+
+
+
     }
 }

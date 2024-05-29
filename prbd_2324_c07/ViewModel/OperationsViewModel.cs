@@ -27,10 +27,10 @@ namespace prbd_2324_c07.ViewModel
         public ICommand EditOperation { get; set; }
 
         public ICommand AddOperation { get; set; }
-        
+
 
         public OperationsViewModel(Tricount tricount) : base() {
-            Tricount= tricount;
+            Tricount = tricount;
             AddOperation = new RelayCommand(AddOperationAction);
 
             OnRefreshData();
@@ -42,8 +42,8 @@ namespace prbd_2324_c07.ViewModel
         }
 
         protected void AddOperationAction() {
-            
-            NotifyColleagues(Messages.MSG_NEW_OPERATION);
+
+            NotifyColleagues(Messages.MSG_NEW_OPERATION, Tricount);
 
         }
 
@@ -57,7 +57,7 @@ namespace prbd_2324_c07.ViewModel
                 var operations = Tricount.Operations.OrderByDescending(op => op.Operation_date);
                 Operations = new ObservableCollection<OperationCardViewModel>(operations.Select(operation => new OperationCardViewModel(operation)));
             }
-            
+
 
         }
 

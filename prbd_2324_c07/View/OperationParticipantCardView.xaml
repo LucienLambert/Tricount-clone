@@ -1,0 +1,16 @@
+﻿<f:UserControlBase x:Class="prbd_2324_c07.View.OperationParticipantCardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
+             xmlns:vw="clr-namespace:prbd_2324_c07.View"
+             xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:OperationParticipantCardViewModel, IsDesignTimeCreatable=False}">
+    <Grid >
+        <Label Content="test"></Label>
+        <Button Content="test"></Button>
+
+    </Grid>
+</f:UserControlBase>

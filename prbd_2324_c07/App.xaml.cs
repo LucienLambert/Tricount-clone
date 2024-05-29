@@ -77,10 +77,8 @@ public partial class App : ApplicationBase<User,PridContext>{
             NavigateTo<MainViewModel, User, PridContext>();
         });
 
-        Register(this, Messages.MSG_NEW_OPERATION, () => {
-            AddOperationView addOperationsWindow = new AddOperationView();
-            addOperationsWindow.ShowDialog();
-        });
+
+
 
 
 

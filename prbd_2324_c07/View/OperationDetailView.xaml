@@ -1,0 +1,68 @@
+﻿<f:WindowBase x:Class="prbd_2324_c07.View.OperationDetailView"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+              xmlns:vm="clr-namespace:prbd_2324_c07.ViewModel"
+              xmlns:vw="clr-namespace:prbd_2324_c07.View"
+              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+              mc:Ignorable="d"
+              Title="Add Operation" Height="500" Width="300" WindowStartupLocation="CenterScreen"
+              ResizeMode="NoResize"
+              WindowStyle="None"
+              AllowsTransparency="True" Background="Transparent"
+              d:DataContext="{d:DesignInstance Type=vm:OperationDetailViewModel, IsDesignTimeCreatable=False}">
+    <Border CornerRadius="15" Background="White">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="159*"/>
+                <RowDefinition Height="159*"/>
+
+            </Grid.RowDefinitions>
+            <!-- Bandeau personnalisé pour imiter la barre de titre -->
+            <Border Grid.Row="0" Background="LightGray" CornerRadius="15,15,0,0" Grid.ColumnSpan="2">
+                <TextBlock Text="Add Operation" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="Black" Margin="5,0,0,0" />
+            </Border>
+
+            <Label Content="Title :" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" />
+            <Label Content="Amount :" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" />
+            <Label Content="Initiator :" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" />
+            <Label Content="Date :" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" />
+            <Label Content="Templates :" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" />
+
+
+            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" Margin="10" />
+            <TextBox Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" Margin="10" />
+
+            <ComboBox ItemsSource="{Binding ParticipantsOperation}" DisplayMemberPath="FullName" SelectedItem="{Binding Initiator}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10" />
+
+
+            <DatePicker  Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="4"  VerticalAlignment="Center"
+                DisplayDateStart="01/01/1900" 
+                DisplayDateEnd="{Binding CreatedAt}" 
+                Height="25"
+                SelectedDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" 
+                DisplayDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" Width="205"/>
+
+
+
+            <vw:ParticipantsOperationView DataContext="{Binding ParticipantsOperationVM}" Grid.Row="6" Grid.ColumnSpan="2" />
+
+
+
+
+
+        </Grid>
+
+    </Border>
+</f:WindowBase>

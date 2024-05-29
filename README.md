@@ -18,7 +18,9 @@ Il manque le (creator) sur le créateur du Tricount dans la liste des participan
 
 Le bouton Save doit fermer l'onglet
 
+***Tricount***
 
+Refactor RefreshBalance()
 
 
 

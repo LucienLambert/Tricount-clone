@@ -206,7 +206,7 @@ namespace prbd_2324_c07.Model
             return !HasErrors;
         }
 
-
+        // Peut se faire différement
         public void RefreshBalance() {
 
             Balance.Clear();

@@ -1,6 +1,9 @@
-﻿using PRBD_Framework;
+﻿using Microsoft.IdentityModel.Tokens;
+using PRBD_Framework;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace prbd_2324_c07.Model;
 
@@ -41,6 +44,35 @@ public  class Operation : EntityBase<PridContext>
         Initiator = initiator;
         Operation_date = operation_date;
         RefreshBalance();
+    }
+
+    public bool Validate(string amount) {
+        ClearErrors();
+
+        var regex = new Regex(@"^[\d,]+$"); 
+
+        if (string.IsNullOrEmpty(Title)) {
+            AddError(nameof(Title), "required");
+        } else if (Title.Length < 3) {
+            AddError(nameof(Title), " length must be >= 3");
+        }
+        //} else if ((IsDetached || IsAdded) && Context.Tricounts.Any((t => t.Title == Title && t.CreatorId == user.UserId))) {
+        //    AddError(nameof(Title), "title arleady exists");
+        //}
+        if (amount.IsNullOrEmpty()) {
+            AddError(nameof(Amount), "required");
+        } else if (!regex.IsMatch(amount)) {
+            AddError(nameof(Amount), "invalid format");
+        } else if (double.Parse(amount)<=0) {
+            AddError(nameof(Amount), "minimum 1 cent");
+        }
+
+        if (DateTime.Now.CompareTo(Operation_date) < 0) {
+            AddError(nameof(Operation_date), "the date cannot be greater than the current date");
+        }
+
+
+        return !HasErrors;
     }
 
     public void RefreshBalance() {

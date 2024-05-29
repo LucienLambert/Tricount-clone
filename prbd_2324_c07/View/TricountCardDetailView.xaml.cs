@@ -15,6 +15,17 @@ namespace prbd_2324_c07.View
 
             // Nécessaire pour pouvoir fermer l'onglet
             DataContext = _vm = new TricountCardDetailViewModel(tricount, isNew);
+
+
+
+            InitializeComponent();
+
+            Register<Tricount>(App.Messages.MSG_NEW_OPERATION, tricount => {
+                OperationDetailView OperationDetailWindow = new OperationDetailView(tricount);
+                OperationDetailWindow.ShowDialog();
+            });
+
+
         }
     }
 }

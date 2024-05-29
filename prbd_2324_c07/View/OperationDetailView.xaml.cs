@@ -1,7 +1,10 @@
-﻿using PRBD_Framework;
+﻿using prbd_2324_c07.Model;
+using prbd_2324_c07.ViewModel;
+using PRBD_Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,11 +18,14 @@ using System.Windows.Shapes;
 
 namespace prbd_2324_c07.View
 {
-   public partial class AddOperationView : WindowBase
+    public partial class OperationDetailView : WindowBase
     {
-        public AddOperationView()
+
+        public readonly OperationDetailViewModel _vm;
+        public OperationDetailView(Tricount tricount)
         {
             InitializeComponent();
+            DataContext = _vm = new OperationDetailViewModel(tricount);
         }
     }
 }
