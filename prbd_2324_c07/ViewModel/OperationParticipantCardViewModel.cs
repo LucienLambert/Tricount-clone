@@ -23,6 +23,18 @@ namespace prbd_2324_c07.ViewModel
             set => SetProperty(ref _participant, value);
         }
 
+        private double _amout;
+        public double Double {
+            get => _amout;
+            set => SetProperty(ref _amout, value);
+        }
+
+        private double _repartition;
+        public double repartition {
+            get => _repartition;
+            set => SetProperty(ref _repartition, value);
+        }
+
         public OperationParticipantCardViewModel(User user) { 
             Participant = user;
         }

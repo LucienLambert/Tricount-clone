@@ -3,7 +3,7 @@ using PRBD_Framework;
 
 namespace prbd_2324_c07.ViewModel
 {
-    public class ParticipantsOperationViewModel : ViewModelBase<User,PridContext>
+    public class OperationParticipantViewModel : ViewModelBase<User,PridContext>
     {
         private Tricount _tricount;
         public Tricount Tricount {
@@ -25,7 +25,7 @@ namespace prbd_2324_c07.ViewModel
             set => SetProperty(ref _listUsers, value);
         }
 
-        public ParticipantsOperationViewModel(Tricount tricount) {
+        public OperationParticipantViewModel(Tricount tricount) {
             Tricount = tricount;
             ListUsers = new ObservableCollectionFast<User>();
             foreach (var s in Tricount.Subscriptions) {

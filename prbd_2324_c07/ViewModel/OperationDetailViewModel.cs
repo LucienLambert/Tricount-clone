@@ -1,13 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using prbd_2324_c07.Model;
+﻿using prbd_2324_c07.Model;
 using PRBD_Framework;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
@@ -68,14 +60,16 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(ref _DatePicker, value);
     }
 
+    //création d'une liste pour gerer les Participants au tricount
     private ObservableCollectionFast<User> _participantsOperation;
     public ObservableCollectionFast<User> ParticipantsOperation  {
         get => _participantsOperation;
         set => SetProperty(ref _participantsOperation, value);
     }
 
-    private ParticipantsOperationViewModel _participantsOperationVM;
-    public ParticipantsOperationViewModel ParticipantsOperationVM {
+    //liste utiliser pour instancer une OperationParticipantViewModel pour chaques users (Participant)
+    private OperationParticipantViewModel _participantsOperationVM;
+    public OperationParticipantViewModel ParticipantsOperationVM {
         get => _participantsOperationVM;
         set => SetProperty(ref _participantsOperationVM, value);
     }
@@ -85,7 +79,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
     // Constructeur Add Operation
     public OperationDetailViewModel(Tricount tricount) {
         Tricount = tricount;
-        ParticipantsOperationVM = new ParticipantsOperationViewModel(Tricount);
+        ParticipantsOperationVM = new OperationParticipantViewModel(Tricount);
         IsNewOperation = true;
         InitializedAddOperation();
         OnRefreshData();
@@ -101,8 +95,6 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
 
     private void InitializedAddOperation() {
         BtnCancel = new RelayCommand(CancelAction);
-
-
         Operation = new Operation();
         ParticipantsOperation = new ObservableCollectionFast<User>();
         foreach (var participant in Tricount.Subscriptions) {
@@ -113,9 +105,6 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         Initiator = CurrentUser;
         DatePicker = DateTime.Now;
         Amount = "0,00";
-
-
-
     }
 
     public override bool Validate() {
@@ -126,7 +115,6 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
     }
 
     public override void CancelAction() {
-        Console.WriteLine("Cancel Opération");
         ClearErrors();
         if (IsNewOperation) {
             Operation.Title = null;

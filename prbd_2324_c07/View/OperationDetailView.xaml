@@ -52,7 +52,7 @@
                 SelectedDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" 
                 DisplayDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" Width="205"/>
 
-            <vw:ParticipantsOperationView DataContext="{Binding ParticipantsOperationVM}" Grid.Row="6" VerticalAlignment="Top" Height="206" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+            <vw:OperationParticipantView DataContext="{Binding ParticipantsOperationVM}" Grid.Row="6" VerticalAlignment="Top" Height="206" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
 
             <Button Grid.Column="1" Content="Add" HorizontalAlignment="Left" Margin="113,27,0,0" Grid.Row="7" VerticalAlignment="Top" Width="48" Height="20"/>
             <Button Grid.Column="1" Content="Cancel" Command="{Binding BtnCancel}" HorizontalAlignment="Left" Margin="166,27,0,0" Grid.Row="7" VerticalAlignment="Top" Width="48" Height="20"/>

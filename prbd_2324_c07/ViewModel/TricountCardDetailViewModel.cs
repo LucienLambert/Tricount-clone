@@ -98,7 +98,7 @@ namespace prbd_2324_c07.ViewModel
             if (messageBoxResult == MessageBoxResult.Yes) {
                 Tricount.Delete();
                 NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
-                NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+                NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount.Title);
             }
         }
 

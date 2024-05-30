@@ -2,9 +2,9 @@
 
 namespace prbd_2324_c07.View
 {
-    public partial class ParticipantsOperationView : UserControlBase
+    public partial class OperationParticipantView : UserControlBase
     {
-        public ParticipantsOperationView()
+        public OperationParticipantView()
         {
             InitializeComponent();
         }
