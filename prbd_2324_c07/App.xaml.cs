@@ -26,6 +26,7 @@ public partial class App : ApplicationBase<User,PridContext>{
         MSG_REVOME_PARTICIPANT,
         MSG_ADD_PARTICIPANT,
         MSG_NEW_OPERATION,
+        MSG_EDIT_OPERATION,
         MSG_CLOSE_OPERATION,
         MSG_OPERATION_AMOUNT_CHANGED,
         MSG_OPERATION_USER_WEIGHT_CHANGED,

@@ -31,6 +31,7 @@ namespace prbd_2324_c07.ViewModel
 
         public OperationsViewModel(Tricount tricount) : base() {
             Tricount = tricount;
+            EditOperation = new RelayCommand<OperationCardViewModel>(EditOperationAction);
             AddOperation = new RelayCommand(AddOperationAction);
 
             OnRefreshData();
@@ -39,6 +40,10 @@ namespace prbd_2324_c07.ViewModel
 
             Register(Messages.MSG_RELOAD_ASKED, OnRefreshData);
 
+        }
+
+        private void EditOperationAction(OperationCardViewModel operationCardViewModel) {
+            NotifyColleagues(Messages.MSG_EDIT_OPERATION, operationCardViewModel.Operation);
         }
 
         protected void AddOperationAction() {

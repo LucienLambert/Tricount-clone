@@ -13,6 +13,11 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext>
         set => SetProperty(ref _tricount, value);
     }
 
+    // Pour bien faire, devrait peut-être être dans un convertisseur
+    public string SaveBtnLabel => IsNewOperation ? "Add" : "Save";
+
+    public string HeaderLabel => IsNewOperation ? "Add Operation" : "Edit Operation";
+
     private Operation _operation;
     public Operation Operation {
         get => _operation;
@@ -91,7 +96,6 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext>
         ParticipantsOperationVM = new OperationParticipantViewModel(Tricount);
         IsNewOperation = true;
         InitializedAddOperation();
-        OnRefreshData();
 
         // Reçoit le participant et son poid lorsque celui-ci a été changé et actualise la Répartition temporaire, puis la renvoie à OperationParticipantCard
         Register<Dictionary<User, double>>(App.Messages.MSG_OPERATION_USER_WEIGHT_CHANGED, dic => {
@@ -109,8 +113,23 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext>
     // Constructeur Edit Operation
     public OperationDetailViewModel(Operation operation) {
         Operation = operation;
+        Tricount = Operation.Tricount;
+        ParticipantsOperationVM = new OperationParticipantViewModel(Operation);
         IsNewOperation = false;
-        //OnRefreshData();
+        InitializeEditOperation();
+
+        // Reçoit le participant et son poid lorsque celui-ci a été changé et actualise la Répartition temporaire, puis la renvoie à OperationParticipantCard
+        Register<Dictionary<User, double>>(App.Messages.MSG_OPERATION_USER_WEIGHT_CHANGED, dic => {
+            var usr = dic.Keys.ElementAt(0);
+            var wght = dic.Values.ElementAt(0);
+            if (wght > 0) {
+                TemporaryRepartition[usr] = wght;
+            } else if (wght == 0 && TemporaryRepartition.ContainsKey(usr)) {
+                TemporaryRepartition.Remove(usr);
+            }
+            NotifyColleagues(App.Messages.MSG_OPERATION_TEMPORARY_REPARTITION_CHANGED, TemporaryRepartition);
+        });
+
     }
 
 
@@ -130,6 +149,20 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext>
         DatePicker = DateTime.Now;
         Amount = "0,00";
     }
+
+    private void InitializeEditOperation() {
+        BtnCancel = new RelayCommand(CancelAction);
+        BtnSave = new RelayCommand(SaveAction, CanSaveAction);
+        ParticipantsOperation = new ObservableCollectionFast<User>();
+        foreach (var participant in Tricount.Subscriptions) {
+            ParticipantsOperation.Add(participant.User);
+        }
+        Initiator = Operation.Initiator;
+        CreatedAt = Operation.Operation_date;
+        Amount = Operation.Amount.ToString();
+        TemporaryRepartition = Operation.GetRepartitions();
+    }
+
 
     public override bool Validate() {
         ClearErrors();
@@ -161,24 +194,38 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext>
     }
 
     public override void SaveAction() {
-        //Pour l'instant, seulement add operation
 
-        Operation.Amount = double.Parse(Amount);
-        Operation.Tricount = Tricount;
-        Operation.Initiator = Initiator;
-        Context.Add(Operation);
+        if (IsNewOperation) {
+            Operation.Amount = double.Parse(Amount);
+            Operation.Tricount = Tricount;
+            Operation.Initiator = Initiator;
+            Context.Add(Operation);
 
-        foreach (var entry in TemporaryRepartition) {
-            // Value = double (poid), Key = User
-            Context.Add(new Repartition((int)entry.Value, entry.Key, Operation));
+            foreach (var entry in TemporaryRepartition) {
+                // Value = double (poid), Key = User
+                Context.Add(new Repartition((int)entry.Value, entry.Key, Operation));
+            }
+
+        } else {
+            Operation.Amount = double.Parse(Amount);
+            Operation.Initiator = Initiator;
+            var usersToUpdate = TemporaryRepartition.Keys;
+
+            // Si le user de Repartitions est dans le dictionnaire, modifie son poid, sinon le supprime
+            foreach (var repartition in Context.Repartitions.Where(rep=>rep.Operation == Operation).ToList()) {
+                if (usersToUpdate.Contains(repartition.User)) {
+                    repartition.Weight = (int)TemporaryRepartition[repartition.User];
+                } else {
+                    Context.Repartitions.Remove(repartition);
+                }
+
+            }
+
+            Context.SaveChanges();
+
+            NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
+            NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
+
         }
-
-        
-        
-        Context.SaveChanges();
-
-        NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
-        NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
-
     }
 }

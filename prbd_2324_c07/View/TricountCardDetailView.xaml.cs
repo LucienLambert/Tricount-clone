@@ -26,6 +26,11 @@ namespace prbd_2324_c07.View
                 OperationDetailWindow.ShowDialog();
             });
 
+            Register<Operation>(App.Messages.MSG_EDIT_OPERATION, operation => {
+                OperationDetailWindow = new OperationDetailView(operation);
+                OperationDetailWindow.ShowDialog();
+            });
+
             //DOIT FERMER LE FENETRE OPERATION => FONCTIONNE QUE DANS LE CAS DE NEW_OPERATION (A TEST AVEC EDIT_OPERATION);
             Register(App.Messages.MSG_CLOSE_OPERATION, () => {
                 OperationDetailWindow.Close();

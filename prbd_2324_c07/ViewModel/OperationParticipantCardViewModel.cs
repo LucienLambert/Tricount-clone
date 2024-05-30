@@ -6,12 +6,6 @@ namespace prbd_2324_c07.ViewModel
     public class OperationParticipantCardViewModel : ViewModelBase<User, PridContext>
     {
 
-        //private Tricount _tricount;
-        //public Tricount Tricount {
-        //    get => _tricount;
-        //    set => SetProperty(ref _tricount, value);
-        //}
-
         private User _participant;
         public User Participant {
             get => _participant;
@@ -62,7 +56,7 @@ namespace prbd_2324_c07.ViewModel
             }
             // Notifie OperationDetailViewModel et lui passe un Dictionnaire contenant le Participant et son Poid pour qu'il mette à jour la Répartition temporaire
             NotifyColleagues(App.Messages.MSG_OPERATION_USER_WEIGHT_CHANGED, new Dictionary<User, double> { { Participant, UserWeight } });
-            RefreshUserAmount();
+            //RefreshUserAmount();
         }
 
 
@@ -87,11 +81,10 @@ namespace prbd_2324_c07.ViewModel
         }
 
 
-
-
+        //Constructeur en venant de Add Operation
         public OperationParticipantCardViewModel(User user, double participantCount) {
             Participant = user;
-            InitializeAddOperation(participantCount);
+            InitializeFromAddOperation(participantCount);
 
             Register<double>(App.Messages.MSG_OPERATION_AMOUNT_CHANGED, amount => {
                 Amount = amount;
@@ -104,7 +97,23 @@ namespace prbd_2324_c07.ViewModel
             });
         }
 
-        private void InitializeAddOperation(double participantCount) {
+        //Constructeur en venant de Edit Operation
+        public OperationParticipantCardViewModel(User user, Operation operation) {
+            Participant = user;
+            InitializeFromEditOperation(operation);
+
+            Register<double>(App.Messages.MSG_OPERATION_AMOUNT_CHANGED, amount => {
+                Amount = amount;
+            });
+
+            Register<Dictionary<User, double>>(App.Messages.MSG_OPERATION_TEMPORARY_REPARTITION_CHANGED, temprep => {
+                Repartition = temprep;
+                // Je ne comprends pas pourquoi la méthode dans le setter de Repartition ne proc pas, du coup j'ai du la remettre ici
+                RefreshBaseAmount();
+            });
+        }
+
+        private void InitializeFromAddOperation(double participantCount) {
 
             BaseAmount = 0;
             UserWeight = 1;
@@ -113,8 +122,19 @@ namespace prbd_2324_c07.ViewModel
             for(int i = 0; i < participantCount; ++i) {
                 Repartition.Add(new User(), 1);
             }
+        }
 
+        private void InitializeFromEditOperation(Operation operation) {
+            Repartition = operation.GetRepartitions();
+            Amount = operation.Amount;
+            BaseAmount = 0;
+            CheckedBox = true;
+            UserWeight = Repartition
+                .Where(rep => rep.Key == Participant)
+                .Select(kvp => kvp.Value)
+                .FirstOrDefault();
 
+            RefreshBaseAmount();
         }
 
     }

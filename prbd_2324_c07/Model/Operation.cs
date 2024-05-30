@@ -86,6 +86,14 @@ public  class Operation : EntityBase<PridContext>
         return AmountHasErrors;
     }
 
+    public Dictionary<User, double> GetRepartitions() {
+        var repartitions = Repartitions
+            .Where(rep => rep.Operation == this)
+            .ToDictionary(rep => rep.User, rep => (double) rep.Weight);
+
+        return repartitions;
+    }
+
     public void RefreshBalance() {
         Balance.Clear();
 
