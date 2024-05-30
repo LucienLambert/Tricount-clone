@@ -142,7 +142,12 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
             //add Tricount à la DB
             Context.Add(Tricount);
             //add les sub à la DB
-            Context.AddRange(Tricount.Subscriptions);
+            foreach (var sub in Tricount.Subscriptions) {
+                if (!Context.Subscriptions.Any(s => s.UserId == sub.UserId && s.TricountId == sub.TricountId)) {
+                    Context.Add(sub);
+                }
+            }
+            //Context.AddRange(Tricount.Subscriptions);
             IsNew = false;
         } else {
             //parcours la liste de Participant

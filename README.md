@@ -7,16 +7,20 @@ A partir de maintenant c'est le title qui nou permet la gestion des onglets.
 ### Liste des bugs connus
 
 ***MAIN***
-probleme user tracking apres un Reload et un reset quand edit_tricount or new_tricount
+	
+	-probleme user tracking apres un Reload et un reset quand edit_tricount or new_tricount
 
 
 ***- Tricounts List***
-Legendes non responsive
+	
+	-Legendes non responsive
 
 
 ***NEW_tricount et EDIT_TRICOUNT***
-Il manque le (creator) sur le créateur du Tricount dans la liste des participants
-Le tricount n'est pas notifié des changements quand j'add ou remove uniquement un participant.
+	
+	-Il manque le (creator) sur le créateur du Tricount dans la liste des participants
+
+	-Le tricount n'est pas notifié des changements quand j'add ou remove uniquement un participant.
 
 ***Tricount***
 Refactor RefreshBalance()

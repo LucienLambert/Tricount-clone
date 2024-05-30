@@ -53,14 +53,13 @@ public partial class App : ApplicationBase<User,PridContext>{
         NavigateTo<LoginViewModel, User, PridContext>();
 
         Register(this, Messages.MSG_LOGOUT, () => {
-            Console.WriteLine("test");
             Logout();
             NavigateTo<LoginViewModel, User, PridContext>();
         });
 
         // si un user est logé alors on passe par ce NavigateTo
         Register<User>(this, Messages.MSG_LOGIN, user => {
-            Login(user); 
+            Login(user);
             NavigateTo<MainViewModel, User, PridContext>();
         });
 
@@ -93,6 +92,8 @@ public partial class App : ApplicationBase<User,PridContext>{
     protected override void OnRefreshData() {
         if(CurrentUser?.FullName != null) {
             CurrentUser = User.GetByFullName(CurrentUser.FullName);
+        } else {
+            CurrentUser = null;
         }
         // TODO
     }
