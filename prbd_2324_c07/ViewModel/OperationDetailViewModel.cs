@@ -4,7 +4,8 @@ using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
 
-public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
+public class OperationDetailViewModel : ViewModelBase<User, PridContext>
+{
 
     private Tricount _tricount;
     public Tricount Tricount {
@@ -13,7 +14,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
     }
 
     private Operation _operation;
-    public  Operation Operation {
+    public Operation Operation {
         get => _operation;
         set => SetProperty(ref _operation, value);
     }
@@ -26,7 +27,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
 
     public string Title {
         get => Operation?.Title;
-        set => SetProperty(Operation?.Title, value, Operation, (o,t) => {
+        set => SetProperty(Operation?.Title, value, Operation, (o, t) => {
             o.Title = t;
             Validate();
         });
@@ -54,15 +55,15 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         });
     }
 
-    private DateTime _DatePicker;
+    private DateTime _datePicker;
     public DateTime DatePicker {
-        get => _DatePicker;
-        set => SetProperty(ref _DatePicker, value);
+        get => _datePicker;
+        set => SetProperty(ref _datePicker, value);
     }
 
     //création d'une liste pour gerer les Participants au tricount
     private ObservableCollectionFast<User> _participantsOperation;
-    public ObservableCollectionFast<User> ParticipantsOperation  {
+    public ObservableCollectionFast<User> ParticipantsOperation {
         get => _participantsOperation;
         set => SetProperty(ref _participantsOperation, value);
     }
@@ -74,7 +75,15 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(ref _participantsOperationVM, value);
     }
 
+    // Dictionnaire pour stocker les poids des utilisateurs en attente d'etre modifié ou sauvé
+    private Dictionary<User, double> _temporaryRepartition = new();
+    public Dictionary<User, double> TemporaryRepartition {
+        get => _temporaryRepartition;
+        set => SetProperty(ref _temporaryRepartition, value);
+    }
+
     public ICommand BtnCancel { get; set; }
+    public ICommand BtnSave { get; set; }
 
     // Constructeur Add Operation
     public OperationDetailViewModel(Tricount tricount) {
@@ -84,6 +93,17 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         InitializedAddOperation();
         OnRefreshData();
 
+        // Reçoit le participant et son poid lorsque celui-ci a été changé et actualise la Répartition temporaire, puis la renvoie à OperationParticipantCard
+        Register<Dictionary<User, double>>(App.Messages.MSG_OPERATION_USER_WEIGHT_CHANGED, dic => {
+            var usr = dic.Keys.ElementAt(0);
+            var wght = dic.Values.ElementAt(0);
+            if (wght > 0) {
+                TemporaryRepartition[usr] = wght;
+            } else if (wght == 0 && TemporaryRepartition.ContainsKey(usr)) {
+                TemporaryRepartition.Remove(usr);
+            }
+            NotifyColleagues(App.Messages.MSG_OPERATION_TEMPORARY_REPARTITION_CHANGED, TemporaryRepartition);
+        });
     }
 
     // Constructeur Edit Operation
@@ -93,12 +113,16 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         //OnRefreshData();
     }
 
+
     private void InitializedAddOperation() {
         BtnCancel = new RelayCommand(CancelAction);
+        BtnSave = new RelayCommand(SaveAction, CanSaveAction);
         Operation = new Operation();
         ParticipantsOperation = new ObservableCollectionFast<User>();
         foreach (var participant in Tricount.Subscriptions) {
             ParticipantsOperation.Add(participant.User);
+            // chaque utilisateur a un poid de 1 à l'initialisation
+            TemporaryRepartition.Add(participant.User, 1);
         }
 
         CreatedAt = DateTime.Now;
@@ -111,6 +135,10 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         ClearErrors();
         Operation.Validate(Amount);
         AddErrors(Operation.Errors);
+
+        if (!Operation.ValidateAmount(Amount)) {
+            NotifyColleagues(App.Messages.MSG_OPERATION_AMOUNT_CHANGED, double.Parse(Amount));
+        }
         return !HasErrors;
     }
 
@@ -127,7 +155,30 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         ParticipantsOperation.Clear();
         NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
     }
+    public bool CanSaveAction() {
 
+        return Validate() && !HasErrors;
+    }
 
+    public override void SaveAction() {
+        //Pour l'instant, seulement add operation
 
+        Operation.Amount = double.Parse(Amount);
+        Operation.Tricount = Tricount;
+        Operation.Initiator = Initiator;
+        Context.Add(Operation);
+
+        foreach (var entry in TemporaryRepartition) {
+            // Value = double (poid), Key = User
+            Context.Add(new Repartition((int)entry.Value, entry.Key, Operation));
+        }
+
+        
+        
+        Context.SaveChanges();
+
+        NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
+        NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
+
+    }
 }

@@ -37,8 +37,8 @@ namespace prbd_2324_c07.ViewModel
 
         protected override void OnRefreshData() {
 
-            OperationParticipantCardVMs = new ObservableCollectionFast<OperationParticipantCardViewModel>(ListUsers.Select(user => new OperationParticipantCardViewModel(user)));
-            
+            OperationParticipantCardVMs = new ObservableCollectionFast<OperationParticipantCardViewModel>(ListUsers.Select(user => new OperationParticipantCardViewModel(user, ListUsers.Count())));
+
         }
 
 

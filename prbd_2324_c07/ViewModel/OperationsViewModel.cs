@@ -35,7 +35,7 @@ namespace prbd_2324_c07.ViewModel
 
             OnRefreshData();
 
-            Register<Operation>(Messages.MSG_OPERATION_CHANGED, operation => OnRefreshData());
+            Register(Messages.MSG_OPERATION_CHANGED, OnRefreshData);
 
             Register(Messages.MSG_RELOAD_ASKED, OnRefreshData);
 
