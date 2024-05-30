@@ -74,7 +74,7 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
 
         OnRefreshData();
         // Notifier du changement de la liste des participants
-        RaisePropertyChanged(nameof(Participant));
+        //RaisePropertyChanged(nameof(Participant));
     }
 
     private void ListNon_Participant() {
@@ -96,14 +96,14 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
     private void ListParticipant() {
         if (IsNew) {
             Participant.Add(CurrentUser);
-            Tricount.AddUserSubTricount(CurrentUser);
+            //Tricount.AddUserSubTricount(CurrentUser);
         } else {
             foreach (Subscription sub in Tricount.Subscriptions) {
                 Participant.Add(sub.User);
             }
         }
         OnRefreshData();
-        RaisePropertyChanged(nameof(Participant));
+        //RaisePropertyChanged(nameof(Participant));
     }
 
     private void AddAction() {
@@ -114,13 +114,13 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
                 TempoDelParticipants.Remove(user);
             }
             Non_Participant.Remove(UserSelected);
-            if (IsNew) {
-                Tricount.AddUserSubTricount(user);
-            }
+            //if (IsNew) {
+            //    Tricount.AddUserSubTricount(user);
+            //}
         }
         OnRefreshData();
         // Notifier du changement de la liste des participants
-        RaisePropertyChanged(nameof(Participant));
+        //RaisePropertyChanged(nameof(Participant));
     }
 
     private void AddMySelfAction() {
@@ -128,7 +128,7 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
         Non_Participant.Remove(CurrentUser);
         OnRefreshData();
         // Notifier du changement de la liste des participants
-        RaisePropertyChanged(nameof(Participant));
+        //RaisePropertyChanged(nameof(Participant));
     }
 
     private bool CanAddMySelf() {
@@ -138,20 +138,20 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
     private void AddEveryBodyAction() {
         foreach (var p in Non_Participant) {
             Participant.Add(p);
-            if (IsNew) {
-                Tricount.AddUserSubTricount(p);
-             }
+            //if (IsNew) {
+            //    Tricount.AddUserSubTricount(p);
+            // }
         }
         Non_Participant.Clear();
         OnRefreshData();
         // Notifier du changement de la liste des participants
-        RaisePropertyChanged(nameof(Participant));
+        //RaisePropertyChanged(nameof(Participant));
     }
 
     private void DelAction(User user) {
         if (IsNew) {
             if (!user.Equals(CurrentUser)) {
-                Tricount.RemoveUserSubTricount(user);
+                //Tricount.RemoveUserSubTricount(user);
                 Non_Participant.Add(user);
                 Participant.Remove(user);
             }
@@ -166,7 +166,7 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
         }
         OnRefreshData();
         // Notifier du changement de la liste des participants
-        RaisePropertyChanged(nameof(Participant));
+        //RaisePropertyChanged(nameof(Participant));
     }
 
     protected override void OnRefreshData() {
