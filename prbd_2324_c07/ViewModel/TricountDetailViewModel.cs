@@ -82,6 +82,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
     public TricountDetailViewModel(Tricount tricount, bool isNew) {
         ParticipantVM = new ParticipantsViewModel(tricount, isNew);
         Tricount = tricount;
+        Console.WriteLine(Tricount);
         IsNew = isNew;
         if(IsNew) {
             titleTemp = "<New Tricount>";
@@ -141,6 +142,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
             Tricount.CreatorId = CurrentUser.UserId;
             //add Tricount à la DB
             Context.Add(Tricount);
+            
             //add les sub à la DB
             foreach (var sub in Tricount.Subscriptions) {
                 if (!Context.Subscriptions.Any(s => s.UserId == sub.UserId && s.TricountId == sub.TricountId)) {

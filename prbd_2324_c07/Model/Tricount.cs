@@ -255,7 +255,8 @@ namespace prbd_2324_c07.Model
         }
 
         public override string ToString() {
-            return $"<tricount : title  = {Title}\n" +
+            return $"<tricount : Id  = {TricountId}\n" +
+                $"<tricount : title  = {Title}\n" +
                 $"#description = {Description}\n" +
                 $"#creatorId = {CreatorId}\n" +
                 $"#subscription = {Subscriptions.Count}";
