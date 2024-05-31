@@ -16,14 +16,14 @@
         <c:BoolToVisibleConverter x:Key="BoolToVisibleConverter"/>
     </f:UserControlBase.Resources>
 
-    <Grid Height="32" Width="379">
+    <Grid Height="32" Width="369">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="{Binding Participant.FullName}" Margin="10,0,10,0" IsHitTestVisible="False"/>
-        <Button Visibility="{Binding IsCreator, Converter={StaticResource BoolToVisibleConverter}}" Command="{Binding DelUserCommand}" Content=" 🗑 " HorizontalAlignment="Left" Width="64" Grid.Column="2" Margin="116,0,0,0"/>
+        <Button Visibility="{Binding DelVisibility, Converter={StaticResource BoolToVisibleConverter}}" Command="{Binding DelUserCommand}" Content=" 🗑 " HorizontalAlignment="Right" Width="64" Grid.Column="2" Margin="10,0,0,0"/>
         <Label Grid.Column="1" Content="{Binding CreatorDisplay}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" Height="32"/>
     </Grid>
 </f:UserControlBase>
