@@ -1,31 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using prbd_2324_c07.Model;
+﻿using prbd_2324_c07.Model;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using static prbd_2324_c07.App;
 
 namespace prbd_2324_c07.ViewModel;
 
-public class TricountsViewModel : ViewModelBase<User, PridContext> {
+public class TricountsViewModel : ViewModelCommon {
 
     private ObservableCollection<TricountCardViewModel> _tricounts;
-
-
     public ObservableCollection<TricountCardViewModel> Tricounts {
         get => _tricounts;
         set => SetProperty(ref _tricounts, value);
     }
 
-    public ICommand NewTricount { get; set; }
-
     private string filter;
-
     public string Filter { get => filter; set => SetProperty(ref filter, value, OnRefreshData); }
+
     public ICommand ClearFilter { get; set; }
     public ICommand DisplayTricountDetails { get; set; }
+    public ICommand NewTricount { get; set; }
 
-    public TricountsViewModel() : base() {
+    public TricountsViewModel() {
+        Console.WriteLine("TricountViewModel");
 
         OnRefreshData();
 
@@ -39,21 +35,16 @@ public class TricountsViewModel : ViewModelBase<User, PridContext> {
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, vm.Tricount);
         });
 
-        Register<Tricount>(Messages.MSG_TRICOUNT_CHANGED, tricount => {
+        Register<Tricount>(App.Messages.MSG_TRICOUNT_CHANGED, tricount => {
             OnRefreshData();
         });
-
-        Register(Messages.MSG_OPERATION_CHANGED, OnRefreshData);
-
-        Register(Messages.MSG_RELOAD_ASKED, OnRefreshData);
-
-
+        Register(App.Messages.MSG_RELOAD_ASKED, OnRefreshData);
     }
 
     protected override void OnRefreshData() {
 
         IQueryable<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Tricount.GetAllWithUser(CurrentUser) : Tricount.GetFiltered(Filter, CurrentUser);
-
+        Console.WriteLine(tricounts.ToString());
         Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(tricount => new TricountCardViewModel(tricount)));
     }
 

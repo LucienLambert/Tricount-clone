@@ -1,10 +1,7 @@
-﻿using prbd_2324_c07.ViewModel;
-using PRBD_Framework;
-using System.Collections.ObjectModel;
+﻿using PRBD_Framework;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 
 namespace prbd_2324_c07.Model
@@ -36,9 +33,7 @@ namespace prbd_2324_c07.Model
         [NotMapped]
         public Dictionary<int, float> Balance { get; set; } = new();
 
-        public Tricount() {
-            
-        }
+        
 
         public Tricount(string title, string description, User creator) {
             Title = title;
@@ -46,6 +41,10 @@ namespace prbd_2324_c07.Model
             Creator = creator;
             //CreatedAt = DateTime.Now;
             RefreshBalance();
+        }
+
+        public Tricount() {
+
         }
 
         public static IQueryable<Tricount> GetAll() {
@@ -263,8 +262,8 @@ namespace prbd_2324_c07.Model
                 $"#subscription = {Subscriptions.Count}";
         }
 
-        private bool AmountValide(string amount) {
-            return double.TryParse(amount, NumberStyles.Currency, CultureInfo.CurrentCulture, out _);
-        }
+        //private bool AmountValide(string amount) {
+        //    return double.TryParse(amount, NumberStyles.Currency, CultureInfo.CurrentCulture, out _);
+        //}
     }
 }
