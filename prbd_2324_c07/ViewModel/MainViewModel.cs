@@ -33,6 +33,6 @@ public class MainViewModel : ViewModelBase<User, PridContext> {
     private void BtnResetAction() {
         NotifyColleagues(App.Messages.MSG_RESET_ASKED);
     }
-
+    //MAJ
 }
 
