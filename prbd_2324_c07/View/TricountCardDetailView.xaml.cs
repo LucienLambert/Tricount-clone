@@ -20,14 +20,14 @@ namespace prbd_2324_c07.View
 
 
             InitializeComponent();
-
+            
             Register<Tricount>(App.Messages.MSG_NEW_OPERATION, tricount => {
-                OperationDetailWindow = new OperationDetailView(tricount);
+                OperationDetailWindow = new OperationDetailView(tricount, null);
                 OperationDetailWindow.ShowDialog();
             });
 
             Register<Operation>(App.Messages.MSG_EDIT_OPERATION, operation => {
-                OperationDetailWindow = new OperationDetailView(operation);
+                OperationDetailWindow = new OperationDetailView(null, operation);
                 OperationDetailWindow.ShowDialog();
             });
 

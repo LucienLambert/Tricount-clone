@@ -121,5 +121,10 @@ public  class Operation : EntityBase<PridContext>
         });
     }
 
-
+    public override string ToString() {
+        return $"<Opération : Id  = {OperationId}\n" +
+            $"<Opération : Initiator.FullName  = {Initiator.FullName}\n" +
+            $"<Opération : title  = {Title}\n" +
+            $"#Tricount = {Tricount}\n";
+    }
 }
