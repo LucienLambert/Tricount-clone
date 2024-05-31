@@ -3,6 +3,7 @@ using prbd_2324_c07.ViewModel;
 using System.Windows;
 using System.Globalization;
 using PRBD_Framework;
+using prbd_2324_c07.View;
 
 namespace prbd_2324_c07;
 
@@ -23,7 +24,13 @@ public partial class App : ApplicationBase<User,PridContext>{
         MSG_RELOAD_ASKED,
         MSG_RESET_ASKED,
         MSG_REVOME_PARTICIPANT,
-        MSG_ADD_PARTICIPANT
+        MSG_ADD_PARTICIPANT,
+        MSG_NEW_OPERATION,
+        MSG_EDIT_OPERATION,
+        MSG_CLOSE_OPERATION,
+        MSG_OPERATION_AMOUNT_CHANGED,
+        MSG_OPERATION_USER_WEIGHT_CHANGED,
+        MSG_OPERATION_TEMPORARY_REPARTITION_CHANGED
     }
 
     public App() {
@@ -50,14 +57,13 @@ public partial class App : ApplicationBase<User,PridContext>{
         NavigateTo<LoginViewModel, User, PridContext>();
 
         Register(this, Messages.MSG_LOGOUT, () => {
-            Console.WriteLine("test");
             Logout();
             NavigateTo<LoginViewModel, User, PridContext>();
         });
 
         // si un user est logé alors on passe par ce NavigateTo
         Register<User>(this, Messages.MSG_LOGIN, user => {
-            Login(user); 
+            Login(user);
             NavigateTo<MainViewModel, User, PridContext>();
         });
 
@@ -74,9 +80,6 @@ public partial class App : ApplicationBase<User,PridContext>{
             PrepareDatabase();
             NavigateTo<MainViewModel, User, PridContext>();
         });
-
-
-
     }
 
     private static void PrepareDatabase() {
@@ -93,6 +96,8 @@ public partial class App : ApplicationBase<User,PridContext>{
     protected override void OnRefreshData() {
         if(CurrentUser?.FullName != null) {
             CurrentUser = User.GetByFullName(CurrentUser.FullName);
+        } else {
+            CurrentUser = null;
         }
         // TODO
     }

@@ -43,7 +43,10 @@ public class TricountsViewModel : ViewModelBase<User, PridContext> {
             OnRefreshData();
         });
 
+        Register(Messages.MSG_OPERATION_CHANGED, OnRefreshData);
+
         Register(Messages.MSG_RELOAD_ASKED, OnRefreshData);
+
 
     }
 

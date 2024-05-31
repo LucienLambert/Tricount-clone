@@ -32,7 +32,6 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(Tricount.Title, value, Tricount, (t, v) => {
             t.Title = v;
             Validate();
-            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         });
     }
 
@@ -41,7 +40,6 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(Tricount?.Description, value, Tricount, (t, d) => {
             t.Description = d;
             Validate();
-            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         });
     }
 
@@ -50,8 +48,13 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(Tricount?.CreatedAt, value, Tricount, (t, c) => {
             t.CreatedAt = (DateTime)c;
             Validate();
-            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         });
+    }
+
+    private DateTime _DatePicker;
+    public DateTime DatePicker {
+        get => _DatePicker;
+        set => SetProperty(ref _DatePicker, value);
     }
 
     //ajout
@@ -66,13 +69,20 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
     private ObservableCollectionFast<User> listParticipant;
 
+    string titleTemp;
+
     public TricountDetailViewModel(Tricount tricount, bool isNew) {
-        ParticipantVM = new ParticipantsViewModel(tricount, isNew);
         Tricount = tricount;
+        ParticipantVM = new ParticipantsViewModel(Tricount, isNew);
         IsNew = isNew;
+        if(IsNew) {
+            titleTemp = "<New Tricount>";
+        } else {
+            titleTemp = tricount.Title;
+        }
         InitializeDataView();
 
-        RaisePropertyChanged();
+        //RaisePropertyChanged();
     }
 
     private void InitializeDataView() {
@@ -82,7 +92,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         if(IsNew) {
             CreatedAt = DateTime.Now;
         }
-
+        DatePicker = DateTime.Now;
         listParticipant = new ObservableCollectionFast<User>();
 
         HeaderDefaultSet();
@@ -90,7 +100,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
     private void HeaderDefaultSet() {       
         if (IsNew) {
-            DefaultHeader = $"<New Tricount> - No Description\nCreated by {CurrentUser.FullName} on {DateTime.Now.Date.ToString("dd/MM/yyyy")}";
+            DefaultHeader = $" <New Tricount> - No Description\nCreated by {CurrentUser.FullName} on {DateTime.Now.Date.ToString("dd/MM/yyyy")}";
         } else {
             DefaultHeader = $"{Tricount.Title} - {Tricount.Description}\nCreated by {Tricount.Creator.FullName} on {Tricount.CreatedAt.ToString("dd/MM/yyyy")}";
         }
@@ -106,38 +116,33 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
     public override void CancelAction() {
         ClearErrors();
         if (IsNew) {
-            Tricount.Title = null;
             IsNew = false;
         } else {
             Tricount.Reload();
-            //notife qui changement à été fait et déclanche une MAJ de l'interface.
-            RaisePropertyChanged();
         }
-        listParticipant.Clear();
-        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, titleTemp);
     }
 
     public override void SaveAction() {
         if (IsNew) {
-            //add idUser -> creatorID
             Tricount.CreatorId = CurrentUser.UserId;
-            //add Tricount à la DB
             Context.Add(Tricount);
             //add les sub à la DB
-            Context.AddRange(Tricount.Subscriptions);
-            IsNew = false;
-        } else {
-            //parcours la liste de Participant
             foreach (var p in ParticipantVM.Participant) {
                 //check si l'utilisateur est déjà présent dans la liste des Subscriptions sinon add user dans subscription
                 if (!Tricount.Subscriptions.Any(sub => sub.UserId == p.UserId)) {
-                    Console.WriteLine("add : "+p.FullName+" into sub");
                     Tricount.AddUserSubTricount(p);
                 }
             }
-            //parcours la liste de participant à remove de Sub
+            IsNew = false;
+        } else {
+            foreach (var p in ParticipantVM.Participant) {
+                //check si l'utilisateur est déjà présent dans la liste des Subscriptions sinon add user dans subscription
+                if (!Tricount.Subscriptions.Any(sub => sub.UserId == p.UserId)) {
+                    Tricount.AddUserSubTricount(p);
+                }
+            }
             foreach (var p in ParticipantVM.TempoDelParticipants){
-                //check si l'utilisateur est présent dans la liste des Subscriptions si oui remove user dans subscription
                 if (Tricount.Subscriptions.Any(sub => sub.UserId == p.UserId)) {
                     Tricount.RemoveUserSubTricount(p);
                 }
@@ -145,13 +150,11 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         }
 
         Context.SaveChanges();
-        //RaisePropertyChanged();
-        listParticipant.Clear();
-        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+        //listParticipant.Clear();
+        
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, titleTemp);
         NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, Tricount);
-        
-
     }
 
     private bool CanSaveAction() {

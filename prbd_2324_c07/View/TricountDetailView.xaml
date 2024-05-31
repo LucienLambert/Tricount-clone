@@ -8,56 +8,56 @@
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:TricountDetailViewModel, IsDesignTimeCreatable=False}"
-             d:DesignHeight="768" Width="1068">
+             d:DesignHeight="768" d:DesignWidth="1068">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="Auto" MinWidth="506"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto" MinHeight="241"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
         <!-- Header -->
-        <Label Content="{Binding DefaultHeader}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="auto" Width="auto" Grid.Column="1" Margin="197,0,0,0" Grid.ColumnSpan="2"/>
+        <Label Content="{Binding DefaultHeader}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.ColumnSpan="2" Margin="10"/>
 
         <!-- Label Formulaire -->
-        <Label Content="Title :" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Height="24" Width="148"/>
-        <Label Content="Description :" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="26" Width="148"/>
-        <Label Content="Creation Date :" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Height="24" Width="148"/>
+        <Label Content="Title :" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1" Margin="5"/>
+        <Label Content="Description :" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2" Margin="5"/>
+        <Label Content="Creation Date :" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Margin="5"/>
 
         <!-- TextBox Formulaire -->
-        <TextBox Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="798" Grid.ColumnSpan="2"  Height="24" Margin="10,0,0,0"
+        <TextBox Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Margin="10,0,10,0"
                  Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
-                 IsReadOnly="{Binding !IsNew}"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="798" Grid.ColumnSpan="2" Height="26" Margin="10,0,0,0"
+                 IsReadOnly="{Binding !IsNew}" Grid.ColumnSpan="2"/>
+        <TextBox Grid.Column="1" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Margin="10,0,10,0"
                  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                 IsReadOnly="{Binding !IsNew}"/>
-        <DatePicker Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="3"  VerticalAlignment="Center" Width="798" Grid.ColumnSpan="2"
+                 IsReadOnly="{Binding !IsNew}" Grid.ColumnSpan="2"/>
+        <DatePicker x:Name="MyDatePicker" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Margin="10,0,10,0"
                     DisplayDateStart="01/01/1900" 
-                    DisplayDateEnd="{Binding CreatedAt}" 
-                    Height="30" Margin="10,0,0,0"
+                    DisplayDateEnd="{Binding DatePicker}" 
                     SelectedDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" 
-                    DisplayDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}"/>
+                    DisplayDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
+
         <!-- Participants section -->
-        <Label Content="Participants" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Height="25" Width="148"/>
-        <vw:ParticipantsView  DataContext="{Binding ParticipantVM}" Margin="6,0,14,0" Grid.Row="7" Grid.ColumnSpan="2" Height="221" VerticalAlignment="Center"/>
+        <Label Content="Participants" HorizontalAlignment="Right" Grid.Row="4" VerticalAlignment="Center" Margin="5"/>
+        <vw:ParticipantsView DataContext="{Binding ParticipantVM}" Grid.Row="6" Grid.ColumnSpan="2" Margin="10"/>
 
         <!-- Templates section -->
-        <Label Content="Templates" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center" Height="25" Width="62" Margin="28,0,0,0" Grid.Column="2"/>
+        <Label Content="Templates" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center" Grid.Column="2" Margin="10"/>
 
         <!-- Button Save or Cancel Formulaire -->
-        <Button Grid.Column="2" Content="Cancel" HorizontalAlignment="Left" Margin="316,0,0,0" Grid.Row="8" VerticalAlignment="Center" Height="20" Width="39"
-                Command="{Binding BtnCancel}"/>
-        <Button Grid.Column="2" Content="Save" HorizontalAlignment="Left" Margin="272,0,0,0" Grid.Row="8" VerticalAlignment="Center" Width="39" Height="20"
-                 Command="{Binding BtnSave}" IsDefault="True"/>
+        <StackPanel Grid.Row="7" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Content="Cancel" Margin="5" Command="{Binding BtnCancel}" Width="40"/>
+            <Button Content="Save" Margin="5" Command="{Binding BtnSave}" IsDefault="True" Width="40"/>
+        </StackPanel>
     </Grid>
 </f:UserControlBase>

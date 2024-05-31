@@ -52,6 +52,11 @@ namespace prbd_2324_c07.Model
             return Context.Tricounts.OrderBy(t => t.Title);
         }
 
+        public void Delete() {
+            Context.Tricounts.Remove(this);
+            Context.SaveChanges();
+        }
+
         // Utilisateur createur ou participant
         public static IQueryable<Tricount> GetAllWithUser(User user) {
 
@@ -202,7 +207,7 @@ namespace prbd_2324_c07.Model
             return !HasErrors;
         }
 
-
+        // Peut se faire différement
         public void RefreshBalance() {
 
             Balance.Clear();
@@ -251,7 +256,8 @@ namespace prbd_2324_c07.Model
         }
 
         public override string ToString() {
-            return $"<tricount : title  = {Title}\n" +
+            return $"<tricount : Id  = {TricountId}\n" +
+                $"<tricount : title  = {Title}\n" +
                 $"#description = {Description}\n" +
                 $"#creatorId = {CreatorId}\n" +
                 $"#subscription = {Subscriptions.Count}";

@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using prbd_2324_c07.Model;
 using PRBD_Framework;
 using System;
@@ -41,6 +40,8 @@ namespace prbd_2324_c07.ViewModel
             //    OnRefreshData();
             //});
 
+            Register(Messages.MSG_OPERATION_CHANGED, OnRefreshData);
+            Register<Tricount>(Messages.MSG_TRICOUNT_CHANGED, tricount => OnRefreshData());
             Register(Messages.MSG_RELOAD_ASKED, OnRefreshData);
         }
 
