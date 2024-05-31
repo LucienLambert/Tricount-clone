@@ -1,13 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using prbd_2324_c07.Model;
-using prbd_2324_c07.View;
+﻿using prbd_2324_c07.Model;
 using PRBD_Framework;
-using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
@@ -77,28 +69,20 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
 
     private ObservableCollectionFast<User> listParticipant;
 
-    string titleTemp;
+  
 
     public TricountDetailViewModel(Tricount tricount, bool isNew) {
         ParticipantVM = new ParticipantsViewModel(tricount, isNew);
         Tricount = tricount;
-        Console.WriteLine(Tricount);
         IsNew = isNew;
-        if(IsNew) {
-            titleTemp = "<New Tricount>";
-        } else {
-            titleTemp = tricount.Title;
-        }
         InitializeDataView();
-
-        RaisePropertyChanged();
     }
 
     private void InitializeDataView() {
         BtnCancel = new RelayCommand(CancelAction);
         BtnSave = new RelayCommand(SaveAction, CanSaveAction);
 
-        if(IsNew) {
+        if (IsNew) {
             CreatedAt = DateTime.Now;
         }
         DatePicker = DateTime.Now;
@@ -127,39 +111,28 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         if (IsNew) {
             Tricount.Title = null;
             IsNew = false;
+            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
         } else {
             Tricount.Reload();
-            //notife qui changement à été fait et déclanche une MAJ de l'interface.
-            RaisePropertyChanged();
+            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+            NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, Tricount);
         }
-        listParticipant.Clear();
-        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, titleTemp);
+        listParticipant.Clear(); 
     }
 
     public override void SaveAction() {
+        foreach (var p in ParticipantVM.Participant) {
+            //check si l'utilisateur est déjà présent dans la liste des Subscriptions sinon add user dans subscription
+            if (!Tricount.Subscriptions.Any(sub => sub.UserId == p.UserId)) {
+                Tricount.AddUserSubTricount(p);
+            }
+        }
         if (IsNew) {
-            //add idUser -> creatorID
             Tricount.CreatorId = CurrentUser.UserId;
-            //add Tricount à la DB
             Context.Add(Tricount);
             
-            //add les sub à la DB
-            foreach (var sub in Tricount.Subscriptions) {
-                if (!Context.Subscriptions.Any(s => s.UserId == sub.UserId && s.TricountId == sub.TricountId)) {
-                    Context.Add(sub);
-                }
-            }
-            //Context.AddRange(Tricount.Subscriptions);
             IsNew = false;
         } else {
-            //parcours la liste de Participant
-            foreach (var p in ParticipantVM.Participant) {
-                //check si l'utilisateur est déjà présent dans la liste des Subscriptions sinon add user dans subscription
-                if (!Tricount.Subscriptions.Any(sub => sub.UserId == p.UserId)) {
-                    Console.WriteLine("add : "+p.FullName+" into sub");
-                    Tricount.AddUserSubTricount(p);
-                }
-            }
             //parcours la liste de participant à remove de Sub
             foreach (var p in ParticipantVM.TempoDelParticipants){
                 //check si l'utilisateur est présent dans la liste des Subscriptions si oui remove user dans subscription
@@ -173,8 +146,9 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         RaisePropertyChanged(nameof(Title));
         listParticipant.Clear();
         
-        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, titleTemp);
+        
         NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
         NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, Tricount);
         
 
@@ -184,7 +158,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         if (IsNew) {
             return Tricount.Validate() && !HasErrors;
         }
-        return Tricount != null && !HasErrors && Tricount.IsModified;
+        return Tricount != null && !HasErrors && (Tricount.IsModified || ParticipantVM.IsChanged);
     }
 
     protected override void OnRefreshData() {
