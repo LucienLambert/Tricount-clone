@@ -30,6 +30,8 @@ public class ParticipantsCardViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(ref _isCreator, value);
     }
 
+    public string CreatorDisplay => IsCreator ? "(Nb Expenses)" : "(Créator) " + " (Nb Expenses)";
+
     public ICommand DelUserCommand { get; set; }
 
     public ParticipantsCardViewModel(Tricount tricount, bool isNew, User user) {

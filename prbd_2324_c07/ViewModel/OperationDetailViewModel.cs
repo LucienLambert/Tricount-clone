@@ -1,5 +1,7 @@
 ﻿using prbd_2324_c07.Model;
 using PRBD_Framework;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
@@ -88,6 +90,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
 
     public ICommand BtnCancel { get; set; }
     public ICommand BtnSave { get; set; }
+    public ICommand BtnDel {  get; set; }
 
     public OperationDetailViewModel(Tricount tricount = null, Operation operation = null) {
         BtnCancel = new RelayCommand(CancelAction);
@@ -99,8 +102,8 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
             ParticipantsOperationVM = new OperationParticipantViewModel(tricount);
             IsNewOperation = true;
             InitializedAddOperation();
-            // Reçoit le participant et son poid lorsque celui-ci a été changé et actualise la Répartition temporaire, puis la renvoie à OperationParticipantCard
         } else if (operation != null) {
+            BtnDel = new RelayCommand(DeleteOperationtAction, CanDeleteAction);
             Operation = operation;
             Tricount = Operation.Tricount;
             ParticipantsOperationVM = new OperationParticipantViewModel(Operation);
@@ -169,6 +172,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         ParticipantsOperation.Clear();
         NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
     }
+
     public bool CanSaveAction() {
 
         return Validate() && !HasErrors;
@@ -176,7 +180,6 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
 
     public override void SaveAction() {
         if (IsNewOperation) {
-            Console.WriteLine("SaveAction : IsNewOperation = true");
             Operation.Amount = double.Parse(Amount);
             Operation.TricountId = Tricount.TricountId;
             Operation.Tricount = Tricount;
@@ -187,9 +190,8 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
                 Context.Add(new Repartition((int)entry.Value, entry.Key, Operation));
             }
             //doit le passer en false pour la suite (si dans certain cas on doit check son status).
-            //IsNewOperation = false;
+            IsNewOperation = false;
         } else {
-            Console.WriteLine("SaveAction : IsNewOperation = false");
             Operation.Amount = double.Parse(Amount);
             Operation.Initiator = Initiator;
             var usersToUpdate = TemporaryRepartition.Keys;
@@ -202,12 +204,24 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
                     Context.Repartitions.Remove(repartition);
                 }
             }
-            //Context.SaveChanges();
-            //NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
-            //NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
         }
         Context.SaveChanges();
         NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
         NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
     }
+
+    private void DeleteOperationtAction() {
+        MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("You're about to delete this Operation. \nDo you confirm ?", "Confirmation", System.Windows.MessageBoxButton.YesNo);
+        if (messageBoxResult == MessageBoxResult.Yes) {
+            Operation.Delete();
+            NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
+            NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
+        }
+    }
+
+    private bool CanDeleteAction() {
+        return Tricount != null && CurrentUser != null &&
+               (CurrentUser.Equals(Tricount.Creator) || ViewModelCommon.isAdmin);
+    }
+
 }

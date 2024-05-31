@@ -121,6 +121,11 @@ public  class Operation : EntityBase<PridContext>
         });
     }
 
+    public void Delete() {
+        Context.Operations.Remove(this);
+        Context.SaveChanges();
+    }
+
     public override string ToString() {
         return $"<Opération : Id  = {OperationId}\n" +
             $"<Opération : Initiator.FullName  = {Initiator.FullName}\n" +
