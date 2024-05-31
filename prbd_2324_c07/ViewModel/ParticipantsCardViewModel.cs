@@ -24,11 +24,17 @@ public class ParticipantsCardViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(ref _participant, value);
     }
 
-    private bool _isCreator;
-    public bool IsCreator {
-        get => _isCreator;
-        set => SetProperty(ref _isCreator, value);
+    private bool _delVisibility;
+    public bool DelVisibility {
+        get => _delVisibility;
+        set => SetProperty(ref _delVisibility, value);
     }
+
+    private int NbExpense => NbExpenseByUser();
+    //si expense > 0 && le user est le créateur sinon on affiche que le NbExpense
+    public string CreatorDisplay => 
+        NbExpense == 0 && Participant.UserId != Tricount.CreatorId ? string.Empty :
+        NbExpense > 0  && Participant.UserId == Tricount.CreatorId ? "(Creator) - ("+ NbExpense + " Expenses)" : "(" + NbExpense + " Expenses)";
 
     public ICommand DelUserCommand { get; set; }
 
@@ -36,12 +42,22 @@ public class ParticipantsCardViewModel : ViewModelBase<User, PridContext> {
         Tricount = tricount;
         IsNew = isNew;
         Participant = user;
-        IsCreator = user.UserId != tricount.CreatorId;
+        DelVisibility = user.UserId != tricount.CreatorId && NbExpense == 0;
         DelUserCommand = new RelayCommand(DelAction);
-        RaisePropertyChanged();
+        NbExpenseByUser();
+        //RaisePropertyChanged();
     }
 
     private void DelAction() {
         NotifyColleagues(App.Messages.MSG_REVOME_PARTICIPANT, Participant);
+    }
+
+    private int NbExpenseByUser() {
+        var NbExpenseByUser = Context.Repartitions
+            //pour chaque répartition ou le Participant est présent && opération du tricount on compte combien de fois il est présent.
+                .Where(r => r.User.UserId == Participant.UserId && r.Operation.Tricount.TricountId == Tricount.TricountId)
+                .GroupBy(r => r.Operation.OperationId)
+                .Count();
+        return NbExpenseByUser;
     }
 }

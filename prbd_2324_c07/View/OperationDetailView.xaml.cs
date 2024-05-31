@@ -9,18 +9,17 @@ namespace prbd_2324_c07.View
 
         public readonly OperationDetailViewModel _vm;
 
-        // Constructeur Add Operation
-        public OperationDetailView(Tricount tricount)
-        {
-            InitializeComponent();
-            DataContext = _vm = new OperationDetailViewModel(tricount);
-        }
+        //// Constructeur Add Operation
+        //public OperationDetailView(Tricount tricount)
+        //{
+        //    InitializeComponent();
+        //    DataContext = _vm = new OperationDetailViewModel(tricount);
+        //}
 
         // Constructeur Edit Operation
-        public OperationDetailView(Operation operation) {
+        public OperationDetailView(Tricount tricount, Operation operation) {
             InitializeComponent();
-            DataContext = _vm = new OperationDetailViewModel(operation);
+            DataContext = _vm = new OperationDetailViewModel(tricount, operation);
         }
-
     }
 }

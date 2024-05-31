@@ -59,6 +59,7 @@ namespace prbd_2324_c07.ViewModel
         }
 
         protected override void OnRefreshData() {
+            //il faut modifier cette partie, dans tout les cas on doit faire un select sur listUser
             if (IsNewOperation) {  
                 OperationParticipantCardVMs = new ObservableCollectionFast<OperationParticipantCardViewModel>(ListUsers.Select(user => new OperationParticipantCardViewModel(user, ListUsers.Count())));
             } else {

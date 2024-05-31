@@ -13,7 +13,7 @@
     <f:UserControlBase.Resources>
         <c:BoolToVisibleConverter x:Key="BoolToVisible"/>
     </f:UserControlBase.Resources>
-        <Grid Height="auto" Width="285">
+    <Grid Height="auto" Width="285">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="96"/>
@@ -22,8 +22,8 @@
         </Grid.ColumnDefinitions>
         <CheckBox IsChecked="{Binding CheckedBox, Mode=TwoWay}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="16" Height="16" />
         <Label Content="{Binding Participant.FullName}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="86" Height="28" Grid.Column="1" />
-        <xctk:NumericUpDown Name="numericUpDown" MinValue="0" MaxValue="100" Width="50" Height="30" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                            Value="{Binding Path=UserWeight, Mode=TwoWay}" Grid.Column="2" Margin="0,5,0,0"/>
+        <xctk:NumericUpDown Name="numericUpDown" MinValue="0" MaxValue="100" Width="50" HorizontalAlignment="Center" 
+                            Value="{Binding Path=UserWeight, Mode=TwoWay}" Grid.Column="2" Margin="0,2,0,3"/>
         <TextBlock FontWeight="Bold" Visibility="{Binding CheckedBox, Converter={StaticResource BoolToVisible}}" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Run Text="{Binding UserAmount}" FontWeight="Bold"/>
             <Run Text=" €" FontWeight="Bold"/>
