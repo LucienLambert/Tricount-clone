@@ -25,8 +25,7 @@
         <xctk:NumericUpDown Name="numericUpDown" MinValue="0" MaxValue="100" Width="50" HorizontalAlignment="Center" 
                             Value="{Binding Path=UserWeight, Mode=TwoWay}" Grid.Column="2" Margin="0,2,0,3"/>
         <TextBlock FontWeight="Bold" Visibility="{Binding CheckedBox, Converter={StaticResource BoolToVisible}}" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Run Text="{Binding UserAmount}" FontWeight="Bold"/>
-            <Run Text=" €" FontWeight="Bold"/>
+            <Run Language="fr-BE" Text="{Binding UserAmount, StringFormat={}{0:F2} €}" FontWeight="Bold"/>
         </TextBlock>
 
     </Grid>
