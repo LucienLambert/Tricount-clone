@@ -2,7 +2,6 @@
 using prbd_2324_c07.Model;
 using PRBD_Framework;
 using System.Windows.Input;
-using static prbd_2324_c07.App;
 
 namespace prbd_2324_c07.ViewModel;
 
@@ -55,6 +54,8 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
         get => _participantCards;
         set => SetProperty(ref _participantCards, value);
     }
+
+    public bool IsChanged { get; set; }
 
     public ParticipantsViewModel(Tricount tricount, bool isNew) : base() {
         Tricount = tricount;
@@ -119,6 +120,7 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
             //}
         }
         OnRefreshData();
+        IsChanged = true;
         // Notifier du changement de la liste des participants
         //RaisePropertyChanged(nameof(Participant));
     }
@@ -127,8 +129,7 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
         Participant.Add(CurrentUser);
         Non_Participant.Remove(CurrentUser);
         OnRefreshData();
-        // Notifier du changement de la liste des participants
-        //RaisePropertyChanged(nameof(Participant));
+        IsChanged = true;
     }
 
     private bool CanAddMySelf() {
@@ -144,6 +145,7 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
         }
         Non_Participant.Clear();
         OnRefreshData();
+        IsChanged = true;
         // Notifier du changement de la liste des participants
         //RaisePropertyChanged(nameof(Participant));
     }
@@ -165,6 +167,7 @@ public class ParticipantsViewModel : ViewModelBase<User, PridContext> {
             }
         }
         OnRefreshData();
+        IsChanged = true;
         // Notifier du changement de la liste des participants
         //RaisePropertyChanged(nameof(Participant));
     }

@@ -11,9 +11,11 @@
              d:DataContext="{d:DesignInstance Type=vm:TricountCardViewModel, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+    <!--il faut changer TricountCardViewModel par TricountCardViewModel ligne 11-->
+    <!--ce DataContext fait bugger la MainView si tu le supprimes plus de probleme de reference dans le main
+    donc le probleme vient de ton itemsSource Tricounts je suppose-->
     <UserControl.DataContext>
-        <vm:TricountsViewModel/>
+        <vm:TricountsViewModel x:Name="vm"/>
     </UserControl.DataContext>
 
     <Grid>
@@ -64,20 +66,16 @@
                     <ToolTip Content="Create a new Tricount"/>
                 </Button.ToolTip>
             </Button>
-            <WrapPanel Orientation="Horizontal" Grid.Column="1">
+            <WrapPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
                 <Rectangle Width="50" Height="15" Fill="LightGray" />
-                <TextBlock Text="Null Balance" Margin="10" />
+                <TextBlock Text="Null Balance" Margin="5,0" />
 
                 <Rectangle Width="50" Height="15" Fill="Honeydew" />
-                <TextBlock Text="Positive Balance" Margin="10" />
+                <TextBlock Text="Positive Balance" Margin="5,0" />
 
                 <Rectangle Width="50" Height="15" Fill="AntiqueWhite"  />
-                <TextBlock Text="Negative Balance" Margin="10" />
+                <TextBlock Text="Negative Balance" Margin="5,0" />
             </WrapPanel>
         </Grid>
-
-
-
     </Grid>
-    
 </f:UserControlBase>

@@ -93,19 +93,14 @@ namespace prbd_2324_c07.ViewModel
             }
 
             return !HasErrors;
-            //NotifyColleagues(App.Messages.OPERATION_)
         }
+
         protected override void OnRefreshData() {
-            //il faut modifier cette partie, dans tout les cas on doit faire un select sur listUser
             if (IsNewOperation) {
                 OperationParticipantCardVMs = new ObservableCollectionFast<OperationParticipantCardViewModel>(ListUsers.Select(kvp => new OperationParticipantCardViewModel(kvp.Key, ListUsers.Count())));
             } else {
-                //var repartition = Operation.GetRepartitions();
                 OperationParticipantCardVMs = new ObservableCollectionFast<OperationParticipantCardViewModel>(ListUsers.Select(kvp => new OperationParticipantCardViewModel(kvp.Key, Operation)));
             }
         }
-
-
-
     }
 }

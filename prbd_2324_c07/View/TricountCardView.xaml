@@ -40,7 +40,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Total Expenses:" HorizontalAlignment="Left" />
-                <TextBlock Grid.Column="1" Text="{Binding TotalExpenses, StringFormat={}{0} €}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="1" Language="fr-BE" Text="{Binding TotalExpenses, StringFormat={}{0} €}" HorizontalAlignment="Right"/>
             </Grid>
 
             <Grid Visibility="{Binding TotalExpenses, Converter={StaticResource ObjectToVisibility}}">
@@ -49,7 +49,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="My Expenses:" HorizontalAlignment="Left" />
-                <TextBlock Grid.Column="1" Text="{Binding UserExpenses, StringFormat={}{0} €}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="1" Language="fr-BE"  Text="{Binding UserExpenses, StringFormat='{}{0:F2} €'}" HorizontalAlignment="Right"/>
             </Grid>
 
             <Grid Visibility="{Binding TotalExpenses, Converter={StaticResource ObjectToVisibility}}">
@@ -58,7 +58,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock FontWeight="Bold" Grid.Column="0" Text="My Balance:" HorizontalAlignment="Left" />
-                <TextBlock FontWeight="Bold" Grid.Column="1" Text="{Binding UserBalance, StringFormat={}{0} €}" Foreground="{Binding UserBalance, Converter={StaticResource NumberToColorConverter}}"  HorizontalAlignment="Right"/>
+                <TextBlock Language="fr-BE" FontWeight="Bold" Grid.Column="1" Text="{Binding UserBalance, StringFormat='{}{0:F2} €'}" Foreground="{Binding UserBalance, Converter={StaticResource NumberToColorConverter}}"  HorizontalAlignment="Right"/>
             </Grid>
         </StackPanel>
     </Border>

@@ -16,7 +16,10 @@
     <f:WindowBase.Resources>
         <c:BoolToCollapsedConverter x:Key="BoolToCollapsed"/>
     </f:WindowBase.Resources>
-    <Border CornerRadius="15" Background="White">
+    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="15" Background="White" >
+        <Border.Effect>
+            <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="10" ShadowDepth="5" Direction="315"/>
+        </Border.Effect>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -56,8 +59,8 @@
                 SelectedDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" 
                 DisplayDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" Width="205"/>
 
-            <vw:OperationParticipantView DataContext="{Binding ParticipantsOperationVM}" Grid.Row="6" VerticalAlignment="Top" Height="206" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
-            <Button Grid.Column="1" Content="Delete" Command="{Binding BtnDelete}" Visibility="{Binding IsNewOperation, Converter={StaticResource BoolToCollapsed}}" HorizontalAlignment="Left" Margin="51,27,0,0" Grid.Row="7" VerticalAlignment="Top" Width="48" Height="20"/>
+            <vw:OperationParticipantView DataContext="{Binding ParticipantsOperationVM}" Grid.Row="6" VerticalAlignment="Top" Height="160" Grid.ColumnSpan="2"/>
+            <Button Grid.Column="1" Content="Delete" Command="{Binding BtnDel}" Visibility="{Binding IsNewOperation, Converter={StaticResource BoolToCollapsed}}" HorizontalAlignment="Left" Margin="51,27,0,0" Grid.Row="7" VerticalAlignment="Top" Width="48" Height="20"/>
             <Button Content="{Binding SaveBtnLabel}" Command="{Binding BtnSave}" HorizontalAlignment="Left" Margin="109,27,0,0" Grid.Row="7" VerticalAlignment="Top" Width="48" Height="20" Grid.Column="1"/>
             <Button Grid.Column="1" Content="Cancel" Command="{Binding BtnCancel}" HorizontalAlignment="Left" Margin="166,27,0,0" Grid.Row="7" VerticalAlignment="Top" Width="48" Height="20"/>
             <Button Content="Save As New Template" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="7" VerticalAlignment="Top" Width="280" Grid.ColumnSpan="2" Height="20"/>
