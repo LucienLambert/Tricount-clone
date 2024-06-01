@@ -160,17 +160,10 @@ namespace prbd_2324_c07.Model
 
         // récupère les expesense du user (paramètre) du tricount actuel
         public double GetUserExpenses(User user) {
-            int totalWeight = 0;
-            int userWeight = 0;
-            double expenses = 0;
-
-            foreach (var op in Operations) {
-                userWeight = op.Repartitions.FirstOrDefault(rep => rep.UserId == user.UserId)?.Weight ?? 0;
-                if (userWeight != 0) {
-                    totalWeight = op.Repartitions.Sum(rep => rep.Weight);
-                    expenses += (op.Amount / totalWeight) * userWeight;
-                }
-            }
+            double expenses = Operations.Select(op => new {
+                op, userWeight = op.Repartitions.FirstOrDefault(rep =>
+                rep.UserId == user.UserId)?.Weight ?? 0, totalWeight = op.Repartitions.Sum(rep => rep.Weight)
+            }).Where(x => x.userWeight != 0).Sum(x => (x.op.Amount / x.totalWeight) * x.userWeight);
             return Math.Round(expenses, 2);
         }
 

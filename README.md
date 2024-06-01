@@ -6,23 +6,9 @@
 
 ***MAIN***
 	
-	-bug tracking fix mais toujours un bug apres reload (message error unsaved modif)
-	
-***NEW_tricount et EDIT_TRICOUNT***
-	
-	-Il manque le (creator) sur le créateur du Tricount dans la liste des participants
-
-***EDIT_TRICOUNT***
-	
-	-Il faut afficher le nombre d'expense pour chaque utilisateurs
-
-***Tricount***
-	
-	-Refactor RefreshBalance()
+	-bug tracking fix mais toujours un bug apres logout + reset (message error unsaved modif)
 
 ***OperationParticipantViewModel***
-	
-	- need change OnRefreshDate() <ref commantaire dans la fonction sité>
 
 ***OperationParticipantCardViewModel***
 	

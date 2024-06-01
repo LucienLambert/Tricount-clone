@@ -3,7 +3,7 @@ using PRBD_Framework;
 
 namespace prbd_2324_c07.ViewModel
 {
-    public class OperationParticipantViewModel : ViewModelBase<User,PridContext>
+    public class OperationParticipantViewModel : ViewModelBase<User, PridContext>
     {
         private Tricount _tricount;
         public Tricount Tricount {
@@ -31,40 +31,78 @@ namespace prbd_2324_c07.ViewModel
             set => SetProperty(ref _operationParticipantsVMs, value);
         }
 
-        private ObservableCollectionFast<User> _listUsers;
+        private Dictionary<User, bool> _listUsers;
 
-        public ObservableCollectionFast<User> ListUsers {
+        // Pour la validation, le booléen fait référence à la case cochée dans OperationParticipantCard
+        public Dictionary<User, bool> ListUsers {
             get => _listUsers;
             set => SetProperty(ref _listUsers, value);
         }
 
-        // Constructeur en venant de Add Operation
-        public OperationParticipantViewModel(Tricount tricount) {
-            IsNewOperation = true;
-            Tricount = tricount;
-            ListUsers = new ObservableCollectionFast<User>();
-            foreach (var s in Tricount.Subscriptions) {
-                ListUsers.Add(s.User);
+
+        public OperationParticipantViewModel(Tricount tricount, Operation operation) {
+            if (tricount != null) {
+                //ADD OPERATION
+                IsNewOperation = true;
+                Tricount = tricount;
+                ListUsers = new Dictionary<User, bool>();
+
+                foreach (var s in Tricount.Subscriptions) {
+                    ListUsers.Add(s.User, true);
+                }
+
+                OnRefreshData();
+
+
+            } else {
+                //EDIT OPERATION
+                IsNewOperation = false;
+                Operation = operation;
+                Tricount = Operation.Tricount;
+                ListUsers = new Dictionary<User, bool>();
+
+
+                foreach (var s in Tricount.Subscriptions) {
+                    ListUsers.Add(s.User, false);
+                }
+
+                foreach (var rep in Operation.Repartitions) {
+                    ListUsers[rep.User] = true;
+                }
+
+                OnRefreshData();
             }
 
-            OnRefreshData();
+            Register<Dictionary<User, bool>>(App.Messages.MSG_CHECKBOX_CHANGED, dic => {
+                foreach (var entry in dic) {
+                    ListUsers[entry.Key] = entry.Value;
+                }
+                Validate();
+            });
+
+
         }
 
-        // Constructeur en venant de Edit Operation
-        public OperationParticipantViewModel(Operation operation) {
-            IsNewOperation = false;
-            Tricount = operation.Tricount;
-            Operation = operation;
-            OnRefreshData();
+        public override bool Validate() {
+            ClearErrors();
+
+            if (!ListUsers.ContainsValue(true)) {
+                AddError(nameof(this.OperationParticipantCardVMs), "You must check at least one participant!");
+            } else {
+                ClearErrors();
+            }
+
+            return !HasErrors;
+            //NotifyColleagues(App.Messages.OPERATION_)
         }
 
         protected override void OnRefreshData() {
             //il faut modifier cette partie, dans tout les cas on doit faire un select sur listUser
-            if (IsNewOperation) {  
-                OperationParticipantCardVMs = new ObservableCollectionFast<OperationParticipantCardViewModel>(ListUsers.Select(user => new OperationParticipantCardViewModel(user, ListUsers.Count())));
+            if (IsNewOperation) {
+                OperationParticipantCardVMs = new ObservableCollectionFast<OperationParticipantCardViewModel>(ListUsers.Select(kvp => new OperationParticipantCardViewModel(kvp.Key, ListUsers.Count())));
             } else {
-                var repartition = Operation.GetRepartitions();
-                OperationParticipantCardVMs = new ObservableCollectionFast<OperationParticipantCardViewModel>(repartition.Select(kvp => new OperationParticipantCardViewModel(kvp.Key, Operation)));
+                //var repartition = Operation.GetRepartitions();
+                OperationParticipantCardVMs = new ObservableCollectionFast<OperationParticipantCardViewModel>(ListUsers.Select(kvp => new OperationParticipantCardViewModel(kvp.Key, Operation)));
             }
         }
 

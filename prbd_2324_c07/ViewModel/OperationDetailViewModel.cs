@@ -99,14 +99,14 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         //dans le cas ou on veut add une Op on recoit un tricount
         if (tricount != null) {
             Tricount = tricount;
-            ParticipantsOperationVM = new OperationParticipantViewModel(tricount);
+            ParticipantsOperationVM = new OperationParticipantViewModel(tricount, null);
             IsNewOperation = true;
             InitializedAddOperation();
         } else if (operation != null) {
             BtnDel = new RelayCommand(DeleteOperationtAction, CanDeleteAction);
             Operation = operation;
             Tricount = Operation.Tricount;
-            ParticipantsOperationVM = new OperationParticipantViewModel(Operation);
+            ParticipantsOperationVM = new OperationParticipantViewModel(null, Operation);
             IsNewOperation = false;
             InitializeEditOperation();
         }
@@ -174,8 +174,8 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
     }
 
     public bool CanSaveAction() {
-
-        return Validate() && !HasErrors;
+        Console.WriteLine();
+        return Validate() && ParticipantsOperationVM.Validate() && !HasErrors;
     }
 
     public override void SaveAction() {

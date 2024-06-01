@@ -38,6 +38,7 @@ public class TricountsViewModel : ViewModelCommon {
         Register<Tricount>(App.Messages.MSG_TRICOUNT_CHANGED, tricount => {
             OnRefreshData();
         });
+        Register(App.Messages.MSG_OPERATION_CHANGED, OnRefreshData);
         Register(App.Messages.MSG_RELOAD_ASKED, OnRefreshData);
     }
 

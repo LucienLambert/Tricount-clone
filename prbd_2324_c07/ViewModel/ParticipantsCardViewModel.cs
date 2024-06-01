@@ -4,7 +4,8 @@ using System.Windows.Input;
 
 namespace prbd_2324_c07.ViewModel;
 
-public class ParticipantsCardViewModel : ViewModelBase<User, PridContext> {
+public class ParticipantsCardViewModel : ViewModelBase<User, PridContext>
+{
 
     private Tricount _tricount;
     public Tricount Tricount {
@@ -32,9 +33,9 @@ public class ParticipantsCardViewModel : ViewModelBase<User, PridContext> {
 
     private int NbExpense => NbExpenseByUser();
     //si expense > 0 && le user est le créateur sinon on affiche que le NbExpense
-    public string CreatorDisplay => 
+    public string CreatorDisplay =>
         NbExpense == 0 && Participant.UserId != Tricount.CreatorId ? string.Empty :
-        NbExpense > 0  && Participant.UserId == Tricount.CreatorId ? "(Creator) - ("+ NbExpense + " Expenses)" : "(" + NbExpense + " Expenses)";
+        NbExpense > 0 && Participant.UserId == Tricount.CreatorId ? "(Creator) - (" + NbExpense + " Expenses)" : "(" + NbExpense + " Expenses)";
 
     public ICommand DelUserCommand { get; set; }
 
@@ -42,7 +43,13 @@ public class ParticipantsCardViewModel : ViewModelBase<User, PridContext> {
         Tricount = tricount;
         IsNew = isNew;
         Participant = user;
-        DelVisibility = user.UserId != tricount.CreatorId && NbExpense == 0;
+
+        if (isNew && Participant.UserId == CurrentUser.UserId) {
+            DelVisibility = false;
+        } else if (user.UserId != tricount.CreatorId && NbExpense == 0) {
+            DelVisibility = true;
+        }
+
         DelUserCommand = new RelayCommand(DelAction);
         NbExpenseByUser();
         //RaisePropertyChanged();
@@ -54,7 +61,7 @@ public class ParticipantsCardViewModel : ViewModelBase<User, PridContext> {
 
     private int NbExpenseByUser() {
         var NbExpenseByUser = Context.Repartitions
-            //pour chaque répartition ou le Participant est présent && opération du tricount on compte combien de fois il est présent.
+                //pour chaque répartition ou le Participant est présent && opération du tricount on compte combien de fois il est présent.
                 .Where(r => r.User.UserId == Participant.UserId && r.Operation.Tricount.TricountId == Tricount.TricountId)
                 .GroupBy(r => r.Operation.OperationId)
                 .Count();

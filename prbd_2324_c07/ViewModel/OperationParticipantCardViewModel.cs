@@ -3,8 +3,7 @@ using PRBD_Framework;
 
 namespace prbd_2324_c07.ViewModel
 {
-    public class OperationParticipantCardViewModel : ViewModelBase<User, PridContext>
-    {
+    public class OperationParticipantCardViewModel : ViewModelBase<User, PridContext> {
 
         private User _participant;
         public User Participant {
@@ -45,7 +44,10 @@ namespace prbd_2324_c07.ViewModel
         private bool _checkedBox;
         public bool CheckedBox {
             get => _checkedBox;
-            set => SetProperty(ref _checkedBox, value, CheckedChanged);
+            set => SetProperty(ref _checkedBox, value, () => {
+                CheckedChanged();
+                NotifyColleagues(App.Messages.MSG_CHECKBOX_CHANGED, new Dictionary<User, bool> { { Participant, CheckedBox } });
+            });
         }
 
         private void UserWeightChanged() {
