@@ -174,7 +174,6 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
     }
 
     public bool CanSaveAction() {
-        Console.WriteLine();
         return Validate() && ParticipantsOperationVM.Validate() && !HasErrors;
     }
 
