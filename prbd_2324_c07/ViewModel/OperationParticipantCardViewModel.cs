@@ -116,7 +116,7 @@ namespace prbd_2324_c07.ViewModel
         }
 
         private void InitializeFromAddOperation(double participantCount) {
-
+            Amount = 0;
             BaseAmount = 0;
             UserWeight = 1;
             CheckedBox = true;

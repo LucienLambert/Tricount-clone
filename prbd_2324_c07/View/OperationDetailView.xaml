@@ -17,9 +17,6 @@
         <c:BoolToCollapsedConverter x:Key="BoolToCollapsed"/>
     </f:WindowBase.Resources>
     <Border BorderThickness="1" BorderBrush="Black" CornerRadius="15" Background="White" >
-        <Border.Effect>
-            <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="10" ShadowDepth="5" Direction="315"/>
-        </Border.Effect>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
