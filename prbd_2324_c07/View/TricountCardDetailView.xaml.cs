@@ -22,18 +22,21 @@ namespace prbd_2324_c07.View
             InitializeComponent();
             
             Register<Tricount>(App.Messages.MSG_NEW_OPERATION, tricount => {
-                OperationDetailWindow = new OperationDetailView(tricount, null);
-                OperationDetailWindow.ShowDialog();
+                if (tricount == _vm.Tricount) { 
+                    OperationDetailWindow.ShowDialog();
+                }
             });
 
             Register<Operation>(App.Messages.MSG_EDIT_OPERATION, operation => {
-                OperationDetailWindow = new OperationDetailView(null, operation);
-                OperationDetailWindow.ShowDialog();
+                if (tricount == _vm.Tricount) {
+                    OperationDetailWindow = new OperationDetailView(null, operation);
+                    OperationDetailWindow.ShowDialog();
+                }
             });
 
-            //DOIT FERMER LE FENETRE OPERATION => FONCTIONNE QUE DANS LE CAS DE NEW_OPERATION (A TEST AVEC EDIT_OPERATION);
-            Register(App.Messages.MSG_CLOSE_OPERATION, () => {
-                OperationDetailWindow.Close();
+            Register<Tricount>(App.Messages.MSG_CLOSE_OPERATION, tricount => {
+                if (tricount == _vm.Tricount)
+                    OperationDetailWindow.Close();
             });
         }
     }
