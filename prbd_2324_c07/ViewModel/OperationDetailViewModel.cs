@@ -170,7 +170,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
             RaisePropertyChanged();
         }
         ParticipantsOperation.Clear();
-        NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
+        NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION, Tricount);
     }
 
     public bool CanSaveAction() {
@@ -207,7 +207,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         }
         Context.SaveChanges();
         NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
-        NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
+        NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION, Tricount);
     }
 
     private void DeleteOperationtAction() {
@@ -215,7 +215,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         if (messageBoxResult == MessageBoxResult.Yes) {
             Operation.Delete();
             NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
-            NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION);
+            NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION, Tricount);
         }
     }
 

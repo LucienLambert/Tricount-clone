@@ -18,24 +18,24 @@ namespace prbd_2324_c07.View
             DataContext = _vm = new TricountCardDetailViewModel(tricount, isNew);
 
 
-
             InitializeComponent();
             
-            Register<Tricount>(App.Messages.MSG_NEW_OPERATION, tricount => {
-                if (tricount == _vm.Tricount) { 
+            Register<Tricount>(App.Messages.MSG_NEW_OPERATION, tricountReg => {
+                if (tricountReg == _vm.Tricount) {
+                    OperationDetailWindow = new OperationDetailView(tricountReg, null);
                     OperationDetailWindow.ShowDialog();
                 }
             });
 
             Register<Operation>(App.Messages.MSG_EDIT_OPERATION, operation => {
-                if (tricount == _vm.Tricount) {
+                if (operation.Tricount == _vm.Tricount) {
                     OperationDetailWindow = new OperationDetailView(null, operation);
                     OperationDetailWindow.ShowDialog();
                 }
             });
 
-            Register<Tricount>(App.Messages.MSG_CLOSE_OPERATION, tricount => {
-                if (tricount == _vm.Tricount)
+            Register<Tricount>(App.Messages.MSG_CLOSE_OPERATION, tricountReg => {
+                if (tricountReg == _vm.Tricount)
                     OperationDetailWindow.Close();
             });
         }
