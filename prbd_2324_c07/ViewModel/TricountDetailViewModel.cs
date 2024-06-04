@@ -139,7 +139,8 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext> {
         }
         Context.SaveChanges();
         //listParticipant.Clear();
-        
+        // Ajouter tous les participants qui ne sont pas déjà dans la liste des Subscription
+
         NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
         NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
         NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, Tricount);
