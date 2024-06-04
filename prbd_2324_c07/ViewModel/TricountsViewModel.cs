@@ -21,7 +21,6 @@ public class TricountsViewModel : ViewModelCommon {
     public ICommand NewTricount { get; set; }
 
     public TricountsViewModel() {
-        Console.WriteLine("TricountViewModel");
 
         OnRefreshData();
 
@@ -45,7 +44,6 @@ public class TricountsViewModel : ViewModelCommon {
     protected override void OnRefreshData() {
 
         IQueryable<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Tricount.GetAllWithUser(CurrentUser) : Tricount.GetFiltered(Filter, CurrentUser);
-        Console.WriteLine(tricounts.ToString());
         Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(tricount => new TricountCardViewModel(tricount)));
     }
 
