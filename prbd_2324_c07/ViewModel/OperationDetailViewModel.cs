@@ -1,4 +1,5 @@
-﻿using prbd_2324_c07.Model;
+﻿using Microsoft.IdentityModel.Tokens;
+using prbd_2324_c07.Model;
 using PRBD_Framework;
 using System.Reflection;
 using System.Windows;
@@ -155,7 +156,12 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
 
         if (!Operation.ValidateAmount(Amount)) {
             NotifyColleagues(App.Messages.MSG_OPERATION_AMOUNT_CHANGED, double.Parse(Amount));
+        } else {
+            if (Amount.IsNullOrEmpty()) {
+                NotifyColleagues(App.Messages.MSG_OPERATION_AMOUNT_CHANGED, (double) 0);
+            }
         }
+
         return !HasErrors;
     }
 
