@@ -12,17 +12,19 @@
              mc:Ignorable="d" Height="234"
              d:DataContext="{d:DesignInstance Type=vm:OperationParticipantViewModel, IsDesignTimeCreatable=False}">
     <Grid Width="300">
-        <ItemsControl x:Name="listView" ItemsSource="{Binding OperationParticipantCardVMs}" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Center" Width="300" Margin="0,2,0,0">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <vw:OperationParticipantCardView />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer>
+            <ItemsControl x:Name="listView" ItemsSource="{Binding OperationParticipantCardVMs}" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Center" Width="300" Margin="0,2,0,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <vw:OperationParticipantCardView />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </f:UserControlBase>
