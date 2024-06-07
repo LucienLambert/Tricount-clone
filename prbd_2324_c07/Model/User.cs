@@ -39,7 +39,7 @@ public class User : EntityBase<PridContext> {
         return Context.Users.SingleOrDefault(u => u.FullName == FullName);
     }
 
-     public override string ToString() {
+    public override string ToString() {
         return $"<User : fullname ={FullName}, " + $"#Mail = {Mail}," + $"#UserId = {UserId}";
     }
 
