@@ -50,8 +50,8 @@
             <ComboBox ItemsSource="{Binding ParticipantsOperation}" DisplayMemberPath="FullName" SelectedItem="{Binding Initiator}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" Height="22" />
 
             <DatePicker  Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="4"  VerticalAlignment="Center"
-                DisplayDateStart="01/01/1900" 
-                DisplayDateEnd="{Binding DatePicker}" 
+                DisplayDateStart="{Binding Tricount.CreatedAt}" 
+                DisplayDateEnd="{Binding Today}" 
                 Height="26"
                 SelectedDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" 
                 DisplayDate="{Binding CreatedAt, UpdateSourceTrigger=PropertyChanged}" Width="205"/>

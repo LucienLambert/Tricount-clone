@@ -68,6 +68,12 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         set => SetProperty(ref _datePicker, value);
     }
 
+    private DateTime _today;
+    public DateTime Today {
+        get => _today;
+        set => SetProperty(ref _today, value);
+    }
+
     //création d'une liste pour gerer les Participants au tricount
     private ObservableCollectionFast<User> _participantsOperation;
     public ObservableCollectionFast<User> ParticipantsOperation {
@@ -131,6 +137,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
             // chaque utilisateur a un poid de 1 à l'initialisation
             TemporaryRepartition.Add(participant.User, 1);
         }
+        Today = DateTime.Now;
         CreatedAt = DateTime.Now;
         Initiator = CurrentUser;
         DatePicker = DateTime.Now;
@@ -141,6 +148,7 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         foreach (var participant in Tricount.Subscriptions) {
             ParticipantsOperation.Add(participant.User);
         }
+        Today = DateTime.Now;
         Initiator = Operation.Initiator;
         CreatedAt = Operation.Operation_date;
         //formatage du string Amout pour n'afficher que les deux 1ere décimale.
