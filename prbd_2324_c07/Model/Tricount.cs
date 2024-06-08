@@ -215,6 +215,9 @@ namespace prbd_2324_c07.Model
                 .Sum(op => op.Amount);
 
             float temp = 0;
+
+
+
             foreach (var userId in participantsIds) {
                 operationsList.ForEach(op => {
                     op.RefreshBalance();

@@ -94,31 +94,58 @@ public  class Operation : EntityBase<PridContext>
         return repartitions;
     }
 
+    //public void RefreshBalance() {
+    //    Balance.Clear();
+
+    //    var repartitions = Repartitions
+    //        .ToList();
+
+    //    int totalWeight = Repartitions
+    //        .Sum(rep => rep.Weight);
+
+    //    float temp = 0;
+
+    //    repartitions.ForEach(rep => {
+
+    //        if (rep.UserId == InitiatorId) {
+    //            temp = (float) Amount / totalWeight;
+    //            temp = temp * (totalWeight - rep.Weight);
+
+    //            Balance.Add(rep.UserId, temp);
+    //            temp = 0;
+    //        } else {
+    //            temp = (float) Amount / totalWeight;
+    //            temp = (rep.Weight * temp) * -1;
+    //            Balance.Add(rep.UserId, temp);
+    //            temp = 0;
+    //        }
+    //    });
+    //}
+
     public void RefreshBalance() {
         Balance.Clear();
 
-        var repartitions = Repartitions
-            .ToList();
+        // Calculer le poids total
+        int totalWeight = Repartitions.Sum(rep => rep.Weight);
 
-        int totalWeight = Repartitions
-            .Sum(rep => rep.Weight);
+        // Répartir le montant de la dépense en fonction des poids
+        foreach (var rep in Repartitions) {
+            double part = (Amount * rep.Weight) / totalWeight;
 
-        float temp = 0;
-        repartitions.ForEach(rep => {
-
-            if (rep.UserId == InitiatorId) {
-                temp = (float) Amount / totalWeight;
-                temp = temp * (totalWeight - rep.Weight);
-
-                Balance.Add(rep.UserId, temp);
-                temp = 0;
+            // Imputer la part de chacun en négatif sur son compte
+            if (Balance.ContainsKey(rep.UserId)) {
+                Balance[rep.UserId] -= (float) part;
             } else {
-                temp = (float) Amount / totalWeight;
-                temp = (rep.Weight * temp) * -1;
-                Balance.Add(rep.UserId, temp);
-                temp = 0;
+                Balance[rep.UserId] = (float) -part;
             }
-        });
+        }
+
+        // Imputer le montant total de la dépense en positif sur le compte de l'initiateur
+        if (Balance.ContainsKey(InitiatorId)) {
+            Balance[InitiatorId] += (float)Amount;
+        } else {
+            Balance[InitiatorId] = (float) Amount;
+        }
     }
 
     public void Delete() {
