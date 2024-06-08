@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using prbd_2324_c07.Model;
 using PRBD_Framework;
+using System.Diagnostics.Eventing.Reader;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
@@ -92,7 +93,15 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
     private Dictionary<User, double> _temporaryRepartition = new();
     public Dictionary<User, double> TemporaryRepartition {
         get => _temporaryRepartition;
-        set => SetProperty(ref _temporaryRepartition, value);
+        set => SetProperty(ref _temporaryRepartition, value, () => {
+        });
+    }
+
+    public void consultdico() {
+        foreach(var kvp in TemporaryRepartition) {
+            //Console.WriteLine(kvp.Key);
+            //Console.WriteLine(kvp.Value);
+        }
     }
 
     public ICommand BtnCancel { get; set; }
@@ -121,11 +130,12 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
         Register<Dictionary<User, double>>(App.Messages.MSG_OPERATION_USER_WEIGHT_CHANGED, dic => {
             var usr = dic.Keys.ElementAt(0);
             var wght = dic.Values.ElementAt(0);
-            if (wght > 0) {
-                TemporaryRepartition[usr] = wght;
-            } else if (wght == 0 && TemporaryRepartition.ContainsKey(usr)) {
-                TemporaryRepartition.Remove(usr);
-            }
+            //if (wght > 0) {
+            TemporaryRepartition[usr] = wght;
+            //} else if (wght == 0 && TemporaryRepartition.ContainsKey(usr)) {
+            //    //TemporaryRepartition.Remove(usr);
+            //}
+            consultdico();
             NotifyColleagues(App.Messages.MSG_OPERATION_TEMPORARY_REPARTITION_CHANGED, TemporaryRepartition);
         });
     }
@@ -209,18 +219,44 @@ public class OperationDetailViewModel : ViewModelBase<User, PridContext> {
             Operation.Initiator = Initiator;
             var usersToUpdate = TemporaryRepartition.Keys;
 
-            // Si le user de Repartitions est dans le dictionnaire, modifie son poid, sinon le supprime
-            foreach (var repartition in Context.Repartitions.Where(rep=>rep.Operation == Operation).ToList()) {
-                if (usersToUpdate.Contains(repartition.User)) {
-                    repartition.Weight = (int)TemporaryRepartition[repartition.User];
+            foreach (var kvp in TemporaryRepartition) {
+                Console.WriteLine(kvp.Key);
+                Console.WriteLine(kvp.Value);
+                if (kvp.Value != 0) {
+                    if (Operation.Repartitions.Select(rep => rep.User).Contains(kvp.Key)) {
+                        var repa = Operation.Repartitions.FirstOrDefault(rep => rep.User == kvp.Key);
+                        repa.Weight = (int)kvp.Value;
+                    } else {
+                        Console.WriteLine("Avant : " + Operation.Repartitions.Count());
+                        Operation.Repartitions.Add(new Repartition((int)kvp.Value, kvp.Key, Operation));
+                        Console.WriteLine("Apres :" + Operation.Repartitions.Count());
+                    }
                 } else {
-                    Context.Repartitions.Remove(repartition);
+                    Console.WriteLine("df cgvhb");
+                    if (Operation.Repartitions.Select(rep => rep.User).Contains(kvp.Key)) {
+                        Console.WriteLine("existe");
+                        var repaaa = Operation.Repartitions.FirstOrDefault(rep => rep.User == kvp.Key);
+                        Console.WriteLine("repartition trouvée a delete : "+repaaa.User);
+                        Operation.Repartitions.Remove(repaaa);
+                    } else {
+
+                    }
                 }
+
             }
+                //// Si le user de Repartitions est dans le dictionnaire, modifie son poid, sinon le supprime
+                //foreach (var repartition in Context.Repartitions.Where(rep=>rep.Operation == Operation).ToList()) {
+                //    if (usersToUpdate.Contains(repartition.User)) {
+                //        repartition.Weight = (int)TemporaryRepartition[repartition.User];
+                //    } else {
+                //        Context.Repartitions.Remove(repartition);
+                //    }
+                //}
+            
+            Context.SaveChanges();
+            NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
+            NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION, Tricount);
         }
-        Context.SaveChanges();
-        NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
-        NotifyColleagues(App.Messages.MSG_CLOSE_OPERATION, Tricount);
     }
 
     private void DeleteOperationtAction() {
